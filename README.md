@@ -8,13 +8,15 @@ The Oracle ingestion pipeline has been started, but the full **Osceola County, F
 
 The pipeline must be continuous and incremental (ongoing ingestion of new and changed records over time) and must publish eligible data artifacts to Elephant IPFS (the Elephant protocol’s decentralized storage layer, following Lexicon / elephant-cli / Filebase+IPNS conventions used by the Elephant oracle skills).
 
+Published artifacts must remain independently retrievable from the public IPFS network after the candidate’s local environment, demo session, and any single pinning vendor are gone. **Content identifiers (CIDs) are the durable identity of each artifact.** A vendor HTTP gateway URL is a convenience locator, not the artifact.
+
 In addition to standard property intelligence, the pipeline must surface signals relevant to **roofing lead generation**, including roof age, open roofing permits (especially long-open permits), contractor identity, BBB rating scores where available, ownership/contact fields where available, and accurate property coordinates for radius-based search.
 
 ## Description
 
 Complete the Oracle pipeline by loading all available Osceola County, FL property, permit, ownership, business, contractor, location, and public-source data into an MCP-ready database. Use IPFS and DuckDB to minimize Oracle-hosted infrastructure costs while enabling UI and agent access to answer property intelligence questions that support the roofing CRM—especially aged-roof and open-permit lead discovery within a map radius.
 
-The pipeline must demonstrate that data is ingested on an ongoing basis (not a one-shot bulk load): support incremental / windowed refreshes, preserve run history with record deltas and timestamps, and re-publish updated artifacts to Elephant IPFS.
+The pipeline must demonstrate that data is ingested on an ongoing basis (not a one-shot bulk load): support incremental / windowed refreshes, preserve run history with record deltas and timestamps, and re-publish updated artifacts to Elephant IPFS as **new immutable CIDs** (do not mutate a previously published CID).
 
 ## Acceptance Criteria
 
@@ -50,6 +52,23 @@ The pipeline must demonstrate that data is ingested on an ongoing basis (not a o
 - Enable agent access to query the database.
 - Provide a UI for exploring the uploaded data.
 
+### IPFS publication
+- Treat IPFS **CIDs** as the durable identity of published artifacts. Do not treat a vendor-specific HTTP URL as the source of truth.
+- Prefer **CIDv1** (base32) for every published object.
+- Keep published bytes **retrievable from the public IPFS network**, not only from a private node, authenticated gateway, vendor dashboard, or laptop that is running during the demo.
+- Publish a machine-readable **artifact manifest** (JSON) for each pipeline run. Include every eligible object (query table, coverage, indexes, sample extracts, and any directory roots) with at least:
+  - `cid`
+  - logical `name` / path
+  - `size` in bytes
+  - IPFS codec (`file` vs `directory`)
+  - content digest (e.g. SHA-256 of the raw bytes, or equivalent)
+  - optional provider `origins` (multiaddrs) if a candidate-operated node is still serving the blocks
+- If IPNS is used, record both the IPNS name and the **resolved CID** for that run. IPNS is a pointer; the CID is the snapshot.
+- On incremental republish, keep prior CIDs immutable. New data produces a new CID. Run history must retain previous CIDs.
+- For directory artifacts, also publish a **CAR** of the DAG rooted at that CID so the snapshot can be imported by any IPFS node without re-encoding.
+- Demonstrate that each listed CID can be fetched from **at least two independent public gateways** that this environment does not operate (for example `https://ipfs.io/ipfs/<cid>` and `https://dweb.link/ipfs/<cid>`), and that the retrieved bytes match the manifest size/digest.
+- Include the artifact manifest (and CARs, if any) in the repository or demo packet so a third party can fetch the dataset by CID after the candidate environment is gone.
+
 ### Roofing CRM–supporting queries
 - Support radius-based property identification using coordinates (around a GPS point or map pin).
 - Support questions about properties with roofs older than 15 years (or a configurable age threshold).
@@ -63,19 +82,24 @@ The pipeline must demonstrate that data is ingested on an ongoing basis (not a o
 - Demonstrate the uploaded dataset through the UI.
 - Demonstrate the uploaded dataset through an agent query aligned to roofing lead discovery.
 - Demonstrate that Oracle can operate without carrying the infrastructure cost.
+- Demonstrate public, CID-addressed IPFS publication using the artifact manifest and independent gateway retrieval (not a private-only locator).
 - Confirm the candidate fulfilled both Oracle and builder responsibilities for this milestone.
 - Pass the demo using real uploaded Osceola County records.
 
 ## Demo Transcript
-- Presenter: “I will demonstrate that the Oracle pipeline has loaded the available dataset for Osceola County, Florida that the data is queryable through DuckDB, that eligible artifacts are stored through IPFS, and that both the UI and agent can answer property intelligence questions that support roofing lead generation.”
+- Presenter: “I will demonstrate that the Oracle pipeline has loaded the available dataset for Osceola County, Florida, that the data is queryable through DuckDB, that eligible artifacts are stored on IPFS as content-addressed snapshots, and that both the UI and agent can answer property intelligence questions that support roofing lead generation.”
 - Presenter: “First, I am opening the pipeline run summary.”
   - Expected Result: The system displays the completed pipeline run, source list, county coverage, record counts, timestamps, and any documented source limitations.
 - Presenter: “Show the total uploaded records by source.”
   - Expected Result: The system shows uploaded property, permit, ownership, contractor (with BBB rating where available), business, and coordinate records with collection timestamps and provenance.
 - Presenter: “Now I am opening the DuckDB-backed query layer.”
   - Expected Result: The system confirms that the loaded data is available for structured querying without requiring Oracle-hosted database infrastructure.
-- Presenter: “Show the IPFS artifacts created for the uploaded datasets.”
-  - Expected Result: The system displays IPFS references or content identifiers for eligible dataset artifacts.
+- Presenter: “Show the published artifact manifest for this run.”
+  - Expected Result: A JSON (or equivalent) listing every eligible artifact with CID, size, logical name, codec, and digest. Gateway URLs, if shown, are derived from those CIDs. An IPNS name, if used, is shown together with the resolved CID.
+- Presenter: “Retrieve one published artifact by CID from a public gateway that this environment does not operate, then again from a second independent public gateway.”
+  - Expected Result: Both fetches succeed and the bytes match the manifest size/digest. Serving the object only from a private, local, or authenticated gateway is a fail.
+- Presenter: “Show that a later incremental publish produced a new CID without mutating the previous one.”
+  - Expected Result: The prior CID still resolves; the new run has a distinct CID; IPNS (if used) now points at the new CID; both CIDs appear in run history. A CAR is available for any directory root.
 - Presenter: “Using the UI, show properties within a sample radius that have roofs older than 15 years.”
   - Expected Result: Matching properties are returned with roof-age basis, coordinates, and source provenance.
 - Presenter: “Show properties in that area with open roofing permits, prioritizing permits that have remained open for many years, including contractor and BBB rating where available.”
