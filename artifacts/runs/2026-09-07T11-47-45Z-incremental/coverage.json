@@ -1,0 +1,1344 @@
+{
+  "county": "osceola",
+  "countyName": "Osceola",
+  "countyFips": "12097",
+  "runId": "2026-09-07T11-47-45Z-incremental",
+  "exportedAt": "2026-09-07T11:57:17.269Z",
+  "datasets": [
+    {
+      "county": "osceola",
+      "source": "osceola_accela",
+      "ingested_count": 1798,
+      "expected_count": null,
+      "first_loaded_at": "2026-09-07T09:07:42.209Z",
+      "last_loaded_at": "2026-09-07T11:48:41.904Z",
+      "cid": null,
+      "ipns_label": null
+    },
+    {
+      "county": "osceola",
+      "source": "osceola_appraiser",
+      "ingested_count": 317197,
+      "expected_count": null,
+      "first_loaded_at": "2026-09-07 08:51:42.781",
+      "last_loaded_at": "2026-09-07 08:51:42.781",
+      "cid": null,
+      "ipns_label": null
+    },
+    {
+      "county": "osceola",
+      "source": "osceola_appraiser (properties)",
+      "ingested_count": 210853,
+      "expected_count": null,
+      "first_loaded_at": "2026-09-07 08:51:42.781",
+      "last_loaded_at": "2026-09-07 08:51:42.781",
+      "cid": null,
+      "ipns_label": null
+    },
+    {
+      "county": "osceola",
+      "source": "osceola_gis_parcels",
+      "ingested_count": 215865,
+      "expected_count": null,
+      "first_loaded_at": "2026-09-07 08:51:45.135",
+      "last_loaded_at": "2026-09-07 08:51:45.135",
+      "cid": null,
+      "ipns_label": null
+    },
+    {
+      "county": "osceola",
+      "source": "overture_places",
+      "ingested_count": 19057,
+      "expected_count": null,
+      "first_loaded_at": "2026-09-07 11:48:57.667",
+      "last_loaded_at": "2026-09-07 11:48:57.667",
+      "cid": null,
+      "ipns_label": null
+    }
+  ],
+  "tables": [
+    {
+      "table": "properties",
+      "rows": 210853,
+      "columns": [
+        {
+          "column": "property_id",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "property_cid",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "request_identifier",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "parcel_identifier",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "source_system",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "county_name",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "state_code",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "address_street",
+          "nonNull": 209692,
+          "pct": 99.4
+        },
+        {
+          "column": "address_city",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "address_zip",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "latitude",
+          "nonNull": 210141,
+          "pct": 99.7
+        },
+        {
+          "column": "longitude",
+          "nonNull": 210141,
+          "pct": 99.7
+        },
+        {
+          "column": "lot_size_acre",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "lot_area_sqft",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "exterior_wall_material",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "roof_covering_material",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "property_type",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "property_usage_type",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "built_year",
+          "nonNull": 170747,
+          "pct": 81
+        },
+        {
+          "column": "livable_floor_area",
+          "nonNull": 165104,
+          "pct": 78.3
+        },
+        {
+          "column": "total_area",
+          "nonNull": 165104,
+          "pct": 78.3
+        },
+        {
+          "column": "assessed_value",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "market_value",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "land_value",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "avm_value",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "owner_name",
+          "nonNull": 210034,
+          "pct": 99.6
+        },
+        {
+          "column": "owners_text",
+          "nonNull": 210034,
+          "pct": 99.6
+        },
+        {
+          "column": "owner_count",
+          "nonNull": 210034,
+          "pct": 99.6
+        },
+        {
+          "column": "owner_occupied",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "last_sale_date",
+          "nonNull": 197050,
+          "pct": 93.5
+        },
+        {
+          "column": "last_sale_price",
+          "nonNull": 197042,
+          "pct": 93.4
+        },
+        {
+          "column": "subdivision",
+          "nonNull": 198870,
+          "pct": 94.3
+        },
+        {
+          "column": "has_permits",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "permit_count",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "has_sunbiz_tenant",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "has_bbb_contractor",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "has_pa_corp_tenant",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "hoa_flag",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "effective_year",
+          "nonNull": 165104,
+          "pct": 78.3
+        },
+        {
+          "column": "last_roof_permit_date",
+          "nonNull": 5862,
+          "pct": 2.8
+        },
+        {
+          "column": "roof_age_basis",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "roof_age_years",
+          "nonNull": 170780,
+          "pct": 81
+        },
+        {
+          "column": "open_roof_permit_count",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "oldest_open_roof_permit_days",
+          "nonNull": 416,
+          "pct": 0.2
+        },
+        {
+          "column": "years_since_sale",
+          "nonNull": 197050,
+          "pct": 93.5
+        },
+        {
+          "column": "owner_mail_city",
+          "nonNull": 210005,
+          "pct": 99.6
+        },
+        {
+          "column": "owner_mail_state",
+          "nonNull": 206436,
+          "pct": 97.9
+        },
+        {
+          "column": "owner_mail_country",
+          "nonNull": 6009,
+          "pct": 2.8
+        },
+        {
+          "column": "owner_out_of_county",
+          "nonNull": 209327,
+          "pct": 99.3
+        },
+        {
+          "column": "owner_out_of_state",
+          "nonNull": 206436,
+          "pct": 97.9
+        },
+        {
+          "column": "gis_year_built",
+          "nonNull": 170234,
+          "pct": 80.7
+        },
+        {
+          "column": "source_urls",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "first_seen_run_id",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "last_changed_run_id",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "row_hash",
+          "nonNull": 210853,
+          "pct": 100
+        }
+      ]
+    },
+    {
+      "table": "permits",
+      "rows": 318995,
+      "columns": [
+        {
+          "column": "property_improvement_id",
+          "nonNull": 318995,
+          "pct": 100
+        },
+        {
+          "column": "property_id",
+          "nonNull": 311530,
+          "pct": 97.7
+        },
+        {
+          "column": "parcel_identifier",
+          "nonNull": 318995,
+          "pct": 100
+        },
+        {
+          "column": "permit_number",
+          "nonNull": 318995,
+          "pct": 100
+        },
+        {
+          "column": "improvement_type",
+          "nonNull": 318995,
+          "pct": 100
+        },
+        {
+          "column": "improvement_status",
+          "nonNull": 318995,
+          "pct": 100
+        },
+        {
+          "column": "improvement_action",
+          "nonNull": 291975,
+          "pct": 91.5
+        },
+        {
+          "column": "permit_issue_date",
+          "nonNull": 299343,
+          "pct": 93.8
+        },
+        {
+          "column": "application_received_date",
+          "nonNull": 67507,
+          "pct": 21.2
+        },
+        {
+          "column": "final_inspection_date",
+          "nonNull": 38545,
+          "pct": 12.1
+        },
+        {
+          "column": "permit_close_date",
+          "nonNull": 131709,
+          "pct": 41.3
+        },
+        {
+          "column": "completion_date",
+          "nonNull": 101779,
+          "pct": 31.9
+        },
+        {
+          "column": "expiration_date",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "opened_date",
+          "nonNull": 301141,
+          "pct": 94.4
+        },
+        {
+          "column": "source_system",
+          "nonNull": 318995,
+          "pct": 100
+        },
+        {
+          "column": "county_name",
+          "nonNull": 318995,
+          "pct": 100
+        },
+        {
+          "column": "project_description",
+          "nonNull": 285987,
+          "pct": 89.7
+        },
+        {
+          "column": "description",
+          "nonNull": 285987,
+          "pct": 89.7
+        },
+        {
+          "column": "estimated_job_value",
+          "nonNull": 300409,
+          "pct": 94.2
+        },
+        {
+          "column": "fee",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "is_roofing",
+          "nonNull": 318995,
+          "pct": 100
+        },
+        {
+          "column": "is_open",
+          "nonNull": 318995,
+          "pct": 100
+        },
+        {
+          "column": "days_open",
+          "nonNull": 301141,
+          "pct": 94.4
+        },
+        {
+          "column": "issuing_agency",
+          "nonNull": 155850,
+          "pct": 48.9
+        },
+        {
+          "column": "contractor_name",
+          "nonNull": 42740,
+          "pct": 13.4
+        },
+        {
+          "column": "contractor_qualifier",
+          "nonNull": 13928,
+          "pct": 4.4
+        },
+        {
+          "column": "contractor_phone",
+          "nonNull": 1308,
+          "pct": 0.4
+        },
+        {
+          "column": "contractor_license",
+          "nonNull": 1724,
+          "pct": 0.5
+        },
+        {
+          "column": "contractor_id",
+          "nonNull": 42734,
+          "pct": 13.4
+        },
+        {
+          "column": "bbb_rating",
+          "nonNull": 2215,
+          "pct": 0.7
+        },
+        {
+          "column": "bbb_accredited",
+          "nonNull": 2466,
+          "pct": 0.8
+        },
+        {
+          "column": "bbb_profile_url",
+          "nonNull": 2466,
+          "pct": 0.8
+        },
+        {
+          "column": "bbb_match_method",
+          "nonNull": 2466,
+          "pct": 0.8
+        },
+        {
+          "column": "latitude",
+          "nonNull": 311156,
+          "pct": 97.5
+        },
+        {
+          "column": "longitude",
+          "nonNull": 311156,
+          "pct": 97.5
+        },
+        {
+          "column": "address_street",
+          "nonNull": 318583,
+          "pct": 99.9
+        },
+        {
+          "column": "address_city",
+          "nonNull": 311530,
+          "pct": 97.7
+        },
+        {
+          "column": "address_zip",
+          "nonNull": 311530,
+          "pct": 97.7
+        },
+        {
+          "column": "source_url",
+          "nonNull": 318995,
+          "pct": 100
+        },
+        {
+          "column": "fetched_at",
+          "nonNull": 318995,
+          "pct": 100
+        },
+        {
+          "column": "first_seen_run_id",
+          "nonNull": 318995,
+          "pct": 100
+        },
+        {
+          "column": "last_changed_run_id",
+          "nonNull": 318995,
+          "pct": 100
+        },
+        {
+          "column": "row_hash",
+          "nonNull": 318995,
+          "pct": 100
+        }
+      ]
+    },
+    {
+      "table": "contractors",
+      "rows": 4929,
+      "columns": [
+        {
+          "column": "contractor_id",
+          "nonNull": 4929,
+          "pct": 100
+        },
+        {
+          "column": "display_name",
+          "nonNull": 4929,
+          "pct": 100
+        },
+        {
+          "column": "normalized_name",
+          "nonNull": 4929,
+          "pct": 100
+        },
+        {
+          "column": "license_number",
+          "nonNull": 481,
+          "pct": 9.8
+        },
+        {
+          "column": "phone",
+          "nonNull": 344,
+          "pct": 7
+        },
+        {
+          "column": "identity_basis",
+          "nonNull": 4929,
+          "pct": 100
+        },
+        {
+          "column": "permit_count",
+          "nonNull": 4929,
+          "pct": 100
+        },
+        {
+          "column": "roofing_permit_count",
+          "nonNull": 4929,
+          "pct": 100
+        },
+        {
+          "column": "open_roofing_permit_count",
+          "nonNull": 4929,
+          "pct": 100
+        },
+        {
+          "column": "first_permit_date",
+          "nonNull": 3998,
+          "pct": 81.1
+        },
+        {
+          "column": "last_permit_date",
+          "nonNull": 3998,
+          "pct": 81.1
+        },
+        {
+          "column": "bbb_id",
+          "nonNull": 285,
+          "pct": 5.8
+        },
+        {
+          "column": "bbb_rating",
+          "nonNull": 253,
+          "pct": 5.1
+        },
+        {
+          "column": "bbb_accredited",
+          "nonNull": 285,
+          "pct": 5.8
+        },
+        {
+          "column": "bbb_review_count",
+          "nonNull": 285,
+          "pct": 5.8
+        },
+        {
+          "column": "bbb_complaint_count",
+          "nonNull": 285,
+          "pct": 5.8
+        },
+        {
+          "column": "bbb_profile_url",
+          "nonNull": 285,
+          "pct": 5.8
+        },
+        {
+          "column": "bbb_match_method",
+          "nonNull": 285,
+          "pct": 5.8
+        },
+        {
+          "column": "source_systems",
+          "nonNull": 4929,
+          "pct": 100
+        }
+      ]
+    },
+    {
+      "table": "places",
+      "rows": 19057,
+      "columns": [
+        {
+          "column": "place_id",
+          "nonNull": 19057,
+          "pct": 100
+        },
+        {
+          "column": "name",
+          "nonNull": 19057,
+          "pct": 100
+        },
+        {
+          "column": "taxonomy_primary",
+          "nonNull": 18141,
+          "pct": 95.2
+        },
+        {
+          "column": "taxonomy_hierarchy",
+          "nonNull": 18141,
+          "pct": 95.2
+        },
+        {
+          "column": "basic_category",
+          "nonNull": 18294,
+          "pct": 96
+        },
+        {
+          "column": "is_contractor",
+          "nonNull": 19057,
+          "pct": 100
+        },
+        {
+          "column": "operating_status",
+          "nonNull": 12578,
+          "pct": 66
+        },
+        {
+          "column": "confidence",
+          "nonNull": 19057,
+          "pct": 100
+        },
+        {
+          "column": "phone",
+          "nonNull": 16884,
+          "pct": 88.6
+        },
+        {
+          "column": "website",
+          "nonNull": 15098,
+          "pct": 79.2
+        },
+        {
+          "column": "address_street",
+          "nonNull": 18416,
+          "pct": 96.6
+        },
+        {
+          "column": "address_city",
+          "nonNull": 19023,
+          "pct": 99.8
+        },
+        {
+          "column": "address_zip",
+          "nonNull": 18392,
+          "pct": 96.5
+        },
+        {
+          "column": "latitude",
+          "nonNull": 19057,
+          "pct": 100
+        },
+        {
+          "column": "longitude",
+          "nonNull": 19057,
+          "pct": 100
+        },
+        {
+          "column": "contractor_id",
+          "nonNull": 14,
+          "pct": 0.1
+        },
+        {
+          "column": "source_datasets",
+          "nonNull": 19057,
+          "pct": 100
+        },
+        {
+          "column": "overture_release",
+          "nonNull": 19057,
+          "pct": 100
+        },
+        {
+          "column": "source_url",
+          "nonNull": 19057,
+          "pct": 100
+        },
+        {
+          "column": "fetched_at",
+          "nonNull": 19057,
+          "pct": 100
+        }
+      ]
+    }
+  ],
+  "sourceLoads": [
+    {
+      "run_id": "2026-09-07T00-00-00Z-full",
+      "source": "ocpa_certified",
+      "item": "vw_mdparcel.csv",
+      "url": "https://www.dropbox.com/scl/fi/zxmxctjxkkontl6jww2qz/2025_CertifiedData_OCPA.zip?rlkey=2bxf6ef5my1k4jkx8jjynwxtx&st=m40wer6o&dl=1",
+      "digest": "47614542175a8b2b85d830b10203555bebf55a9fc4c1ed83f9743cb3b298bda2",
+      "bytes": 139703616,
+      "rows": 210853,
+      "fetched_at": "2026-09-07 08:51:42.781",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T00-00-00Z-full",
+      "source": "ocpa_certified",
+      "item": "vw_mdowner.csv",
+      "url": "https://www.dropbox.com/scl/fi/zxmxctjxkkontl6jww2qz/2025_CertifiedData_OCPA.zip?rlkey=2bxf6ef5my1k4jkx8jjynwxtx&st=m40wer6o&dl=1",
+      "digest": "47614542175a8b2b85d830b10203555bebf55a9fc4c1ed83f9743cb3b298bda2",
+      "bytes": 20081293,
+      "rows": 316728,
+      "fetched_at": "2026-09-07 08:51:42.781",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T00-00-00Z-full",
+      "source": "ocpa_certified",
+      "item": "vw_mdmail.csv",
+      "url": "https://www.dropbox.com/scl/fi/zxmxctjxkkontl6jww2qz/2025_CertifiedData_OCPA.zip?rlkey=2bxf6ef5my1k4jkx8jjynwxtx&st=m40wer6o&dl=1",
+      "digest": "47614542175a8b2b85d830b10203555bebf55a9fc4c1ed83f9743cb3b298bda2",
+      "bytes": 34184792,
+      "rows": 210853,
+      "fetched_at": "2026-09-07 08:51:42.781",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T00-00-00Z-full",
+      "source": "ocpa_certified",
+      "item": "vw_mdBld.csv",
+      "url": "https://www.dropbox.com/scl/fi/zxmxctjxkkontl6jww2qz/2025_CertifiedData_OCPA.zip?rlkey=2bxf6ef5my1k4jkx8jjynwxtx&st=m40wer6o&dl=1",
+      "digest": "47614542175a8b2b85d830b10203555bebf55a9fc4c1ed83f9743cb3b298bda2",
+      "bytes": 27222560,
+      "rows": 171115,
+      "fetched_at": "2026-09-07 08:51:42.781",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T00-00-00Z-full",
+      "source": "ocpa_certified",
+      "item": "vw_mdpermit.csv",
+      "url": "https://www.dropbox.com/scl/fi/zxmxctjxkkontl6jww2qz/2025_CertifiedData_OCPA.zip?rlkey=2bxf6ef5my1k4jkx8jjynwxtx&st=m40wer6o&dl=1",
+      "digest": "47614542175a8b2b85d830b10203555bebf55a9fc4c1ed83f9743cb3b298bda2",
+      "bytes": 75103490,
+      "rows": 321075,
+      "fetched_at": "2026-09-07 08:51:42.781",
+      "notes": "5 malformed rows quarantined in reject_errors"
+    },
+    {
+      "run_id": "2026-09-07T00-00-00Z-full",
+      "source": "ocpa_certified",
+      "item": "vw_mdsales1930.csv",
+      "url": "https://www.dropbox.com/scl/fi/zxmxctjxkkontl6jww2qz/2025_CertifiedData_OCPA.zip?rlkey=2bxf6ef5my1k4jkx8jjynwxtx&st=m40wer6o&dl=1",
+      "digest": "47614542175a8b2b85d830b10203555bebf55a9fc4c1ed83f9743cb3b298bda2",
+      "bytes": 410912205,
+      "rows": 887628,
+      "fetched_at": "2026-09-07 08:51:42.781",
+      "notes": "15 malformed rows quarantined in reject_errors"
+    },
+    {
+      "run_id": "2026-09-07T00-00-00Z-full",
+      "source": "ocpa_certified",
+      "item": "vw_mdDetail.csv",
+      "url": "https://www.dropbox.com/scl/fi/zxmxctjxkkontl6jww2qz/2025_CertifiedData_OCPA.zip?rlkey=2bxf6ef5my1k4jkx8jjynwxtx&st=m40wer6o&dl=1",
+      "digest": "47614542175a8b2b85d830b10203555bebf55a9fc4c1ed83f9743cb3b298bda2",
+      "bytes": 93710739,
+      "rows": 210853,
+      "fetched_at": "2026-09-07 08:51:42.781",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T00-00-00Z-full",
+      "source": "ocpa_certified",
+      "item": "vw_mdLegal_ln.csv",
+      "url": "https://www.dropbox.com/scl/fi/zxmxctjxkkontl6jww2qz/2025_CertifiedData_OCPA.zip?rlkey=2bxf6ef5my1k4jkx8jjynwxtx&st=m40wer6o&dl=1",
+      "digest": "47614542175a8b2b85d830b10203555bebf55a9fc4c1ed83f9743cb3b298bda2",
+      "bytes": 27414422,
+      "rows": 411680,
+      "fetched_at": "2026-09-07 08:51:42.781",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T00-00-00Z-full",
+      "source": "ocpa_certified",
+      "item": "lu_dor.csv",
+      "url": "https://www.dropbox.com/scl/fi/zxmxctjxkkontl6jww2qz/2025_CertifiedData_OCPA.zip?rlkey=2bxf6ef5my1k4jkx8jjynwxtx&st=m40wer6o&dl=1",
+      "digest": "47614542175a8b2b85d830b10203555bebf55a9fc4c1ed83f9743cb3b298bda2",
+      "bytes": 22556,
+      "rows": 351,
+      "fetched_at": "2026-09-07 08:51:42.781",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T00-00-00Z-full",
+      "source": "ocpa_certified",
+      "item": "lu_sub.csv",
+      "url": "https://www.dropbox.com/scl/fi/zxmxctjxkkontl6jww2qz/2025_CertifiedData_OCPA.zip?rlkey=2bxf6ef5my1k4jkx8jjynwxtx&st=m40wer6o&dl=1",
+      "digest": "47614542175a8b2b85d830b10203555bebf55a9fc4c1ed83f9743cb3b298bda2",
+      "bytes": 658498,
+      "rows": 4032,
+      "fetched_at": "2026-09-07 08:51:42.781",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T00-00-00Z-full",
+      "source": "ocpa_certified",
+      "item": "vw_mdsite.csv",
+      "url": "https://www.dropbox.com/scl/fi/zxmxctjxkkontl6jww2qz/2025_CertifiedData_OCPA.zip?rlkey=2bxf6ef5my1k4jkx8jjynwxtx&st=m40wer6o&dl=1",
+      "digest": "47614542175a8b2b85d830b10203555bebf55a9fc4c1ed83f9743cb3b298bda2",
+      "bytes": 20366729,
+      "rows": 221594,
+      "fetched_at": "2026-09-07 08:51:42.781",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T00-00-00Z-full",
+      "source": "osceola_gis_parcels",
+      "item": "parcels.jsonl",
+      "url": "https://services6.arcgis.com/9zKHLCgIwu2HFA5O/arcgis/rest/services/Parcels/FeatureServer/0/query",
+      "digest": "a3d32fb4e2307e06c3ad0d5c6eb6fc3cc4c2747ce8d77b8d6a9299e1343f2923",
+      "bytes": 66426586,
+      "rows": 215866,
+      "fetched_at": "2026-09-07 08:51:45.135",
+      "notes": "where=1=1; expected=215866"
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-01-01_2026-09-07/windows/2026-01-01_2026-01-08/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "9897d73db9674726bf023fe2ff1dd524b2fcacae280fa882952923758ff49169",
+      "bytes": 45813,
+      "rows": 42,
+      "fetched_at": "2026-09-07 11:44:08.153",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-01-01_2026-09-07/windows/2026-01-09_2026-01-16/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "5b69b00ec4c92e0072f39f5993001ad2a216299f14347ca648e9ebf9ff53a808",
+      "bytes": 76158,
+      "rows": 71,
+      "fetched_at": "2026-09-07 11:44:08.171",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-01-01_2026-09-07/windows/2026-01-17_2026-01-24/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "2c715eb176931d213466ef6b4a35812d8fa6de7a113b7b55dc5c7abab01f254e",
+      "bytes": 63408,
+      "rows": 58,
+      "fetched_at": "2026-09-07 11:44:08.184",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-01-01_2026-09-07/windows/2026-01-25_2026-02-01/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "f4668b2aba54c6914c32eeddc5dba438e5d1f99b2298f28b510b88108b1c108b",
+      "bytes": 52241,
+      "rows": 49,
+      "fetched_at": "2026-09-07 11:44:08.204",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-01-01_2026-09-07/windows/2026-02-02_2026-02-09/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "edaf62a9a831ddd6cc985e9b6010647f10e599a2d7540487a280fa113fabecd0",
+      "bytes": 72551,
+      "rows": 68,
+      "fetched_at": "2026-09-07 11:44:08.214",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-01-01_2026-09-07/windows/2026-02-10_2026-02-17/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "8e06dbebf76fbb6174fb61a1658a0dbd6d3a4b66f2a8f2e9b7145d9d5c76e067",
+      "bytes": 62505,
+      "rows": 58,
+      "fetched_at": "2026-09-07 11:44:08.225",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-01-01_2026-09-07/windows/2026-02-18_2026-02-25/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "f2dbfdbe9154566932ac6ce391abb21b4679921106e16f969766d4cd2c96c7a8",
+      "bytes": 75468,
+      "rows": 69,
+      "fetched_at": "2026-09-07 11:44:08.241",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-01-01_2026-09-07/windows/2026-02-26_2026-03-04/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "rows": 0,
+      "fetched_at": "2026-09-07 11:44:08.251",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-02-26_2026-09-07/windows/2026-02-26_2026-03-10/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "afe229bd22d20d51787747dba125fac295233f89d49ad16edafa6a4440c9979b",
+      "bytes": 86029,
+      "rows": 79,
+      "fetched_at": "2026-09-07 11:44:08.268",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-02-26_2026-09-07/windows/2026-03-11_2026-03-16/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "72b31b2cc45c7a0df609fa397dda298fc5ec1ff3beb9e189f68994d1fb1942b4",
+      "bytes": 57090,
+      "rows": 53,
+      "fetched_at": "2026-09-07 11:44:08.282",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-02-26_2026-09-07/windows/2026-03-17_2026-03-22/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "003a8c0627f9c79e21484a2de14dcf0f3fcbe8331ddceb9f7323dc3507b55e60",
+      "bytes": 52169,
+      "rows": 47,
+      "fetched_at": "2026-09-07 11:44:08.302",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-02-26_2026-09-07/windows/2026-03-23_2026-03-28/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "0bc52de274669ef0cacf304cd3bfa212e0940276163a77c9ff7727161fc2ef0c",
+      "bytes": 71878,
+      "rows": 66,
+      "fetched_at": "2026-09-07 11:44:08.314",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-02-26_2026-09-07/windows/2026-03-29_2026-04-03/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "bdcba7057260efc3d8394db5b19c0f65a1025782cab3ac8e09b8556c3b5ab3f5",
+      "bytes": 73280,
+      "rows": 60,
+      "fetched_at": "2026-09-07 11:44:08.332",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-02-26_2026-09-07/windows/2026-04-04_2026-04-15/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "dc3f0fb4e51ffc04952de5941385ae2f3408df417c947b4b456634375fa98c32",
+      "bytes": 94349,
+      "rows": 88,
+      "fetched_at": "2026-09-07 11:44:08.348",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-02-26_2026-09-07/windows/2026-04-16_2026-04-21/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "bde79949420c723f922af01f00631cebf9fa461acb270ccfcc7a3bd9ff86153b",
+      "bytes": 53024,
+      "rows": 49,
+      "fetched_at": "2026-09-07 11:44:08.359",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-02-26_2026-09-07/windows/2026-04-22_2026-04-27/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "4103713d212b9b5b826b64d26cc17f1ee8d5e74053e59e293ffec9aa904a7840",
+      "bytes": 65889,
+      "rows": 60,
+      "fetched_at": "2026-09-07 11:44:08.368",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-02-26_2026-09-07/windows/2026-04-28_2026-05-09/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "9837efa3c7a06480928ad15782ccb9d4862e1ae292421ed7e8ea7e83da62cc98",
+      "bytes": 98727,
+      "rows": 93,
+      "fetched_at": "2026-09-07 11:44:08.384",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-02-26_2026-09-07/windows/2026-05-10_2026-05-15/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "ec33ad3e0df25cc820f54d5e040eccb1d9f506d82f5423fe2b995e8722d843ac",
+      "bytes": 63677,
+      "rows": 60,
+      "fetched_at": "2026-09-07 11:44:08.396",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-02-26_2026-09-07/windows/2026-05-16_2026-05-21/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "cc9eaaf16aec3e9e0f768db3e0aa3cde22e3b865b408109010daacbd55c49978",
+      "bytes": 61505,
+      "rows": 57,
+      "fetched_at": "2026-09-07 11:44:08.411",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-02-26_2026-09-07/windows/2026-05-22_2026-06-02/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "a21ae2e66ea0e88452dcf5b61a42dbda4eeb8ff74b54ec9f5d0478673d0c2c90",
+      "bytes": 70467,
+      "rows": 66,
+      "fetched_at": "2026-09-07 11:44:08.42",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-02-26_2026-09-07/windows/2026-06-03_2026-06-15/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "53203dde9b8715eef5f0fbb636229b3c7abc5c7a32428c863434bc1c60c6e9a2",
+      "bytes": 83135,
+      "rows": 77,
+      "fetched_at": "2026-09-07 11:44:08.443",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-02-26_2026-09-07/windows/2026-06-16_2026-06-27/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "a4d05b5e5acec975bebafa54a9547e79a1fdbde4bb18a948e8da339ee2cbe612",
+      "bytes": 94917,
+      "rows": 88,
+      "fetched_at": "2026-09-07 11:44:08.456",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-02-26_2026-09-07/windows/2026-06-28_2026-07-09/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "dca41f91a3fbfec792e21dc5882dfbd12851c074d0791628d940bc1e86386ee6",
+      "bytes": 87475,
+      "rows": 80,
+      "fetched_at": "2026-09-07 11:44:08.473",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-02-26_2026-09-07/windows/2026-07-10_2026-07-21/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "68d8c5e07b721446a377b5db56184eedf99a7490a78b56fc3557fc5fcbbee80f",
+      "bytes": 70983,
+      "rows": 64,
+      "fetched_at": "2026-09-07 11:44:08.489",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "2026-02-26_2026-09-07/windows/2026-07-22_2026-08-02/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "a05cf95fdb453db30254405222d1186d8a2fb854768c1bf66f290ea66a166478",
+      "bytes": 75953,
+      "rows": 70,
+      "fetched_at": "2026-09-07 11:44:08.5",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "osceola_accela",
+      "item": "smoke-2026-09-01_2026-09-07/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "63d6e0ff6fb0bebb5acdb7e872444603bdacfa7362a7c8d73e16f3ef19bb820e",
+      "bytes": 27294,
+      "rows": 25,
+      "fetched_at": "2026-09-07 11:44:08.519",
+      "notes": null
+    },
+    {
+      "run_id": "preview-bbb",
+      "source": "bbb_roofing",
+      "item": "roofing-central-fl-2026-09-07/profiles.jsonl",
+      "url": "https://www.bbb.org/",
+      "digest": "eeedbc632b7338f16490689f9704db03383da439c1ef21e6c6f7cf937526cd7f",
+      "bytes": 687485,
+      "rows": 1007,
+      "fetched_at": "2026-09-07 11:44:08.585",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T11-47-45Z-incremental",
+      "source": "osceola_accela",
+      "item": "2026-01-01_2026-09-07/windows/2026-01-01_2026-01-08/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "9897d73db9674726bf023fe2ff1dd524b2fcacae280fa882952923758ff49169",
+      "bytes": 45813,
+      "rows": 42,
+      "fetched_at": "2026-09-07 11:48:57.475",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T11-47-45Z-incremental",
+      "source": "osceola_accela",
+      "item": "2026-01-01_2026-09-07/windows/2026-01-09_2026-01-16/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "5b69b00ec4c92e0072f39f5993001ad2a216299f14347ca648e9ebf9ff53a808",
+      "bytes": 76158,
+      "rows": 71,
+      "fetched_at": "2026-09-07 11:48:57.492",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T11-47-45Z-incremental",
+      "source": "osceola_accela",
+      "item": "2026-01-01_2026-09-07/windows/2026-01-17_2026-01-24/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "2c715eb176931d213466ef6b4a35812d8fa6de7a113b7b55dc5c7abab01f254e",
+      "bytes": 63408,
+      "rows": 58,
+      "fetched_at": "2026-09-07 11:48:57.505",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T11-47-45Z-incremental",
+      "source": "osceola_accela",
+      "item": "2026-01-01_2026-09-07/windows/2026-01-25_2026-02-01/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "f4668b2aba54c6914c32eeddc5dba438e5d1f99b2298f28b510b88108b1c108b",
+      "bytes": 52241,
+      "rows": 49,
+      "fetched_at": "2026-09-07 11:48:57.518",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T11-47-45Z-incremental",
+      "source": "osceola_accela",
+      "item": "2026-01-01_2026-09-07/windows/2026-02-02_2026-02-09/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "edaf62a9a831ddd6cc985e9b6010647f10e599a2d7540487a280fa113fabecd0",
+      "bytes": 72551,
+      "rows": 68,
+      "fetched_at": "2026-09-07 11:48:57.536",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T11-47-45Z-incremental",
+      "source": "osceola_accela",
+      "item": "2026-01-01_2026-09-07/windows/2026-02-10_2026-02-17/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "8e06dbebf76fbb6174fb61a1658a0dbd6d3a4b66f2a8f2e9b7145d9d5c76e067",
+      "bytes": 62505,
+      "rows": 58,
+      "fetched_at": "2026-09-07 11:48:57.567",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T11-47-45Z-incremental",
+      "source": "osceola_accela",
+      "item": "2026-01-01_2026-09-07/windows/2026-02-18_2026-02-25/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "f2dbfdbe9154566932ac6ce391abb21b4679921106e16f969766d4cd2c96c7a8",
+      "bytes": 75468,
+      "rows": 69,
+      "fetched_at": "2026-09-07 11:48:57.582",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T11-47-45Z-incremental",
+      "source": "osceola_accela",
+      "item": "2026-01-01_2026-09-07/windows/2026-02-26_2026-03-04/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "rows": 0,
+      "fetched_at": "2026-09-07 11:48:57.588",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T11-47-45Z-incremental",
+      "source": "osceola_accela",
+      "item": "2026-02-26_2026-09-07/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "aba20095f7defc3778bafa6d163577fcacb3021cf9dd8a2d6fa4662580531592",
+      "bytes": 1500118,
+      "rows": 1383,
+      "fetched_at": "2026-09-07 11:48:57.634",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T11-47-45Z-incremental",
+      "source": "osceola_accela",
+      "item": "2026-09-07T11-47-45Z-incremental_2026-08-24_2026-09-07/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "aa3a7a57b3f0e5d15010336c2b201c6d52d8888c54d754e1f16eba1b72b579bd",
+      "bytes": 95098,
+      "rows": 88,
+      "fetched_at": "2026-09-07 11:48:57.65",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T11-47-45Z-incremental",
+      "source": "osceola_accela",
+      "item": "smoke-2026-09-01_2026-09-07/permits.jsonl",
+      "url": "https://permits.osceola.org/CitizenAccess/",
+      "digest": "63d6e0ff6fb0bebb5acdb7e872444603bdacfa7362a7c8d73e16f3ef19bb820e",
+      "bytes": 27294,
+      "rows": 25,
+      "fetched_at": "2026-09-07 11:48:57.665",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T11-47-45Z-incremental",
+      "source": "overture_places",
+      "item": "places-osceola.parquet",
+      "url": "https://stac.overturemaps.org/2026-08-19.0/catalog.json",
+      "digest": "e85f0320407bdd72634b5b349c123e02560947db903b946a05bd4f8d9e39b942",
+      "bytes": 1540673,
+      "rows": 19057,
+      "fetched_at": "2026-09-07 11:48:57.667",
+      "notes": "release=2026-08-19.0; clipped=19057; excluded_osm=0"
+    },
+    {
+      "run_id": "2026-09-07T11-47-45Z-incremental",
+      "source": "bbb_roofing",
+      "item": "roofing-central-fl-2026-09-07/profiles.jsonl",
+      "url": "https://www.bbb.org/",
+      "digest": "eeedbc632b7338f16490689f9704db03383da439c1ef21e6c6f7cf937526cd7f",
+      "bytes": 687485,
+      "rows": 1007,
+      "fetched_at": "2026-09-07 11:57:07.839",
+      "notes": null
+    }
+  ]
+}

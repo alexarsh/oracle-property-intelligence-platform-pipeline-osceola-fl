@@ -1,0 +1,246 @@
+{
+  "runId": "2026-09-07T11-47-45Z-incremental",
+  "minGateways": 2,
+  "verifiedAt": "2026-09-07T11:58:22.113Z",
+  "gateways": [
+    "https://ipfs.io",
+    "https://dweb.link"
+  ],
+  "artifacts": [
+    {
+      "name": "coverage.json",
+      "cid": "bafybeib4m45crx6afjpyritnd6ym2itcklfkkd2qflqjdlu7e2odeqshsa",
+      "expectedSize": 39069,
+      "expectedDigest": "sha256:6202f926ede1526dbe369506b17ba663c5fa345b3b46ceda03a4b24cbc196b27",
+      "checks": [
+        {
+          "gateway": "https://ipfs.io",
+          "url": "https://ipfs.io/ipfs/bafybeib4m45crx6afjpyritnd6ym2itcklfkkd2qflqjdlu7e2odeqshsa",
+          "ok": true,
+          "status": 200,
+          "bytes": 39069,
+          "sha256": "sha256:6202f926ede1526dbe369506b17ba663c5fa345b3b46ceda03a4b24cbc196b27",
+          "matched": true,
+          "ms": 383,
+          "error": null
+        },
+        {
+          "gateway": "https://dweb.link",
+          "url": "https://dweb.link/ipfs/bafybeib4m45crx6afjpyritnd6ym2itcklfkkd2qflqjdlu7e2odeqshsa",
+          "ok": true,
+          "status": 200,
+          "bytes": 39069,
+          "sha256": "sha256:6202f926ede1526dbe369506b17ba663c5fa345b3b46ceda03a4b24cbc196b27",
+          "matched": true,
+          "ms": 595,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "query-tables/contractors.parquet",
+      "cid": "bafybeifbceziss2spevcbkkkfzmz22du23bxc2tgewmqi7oeypjtw4wqem",
+      "expectedSize": 249933,
+      "expectedDigest": "sha256:f7a9b405689c38b7332661e02e0ef032324d8b285fc83ef500e3e972d6150681",
+      "checks": [
+        {
+          "gateway": "https://ipfs.io",
+          "url": "https://ipfs.io/ipfs/bafybeifbceziss2spevcbkkkfzmz22du23bxc2tgewmqi7oeypjtw4wqem",
+          "ok": true,
+          "status": 200,
+          "bytes": 249933,
+          "sha256": "sha256:f7a9b405689c38b7332661e02e0ef032324d8b285fc83ef500e3e972d6150681",
+          "matched": true,
+          "ms": 334,
+          "error": null
+        },
+        {
+          "gateway": "https://dweb.link",
+          "url": "https://dweb.link/ipfs/bafybeifbceziss2spevcbkkkfzmz22du23bxc2tgewmqi7oeypjtw4wqem",
+          "ok": true,
+          "status": 200,
+          "bytes": 249933,
+          "sha256": "sha256:f7a9b405689c38b7332661e02e0ef032324d8b285fc83ef500e3e972d6150681",
+          "matched": true,
+          "ms": 662,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "query-tables/permits.parquet",
+      "cid": "bafybeifprsi7h7agbnspz6ilrs2wkjoeknqpgwjvctkieoq7lxusunugoy",
+      "expectedSize": 42188267,
+      "expectedDigest": "sha256:b2f51e9dc903c8dfa8022506e95cca5310135ec79991bbc7990d65f29692df53",
+      "checks": [
+        {
+          "gateway": "https://ipfs.io",
+          "url": "https://ipfs.io/ipfs/bafybeifprsi7h7agbnspz6ilrs2wkjoeknqpgwjvctkieoq7lxusunugoy",
+          "ok": true,
+          "status": 200,
+          "bytes": 42188267,
+          "sha256": "sha256:b2f51e9dc903c8dfa8022506e95cca5310135ec79991bbc7990d65f29692df53",
+          "matched": true,
+          "ms": 17305,
+          "error": null
+        },
+        {
+          "gateway": "https://dweb.link",
+          "url": "https://dweb.link/ipfs/bafybeifprsi7h7agbnspz6ilrs2wkjoeknqpgwjvctkieoq7lxusunugoy",
+          "ok": true,
+          "status": 200,
+          "bytes": 42188267,
+          "sha256": "sha256:b2f51e9dc903c8dfa8022506e95cca5310135ec79991bbc7990d65f29692df53",
+          "matched": true,
+          "ms": 15633,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "query-tables/places.parquet",
+      "cid": "bafybeidkauzskdouvnrnkdbpko7bjurq7tdohpts5uoqd766daotjrs7yu",
+      "expectedSize": 1441887,
+      "expectedDigest": "sha256:dd2c67d15974c312a2bc0c277a494a7b9bd4edbb6b7867cb618a0f190d82ee1c",
+      "checks": [
+        {
+          "gateway": "https://ipfs.io",
+          "url": "https://ipfs.io/ipfs/bafybeidkauzskdouvnrnkdbpko7bjurq7tdohpts5uoqd766daotjrs7yu",
+          "ok": true,
+          "status": 200,
+          "bytes": 1441887,
+          "sha256": "sha256:dd2c67d15974c312a2bc0c277a494a7b9bd4edbb6b7867cb618a0f190d82ee1c",
+          "matched": true,
+          "ms": 631,
+          "error": null
+        },
+        {
+          "gateway": "https://dweb.link",
+          "url": "https://dweb.link/ipfs/bafybeidkauzskdouvnrnkdbpko7bjurq7tdohpts5uoqd766daotjrs7yu",
+          "ok": true,
+          "status": 200,
+          "bytes": 1441887,
+          "sha256": "sha256:dd2c67d15974c312a2bc0c277a494a7b9bd4edbb6b7867cb618a0f190d82ee1c",
+          "matched": true,
+          "ms": 944,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "query-tables/properties.parquet",
+      "cid": "bafybeihzegn247nlenkrjphy7vymyzdptookdajf4667f3dtlhxpym7syu",
+      "expectedSize": 29401245,
+      "expectedDigest": "sha256:7e4fa3f75ac56819bd0276371d286dce8b0727e284e48f8a2e821eab87486379",
+      "checks": [
+        {
+          "gateway": "https://ipfs.io",
+          "url": "https://ipfs.io/ipfs/bafybeihzegn247nlenkrjphy7vymyzdptookdajf4667f3dtlhxpym7syu",
+          "ok": true,
+          "status": 200,
+          "bytes": 29401245,
+          "sha256": "sha256:7e4fa3f75ac56819bd0276371d286dce8b0727e284e48f8a2e821eab87486379",
+          "matched": true,
+          "ms": 8743,
+          "error": null
+        },
+        {
+          "gateway": "https://dweb.link",
+          "url": "https://dweb.link/ipfs/bafybeihzegn247nlenkrjphy7vymyzdptookdajf4667f3dtlhxpym7syu",
+          "ok": true,
+          "status": 200,
+          "bytes": 29401245,
+          "sha256": "sha256:7e4fa3f75ac56819bd0276371d286dce8b0727e284e48f8a2e821eab87486379",
+          "matched": true,
+          "ms": 8823,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "samples/aged-roofs-sample.csv",
+      "cid": "bafybeihqtcfpt6324pcus5mcyxnudluwzdxdqut4xs3uvzcgv2ipmufrsu",
+      "expectedSize": 157828,
+      "expectedDigest": "sha256:1c54fd78dc6246501c508f03328193c7e3f8c679b71a00fee2c8b5a8541a4b17",
+      "checks": [
+        {
+          "gateway": "https://ipfs.io",
+          "url": "https://ipfs.io/ipfs/bafybeihqtcfpt6324pcus5mcyxnudluwzdxdqut4xs3uvzcgv2ipmufrsu",
+          "ok": true,
+          "status": 200,
+          "bytes": 157828,
+          "sha256": "sha256:1c54fd78dc6246501c508f03328193c7e3f8c679b71a00fee2c8b5a8541a4b17",
+          "matched": true,
+          "ms": 316,
+          "error": null
+        },
+        {
+          "gateway": "https://dweb.link",
+          "url": "https://dweb.link/ipfs/bafybeihqtcfpt6324pcus5mcyxnudluwzdxdqut4xs3uvzcgv2ipmufrsu",
+          "ok": true,
+          "status": 200,
+          "bytes": 157828,
+          "sha256": "sha256:1c54fd78dc6246501c508f03328193c7e3f8c679b71a00fee2c8b5a8541a4b17",
+          "matched": true,
+          "ms": 348,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "samples/long-open-roofing-permits-sample.csv",
+      "cid": "bafybeib2wq7cyoo75c73jhjguaak6g752tlwweq33u65fwkmjsqf6ce23y",
+      "expectedSize": 134984,
+      "expectedDigest": "sha256:eb00f1f23a2e433eedb29cd81a8fd9aa71b7d49032b130bbfd5da5061adfa08f",
+      "checks": [
+        {
+          "gateway": "https://ipfs.io",
+          "url": "https://ipfs.io/ipfs/bafybeib2wq7cyoo75c73jhjguaak6g752tlwweq33u65fwkmjsqf6ce23y",
+          "ok": true,
+          "status": 200,
+          "bytes": 134984,
+          "sha256": "sha256:eb00f1f23a2e433eedb29cd81a8fd9aa71b7d49032b130bbfd5da5061adfa08f",
+          "matched": true,
+          "ms": 444,
+          "error": null
+        },
+        {
+          "gateway": "https://dweb.link",
+          "url": "https://dweb.link/ipfs/bafybeib2wq7cyoo75c73jhjguaak6g752tlwweq33u65fwkmjsqf6ce23y",
+          "ok": true,
+          "status": 200,
+          "bytes": 134984,
+          "sha256": "sha256:eb00f1f23a2e433eedb29cd81a8fd9aa71b7d49032b130bbfd5da5061adfa08f",
+          "matched": true,
+          "ms": 509,
+          "error": null
+        }
+      ]
+    }
+  ],
+  "rootPathCheck": [
+    {
+      "gateway": "https://ipfs.io",
+      "url": "https://ipfs.io/ipfs/bafybeieyru5hga3ypyatj2r342hejqifid65bw3rrff5ini2bfk4qifhwy/coverage.json",
+      "ok": true,
+      "status": 200,
+      "bytes": 39069,
+      "sha256": "sha256:6202f926ede1526dbe369506b17ba663c5fa345b3b46ceda03a4b24cbc196b27",
+      "matched": true,
+      "ms": 260,
+      "error": null
+    },
+    {
+      "gateway": "https://dweb.link",
+      "url": "https://dweb.link/ipfs/bafybeieyru5hga3ypyatj2r342hejqifid65bw3rrff5ini2bfk4qifhwy/coverage.json",
+      "ok": true,
+      "status": 200,
+      "bytes": 39069,
+      "sha256": "sha256:6202f926ede1526dbe369506b17ba663c5fa345b3b46ceda03a4b24cbc196b27",
+      "matched": true,
+      "ms": 312,
+      "error": null
+    }
+  ],
+  "allMatched": true
+}
