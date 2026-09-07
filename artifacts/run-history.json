@@ -234,6 +234,144 @@
         "BBB profiles loaded: 1007 rows from 1 harvest file(s)",
         "Contractors matched to BBB profiles: 285"
       ]
+    },
+    {
+      "runId": "2026-09-07T12-33-03Z-incremental",
+      "county": "osceola",
+      "mode": "incremental",
+      "startedAt": "2026-09-07T12:33:03.378Z",
+      "finishedAt": "2026-09-07T12:50:26.036Z",
+      "status": "succeeded",
+      "pipelineCommit": "2c12684cfb9d918a447565e653fb731d7a15df3c",
+      "sources": [
+        {
+          "source": "ocpa_certified",
+          "status": "skipped",
+          "fetchedAt": "2026-09-07T12:33:03.699Z",
+          "window": {
+            "taxYear": "2025"
+          },
+          "recordsSeen": 0,
+          "recordsNew": 0,
+          "recordsChanged": 0,
+          "recordsQuarantined": 0,
+          "durationMs": 271,
+          "requestCount": 0,
+          "urls": [
+            "https://www.property-appraiser.org/data/"
+          ],
+          "limitations": [
+            "Annual certified export (one ZIP per tax year, hosted on Dropbox); intra-year changes only appear in the next certification.",
+            "Pipe-delimited latin-1 CSVs; ~21k permit rows are truncated/malformed in the source and are quarantined, not dropped.",
+            "Contains no coordinates — geometry comes from the county GIS layer.",
+            "No new certified export since the previous run."
+          ],
+          "error": null
+        },
+        {
+          "source": "osceola_gis_parcels",
+          "status": "ok",
+          "fetchedAt": "2026-09-07T12:33:04.227Z",
+          "window": {
+            "updatedSince": "2026-09-07"
+          },
+          "recordsSeen": 0,
+          "recordsNew": 0,
+          "recordsChanged": 0,
+          "recordsQuarantined": 0,
+          "durationMs": 544,
+          "requestCount": 1,
+          "urls": [
+            "https://services6.arcgis.com/9zKHLCgIwu2HFA5O/arcgis/rest/services/Parcels/FeatureServer/0"
+          ],
+          "limitations": [
+            "Paginated at 2,000 features per request; a full centroid sweep is ~110 requests.",
+            "Parcel count (~215.9k) exceeds the appraiser roll (~210.9k): the GIS layer includes right-of-way and non-taxable polygons."
+          ],
+          "error": null
+        },
+        {
+          "source": "osceola_accela",
+          "status": "ok",
+          "fetchedAt": "2026-09-07T12:34:23.237Z",
+          "window": {
+            "since": "2026-08-24",
+            "until": "2026-09-07",
+            "windows": "2",
+            "searchHits": "110"
+          },
+          "recordsSeen": 1999,
+          "recordsNew": 0,
+          "recordsChanged": 289,
+          "recordsQuarantined": 0,
+          "durationMs": 78992,
+          "requestCount": 95,
+          "urls": [
+            "https://permits.osceola.org/CitizenAccess/"
+          ],
+          "limitations": [
+            "Server presents an incomplete TLS chain (missing Entrust intermediate); the pipeline pins the intermediate certificate.",
+            "General search is an ASP.NET postback; results are paged 10 at a time and the portal caps a single search at 100 hits, so refresh windows are kept short.",
+            "Covers unincorporated Osceola County; City of Kissimmee and City of St. Cloud issue their own permits (present in the appraiser roll as agency K / S)."
+          ],
+          "error": null
+        },
+        {
+          "source": "overture_places",
+          "status": "ok",
+          "fetchedAt": "2026-09-07T12:34:23.461Z",
+          "window": {
+            "release": "2026-08-19.0"
+          },
+          "recordsSeen": 19057,
+          "recordsNew": 19057,
+          "recordsChanged": 0,
+          "recordsQuarantined": 0,
+          "durationMs": 237,
+          "requestCount": null,
+          "urls": [
+            "https://stac.overturemaps.org/2026-08-19.0/catalog.json",
+            "s3://overturemaps-us-west-2/release/2026-08-19.0/theme=places/type=place/*"
+          ],
+          "limitations": [
+            "Overture is a numerator (places it knows about), not an authoritative count of all businesses; expected_count is NULL by design.",
+            "Rows sourced from OpenStreetMap are excluded (licence gate from the kit's overture-places-ingest skill).",
+            "Category semantics are release-specific; every row is stamped with the Overture release."
+          ],
+          "error": null
+        }
+      ],
+      "tableCounts": {
+        "properties": 210853,
+        "permits": 318995,
+        "contractors": 4928,
+        "places": 19057
+      },
+      "tableDeltas": {
+        "properties": 0,
+        "permits": 0,
+        "contractors": -1,
+        "places": 0
+      },
+      "manifestCid": "bafybeidgvqrr47jf2anjca23nvsp5m5byzvijk7sgu5lv22w3556jk5zca",
+      "rootCid": "bafybeiduo5phbfpr3j76ssk45xl4smvcwrjfafvmtwl3qxlc6atduevbvm",
+      "previousRootCid": "bafybeieyru5hga3ypyatj2r342hejqifid65bw3rrff5ini2bfk4qifhwy",
+      "ipnsName": "k51qzi5uqu5dj6np6f9gfvamtn0z1a4kcnbn1jpaba5im6i1msabllgebus21p",
+      "verification": {
+        "verifiedAt": "2026-09-07T12:50:26.033Z",
+        "gateways": [
+          "https://ipfs.io",
+          "https://dweb.link",
+          "https://gateway.pinata.cloud",
+          "https://w3s.link"
+        ],
+        "artifactsChecked": 7,
+        "allMatched": true
+      },
+      "notes": [
+        "BBB profiles loaded: 1007 rows from 1 harvest file(s)",
+        "Contractors matched to BBB profiles: 285"
+      ]
     }
   ]
 }
