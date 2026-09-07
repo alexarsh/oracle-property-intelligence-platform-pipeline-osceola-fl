@@ -1,0 +1,12 @@
+# Vercel deploys the Explorer from this monorepo (root directory apps/explorer).
+# Keep the upload to source + committed run artifacts.
+data
+.cache
+node_modules
+**/node_modules
+**/.next
+**/dist
+artifacts/runs/*/query-tables
+artifacts/runs/*/*.car
+packages/pipeline/src/sources/**/__fixtures__
+*.log
