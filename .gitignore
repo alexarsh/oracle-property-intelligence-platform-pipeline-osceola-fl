@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.next/
+.vercel/
+coverage/
+*.log
+.env
+.env.*
+!.env.example
+# Raw downloads, DuckDB databases and staged artifacts are reproducible from the pipeline; only manifests/history are committed.
+data/
+packages/pipeline/data/
+*.duckdb
+*.duckdb.wal
+artifacts/runs/*/query-tables/
+artifacts/runs/*/*.car
+.DS_Store
