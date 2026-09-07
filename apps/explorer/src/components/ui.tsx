@@ -14,9 +14,9 @@ export function PageHeader({
     <div className="mb-6 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
-        {transcript ? (
-          <p className="mt-1 text-sm text-zinc-500 italic">Demo: “{transcript}”</p>
-        ) : null}
+        {/* `transcript` maps the page to the assignment's demo transcript; kept in the
+            props for docs/tests but intentionally not rendered in the product UI. */}
+        {transcript ? <span className="sr-only">{transcript}</span> : null}
       </div>
       {children}
     </div>
