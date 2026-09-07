@@ -215,6 +215,7 @@ program
       ...(o.only ? { only: o.only.split(",").map((n) => n.trim()) } : {}),
     });
     await writeJson(path.join(dir, "verification.json"), report);
+    await recordVerification(o.run, report);
     logger.info(
       {
         allMatched: report.allMatched,

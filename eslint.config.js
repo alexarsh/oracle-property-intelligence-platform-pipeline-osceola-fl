@@ -13,8 +13,17 @@ export default tseslint.config(
     rules: {
       "@typescript-eslint/no-explicit-any": "error",
       "@typescript-eslint/consistent-type-imports": "error",
-      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+      "@typescript-eslint/no-unused-vars": ["error", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
     },
   },
-  { files: ["**/*.js", "**/*.mjs"], ...tseslint.configs.disableTypeChecked },
+  {
+    files: ["**/*.js", "**/*.mjs", "*.config.ts"],
+    ...tseslint.configs.disableTypeChecked,
+    languageOptions: {
+      ...tseslint.configs.disableTypeChecked.languageOptions,
+      globals: { process: "readonly", console: "readonly", URL: "readonly", fetch: "readonly" },
+    },
+  },
+  // Test files are excluded from the emitted tsconfig projects; lint them without type information.
+  { files: ["packages/**/*.test.ts"], ...tseslint.configs.disableTypeChecked },
 );

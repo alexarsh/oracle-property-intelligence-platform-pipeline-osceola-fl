@@ -233,7 +233,7 @@ export async function openBbbSession(options: BbbSessionOptions = {}): Promise<B
     // navigation after clearing cookies is usually not challenged at all. So: short wait, then
     // clear + retry, up to `challengeRounds` times, before giving up.
     for (let round = 1; ; round++) {
-      let status = await navigate(url);
+      const status = await navigate(url);
       let { html, title } = await snapshot();
       if (!isChallengeHtml(html, status)) {
         const latencyMs = Date.now() - t0;
