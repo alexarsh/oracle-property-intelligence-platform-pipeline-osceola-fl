@@ -1,0 +1,245 @@
+{
+  "runId": "2026-09-07T10-42-08Z-full",
+  "verifiedAt": "2026-09-07T11:04:40.867Z",
+  "gateways": [
+    "https://ipfs.io",
+    "https://dweb.link"
+  ],
+  "artifacts": [
+    {
+      "name": "coverage.json",
+      "cid": "bafybeiahheunhszk7hb2m4agfzh3nuglmkjstdclfvjqfkxhx43cym3uoi",
+      "expectedSize": 22580,
+      "expectedDigest": "sha256:51de5461fc2b412b66b6215f8771a98d433ce83ac235e17012e7e647f5c7d6db",
+      "checks": [
+        {
+          "gateway": "https://ipfs.io",
+          "url": "https://ipfs.io/ipfs/bafybeiahheunhszk7hb2m4agfzh3nuglmkjstdclfvjqfkxhx43cym3uoi",
+          "ok": false,
+          "status": 504,
+          "bytes": null,
+          "sha256": null,
+          "matched": false,
+          "ms": 28085,
+          "error": "HTTP 504"
+        },
+        {
+          "gateway": "https://dweb.link",
+          "url": "https://dweb.link/ipfs/bafybeiahheunhszk7hb2m4agfzh3nuglmkjstdclfvjqfkxhx43cym3uoi",
+          "ok": false,
+          "status": 504,
+          "bytes": null,
+          "sha256": null,
+          "matched": false,
+          "ms": 146,
+          "error": "HTTP 504"
+        }
+      ]
+    },
+    {
+      "name": "query-tables/contractors.parquet",
+      "cid": "bafybeibpibi2245geuxelnbc3g3ow7bcz4hx7cmzwfjd4zfxifnwpcrava",
+      "expectedSize": 209793,
+      "expectedDigest": "sha256:61a957870c017d3858f9e0e8f782511e552030e3adac036d6a8851974bffd922",
+      "checks": [
+        {
+          "gateway": "https://ipfs.io",
+          "url": "https://ipfs.io/ipfs/bafybeibpibi2245geuxelnbc3g3ow7bcz4hx7cmzwfjd4zfxifnwpcrava",
+          "ok": false,
+          "status": 504,
+          "bytes": null,
+          "sha256": null,
+          "matched": false,
+          "ms": 28096,
+          "error": "HTTP 504"
+        },
+        {
+          "gateway": "https://dweb.link",
+          "url": "https://dweb.link/ipfs/bafybeibpibi2245geuxelnbc3g3ow7bcz4hx7cmzwfjd4zfxifnwpcrava",
+          "ok": false,
+          "status": 504,
+          "bytes": null,
+          "sha256": null,
+          "matched": false,
+          "ms": 130,
+          "error": "HTTP 504"
+        }
+      ]
+    },
+    {
+      "name": "query-tables/permits.parquet",
+      "cid": "bafybeid4n3nrvjbl7skmsmvzn52iyqtrwgua5qo3xho6a7xdppmqaa3ydm",
+      "expectedSize": 41537879,
+      "expectedDigest": "sha256:9a187acee5f74710bc962705ddc68b7a1d496cc334e6453b69d8815ccc94eda1",
+      "checks": [
+        {
+          "gateway": "https://ipfs.io",
+          "url": "https://ipfs.io/ipfs/bafybeid4n3nrvjbl7skmsmvzn52iyqtrwgua5qo3xho6a7xdppmqaa3ydm",
+          "ok": false,
+          "status": 504,
+          "bytes": null,
+          "sha256": null,
+          "matched": false,
+          "ms": 28104,
+          "error": "HTTP 504"
+        },
+        {
+          "gateway": "https://dweb.link",
+          "url": "https://dweb.link/ipfs/bafybeid4n3nrvjbl7skmsmvzn52iyqtrwgua5qo3xho6a7xdppmqaa3ydm",
+          "ok": false,
+          "status": 429,
+          "bytes": null,
+          "sha256": null,
+          "matched": false,
+          "ms": 44,
+          "error": "HTTP 429"
+        }
+      ]
+    },
+    {
+      "name": "query-tables/places.parquet",
+      "cid": "bafybeif2qbn7pmj2uwtob5nct5bnmwmy4jrqntza553ktickfrxol4q3da",
+      "expectedSize": 1441315,
+      "expectedDigest": "sha256:b9ae19faedeb7eed35630530643ec7c5d1bcca2d70b7499b763364d9bb61a76e",
+      "checks": [
+        {
+          "gateway": "https://ipfs.io",
+          "url": "https://ipfs.io/ipfs/bafybeif2qbn7pmj2uwtob5nct5bnmwmy4jrqntza553ktickfrxol4q3da",
+          "ok": false,
+          "status": 429,
+          "bytes": null,
+          "sha256": null,
+          "matched": false,
+          "ms": 36,
+          "error": "HTTP 429"
+        },
+        {
+          "gateway": "https://dweb.link",
+          "url": "https://dweb.link/ipfs/bafybeif2qbn7pmj2uwtob5nct5bnmwmy4jrqntza553ktickfrxol4q3da",
+          "ok": false,
+          "status": 429,
+          "bytes": null,
+          "sha256": null,
+          "matched": false,
+          "ms": 42,
+          "error": "HTTP 429"
+        }
+      ]
+    },
+    {
+      "name": "query-tables/properties.parquet",
+      "cid": "bafybeibv2pj2kikqmtba6r2fyuvaure6zwi2mejzcdkgb5j52tm7qes4ae",
+      "expectedSize": 29328587,
+      "expectedDigest": "sha256:2bcebdf4b52c512d1ef70afc3be1201415a3b313267fd2195520b4d55597d936",
+      "checks": [
+        {
+          "gateway": "https://ipfs.io",
+          "url": "https://ipfs.io/ipfs/bafybeibv2pj2kikqmtba6r2fyuvaure6zwi2mejzcdkgb5j52tm7qes4ae",
+          "ok": false,
+          "status": 429,
+          "bytes": null,
+          "sha256": null,
+          "matched": false,
+          "ms": 35,
+          "error": "HTTP 429"
+        },
+        {
+          "gateway": "https://dweb.link",
+          "url": "https://dweb.link/ipfs/bafybeibv2pj2kikqmtba6r2fyuvaure6zwi2mejzcdkgb5j52tm7qes4ae",
+          "ok": false,
+          "status": 429,
+          "bytes": null,
+          "sha256": null,
+          "matched": false,
+          "ms": 40,
+          "error": "HTTP 429"
+        }
+      ]
+    },
+    {
+      "name": "samples/aged-roofs-sample.csv",
+      "cid": "bafybeihqtcfpt6324pcus5mcyxnudluwzdxdqut4xs3uvzcgv2ipmufrsu",
+      "expectedSize": 157828,
+      "expectedDigest": "sha256:1c54fd78dc6246501c508f03328193c7e3f8c679b71a00fee2c8b5a8541a4b17",
+      "checks": [
+        {
+          "gateway": "https://ipfs.io",
+          "url": "https://ipfs.io/ipfs/bafybeihqtcfpt6324pcus5mcyxnudluwzdxdqut4xs3uvzcgv2ipmufrsu",
+          "ok": false,
+          "status": 429,
+          "bytes": null,
+          "sha256": null,
+          "matched": false,
+          "ms": 40,
+          "error": "HTTP 429"
+        },
+        {
+          "gateway": "https://dweb.link",
+          "url": "https://dweb.link/ipfs/bafybeihqtcfpt6324pcus5mcyxnudluwzdxdqut4xs3uvzcgv2ipmufrsu",
+          "ok": false,
+          "status": 429,
+          "bytes": null,
+          "sha256": null,
+          "matched": false,
+          "ms": 40,
+          "error": "HTTP 429"
+        }
+      ]
+    },
+    {
+      "name": "samples/long-open-roofing-permits-sample.csv",
+      "cid": "bafybeiaintbjuhnv2uffv6fijqy5jql66du3wvj3e3jywnqzuyalbysa3u",
+      "expectedSize": 63585,
+      "expectedDigest": "sha256:d0ef84ef29ff688e153a101b0b3c34e6af9fc5c86576c5bc84ce5be3489f53b6",
+      "checks": [
+        {
+          "gateway": "https://ipfs.io",
+          "url": "https://ipfs.io/ipfs/bafybeiaintbjuhnv2uffv6fijqy5jql66du3wvj3e3jywnqzuyalbysa3u",
+          "ok": false,
+          "status": 429,
+          "bytes": null,
+          "sha256": null,
+          "matched": false,
+          "ms": 35,
+          "error": "HTTP 429"
+        },
+        {
+          "gateway": "https://dweb.link",
+          "url": "https://dweb.link/ipfs/bafybeiaintbjuhnv2uffv6fijqy5jql66du3wvj3e3jywnqzuyalbysa3u",
+          "ok": false,
+          "status": 429,
+          "bytes": null,
+          "sha256": null,
+          "matched": false,
+          "ms": 85,
+          "error": "HTTP 429"
+        }
+      ]
+    }
+  ],
+  "rootPathCheck": [
+    {
+      "gateway": "https://ipfs.io",
+      "url": "https://ipfs.io/ipfs/bafybeib7wcgs7felpkf2gpusyp6m7eac74fd67cgmx5zmbnawuotv4ljn4/coverage.json",
+      "ok": false,
+      "status": 429,
+      "bytes": null,
+      "sha256": null,
+      "matched": false,
+      "ms": 16,
+      "error": "HTTP 429"
+    },
+    {
+      "gateway": "https://dweb.link",
+      "url": "https://dweb.link/ipfs/bafybeib7wcgs7felpkf2gpusyp6m7eac74fd67cgmx5zmbnawuotv4ljn4/coverage.json",
+      "ok": false,
+      "status": 429,
+      "bytes": null,
+      "sha256": null,
+      "matched": false,
+      "ms": 16,
+      "error": "HTTP 429"
+    }
+  ],
+  "allMatched": false
+}

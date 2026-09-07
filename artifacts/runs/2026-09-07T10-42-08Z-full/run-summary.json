@@ -1,0 +1,105 @@
+{
+  "runId": "2026-09-07T10-42-08Z-full",
+  "county": "osceola",
+  "mode": "full",
+  "startedAt": "2026-09-07T10:42:08.857Z",
+  "finishedAt": "2026-09-07T11:04:40.868Z",
+  "status": "succeeded",
+  "pipelineCommit": "05a5152bdae8eafd61ee22026e3ce6f51b44f361",
+  "sources": [
+    {
+      "source": "ocpa_certified",
+      "status": "ok",
+      "fetchedAt": "2026-09-07T10:42:12.240Z",
+      "window": {
+        "taxYear": "2025"
+      },
+      "recordsSeen": 2966762,
+      "recordsNew": 2966762,
+      "recordsChanged": 0,
+      "recordsQuarantined": 20,
+      "durationMs": 40420,
+      "requestCount": 1,
+      "urls": [
+        "https://www.property-appraiser.org/data/",
+        "https://www.dropbox.com/scl/fi/zxmxctjxkkontl6jww2qz/2025_CertifiedData_OCPA.zip"
+      ],
+      "limitations": [
+        "Annual certified export (one ZIP per tax year, hosted on Dropbox); intra-year changes only appear in the next certification.",
+        "Pipe-delimited latin-1 CSVs; ~21k permit rows are truncated/malformed in the source and are quarantined, not dropped.",
+        "Contains no coordinates — geometry comes from the county GIS layer."
+      ],
+      "error": null
+    },
+    {
+      "source": "osceola_gis_parcels",
+      "status": "ok",
+      "fetchedAt": "2026-09-07T10:42:49.587Z",
+      "window": null,
+      "recordsSeen": 215866,
+      "recordsNew": 215865,
+      "recordsChanged": 1,
+      "recordsQuarantined": 0,
+      "durationMs": 72635,
+      "requestCount": 109,
+      "urls": [
+        "https://services6.arcgis.com/9zKHLCgIwu2HFA5O/arcgis/rest/services/Parcels/FeatureServer/0"
+      ],
+      "limitations": [
+        "Paginated at 2,000 features per request; a full centroid sweep is ~110 requests.",
+        "Parcel count (~215.9k) exceeds the appraiser roll (~210.9k): the GIS layer includes right-of-way and non-taxable polygons."
+      ],
+      "error": null
+    },
+    {
+      "source": "overture_places",
+      "status": "ok",
+      "fetchedAt": "2026-09-07T10:44:01.921Z",
+      "window": {
+        "release": "2026-08-19.0"
+      },
+      "recordsSeen": 19057,
+      "recordsNew": 19057,
+      "recordsChanged": 0,
+      "recordsQuarantined": 0,
+      "durationMs": 488138,
+      "requestCount": null,
+      "urls": [
+        "https://stac.overturemaps.org/2026-08-19.0/catalog.json",
+        "s3://overturemaps-us-west-2/release/2026-08-19.0/theme=places/type=place/*"
+      ],
+      "limitations": [
+        "Overture is a numerator (places it knows about), not an authoritative count of all businesses; expected_count is NULL by design.",
+        "Rows sourced from OpenStreetMap are excluded (licence gate from the kit's overture-places-ingest skill).",
+        "Category semantics are release-specific; every row is stamped with the Overture release."
+      ],
+      "error": null
+    }
+  ],
+  "tableCounts": {
+    "properties": 210853,
+    "permits": 317197,
+    "contractors": 4529,
+    "places": 19057
+  },
+  "tableDeltas": {
+    "properties": 210853,
+    "permits": 317197,
+    "contractors": 4529,
+    "places": 19057
+  },
+  "manifestCid": "bafybeifajrne2amw2iawxyp2ygbxi2eazp53hakokkspy2wfyvc2f4supy",
+  "rootCid": "bafybeib7wcgs7felpkf2gpusyp6m7eac74fd67cgmx5zmbnawuotv4ljn4",
+  "previousRootCid": null,
+  "ipnsName": "k51qzi5uqu5dj6np6f9gfvamtn0z1a4kcnbn1jpaba5im6i1msabllgebus21p",
+  "verification": {
+    "verifiedAt": "2026-09-07T11:04:40.867Z",
+    "gateways": [
+      "https://ipfs.io",
+      "https://dweb.link"
+    ],
+    "artifactsChecked": 7,
+    "allMatched": false
+  },
+  "notes": []
+}

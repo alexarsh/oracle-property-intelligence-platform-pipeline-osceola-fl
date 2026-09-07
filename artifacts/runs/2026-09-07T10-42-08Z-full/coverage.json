@@ -1,0 +1,905 @@
+{
+  "county": "osceola",
+  "countyName": "Osceola",
+  "countyFips": "12097",
+  "runId": "2026-09-07T10-42-08Z-full",
+  "exportedAt": "2026-09-07T10:52:23.966Z",
+  "datasets": [
+    {
+      "county": "osceola",
+      "source": "osceola_appraiser",
+      "ingested_count": 317197,
+      "expected_count": null,
+      "first_loaded_at": "2026-09-07 10:42:12.24",
+      "last_loaded_at": "2026-09-07 10:42:12.24",
+      "cid": null,
+      "ipns_label": null
+    },
+    {
+      "county": "osceola",
+      "source": "osceola_appraiser (properties)",
+      "ingested_count": 210853,
+      "expected_count": null,
+      "first_loaded_at": "2026-09-07 10:42:12.24",
+      "last_loaded_at": "2026-09-07 10:42:12.24",
+      "cid": null,
+      "ipns_label": null
+    },
+    {
+      "county": "osceola",
+      "source": "osceola_gis_parcels",
+      "ingested_count": 215865,
+      "expected_count": null,
+      "first_loaded_at": "2026-09-07 10:42:49.587",
+      "last_loaded_at": "2026-09-07 10:42:49.587",
+      "cid": null,
+      "ipns_label": null
+    },
+    {
+      "county": "osceola",
+      "source": "overture_places",
+      "ingested_count": 19057,
+      "expected_count": null,
+      "first_loaded_at": "2026-09-07 10:44:01.921",
+      "last_loaded_at": "2026-09-07 10:44:01.921",
+      "cid": null,
+      "ipns_label": null
+    }
+  ],
+  "tables": [
+    {
+      "table": "properties",
+      "rows": 210853,
+      "columns": [
+        {
+          "column": "property_id",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "property_cid",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "request_identifier",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "parcel_identifier",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "source_system",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "county_name",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "state_code",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "address_street",
+          "nonNull": 209692,
+          "pct": 99.4
+        },
+        {
+          "column": "address_city",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "address_zip",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "latitude",
+          "nonNull": 210141,
+          "pct": 99.7
+        },
+        {
+          "column": "longitude",
+          "nonNull": 210141,
+          "pct": 99.7
+        },
+        {
+          "column": "lot_size_acre",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "lot_area_sqft",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "exterior_wall_material",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "roof_covering_material",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "property_type",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "property_usage_type",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "built_year",
+          "nonNull": 170747,
+          "pct": 81
+        },
+        {
+          "column": "livable_floor_area",
+          "nonNull": 165104,
+          "pct": 78.3
+        },
+        {
+          "column": "total_area",
+          "nonNull": 165104,
+          "pct": 78.3
+        },
+        {
+          "column": "assessed_value",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "market_value",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "land_value",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "avm_value",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "owner_name",
+          "nonNull": 210034,
+          "pct": 99.6
+        },
+        {
+          "column": "owners_text",
+          "nonNull": 210034,
+          "pct": 99.6
+        },
+        {
+          "column": "owner_count",
+          "nonNull": 210034,
+          "pct": 99.6
+        },
+        {
+          "column": "owner_occupied",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "last_sale_date",
+          "nonNull": 197050,
+          "pct": 93.5
+        },
+        {
+          "column": "last_sale_price",
+          "nonNull": 197042,
+          "pct": 93.4
+        },
+        {
+          "column": "subdivision",
+          "nonNull": 198870,
+          "pct": 94.3
+        },
+        {
+          "column": "has_permits",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "permit_count",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "has_sunbiz_tenant",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "has_bbb_contractor",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "has_pa_corp_tenant",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "hoa_flag",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "effective_year",
+          "nonNull": 165104,
+          "pct": 78.3
+        },
+        {
+          "column": "last_roof_permit_date",
+          "nonNull": 4445,
+          "pct": 2.1
+        },
+        {
+          "column": "roof_age_basis",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "roof_age_years",
+          "nonNull": 170768,
+          "pct": 81
+        },
+        {
+          "column": "open_roof_permit_count",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "oldest_open_roof_permit_days",
+          "nonNull": 161,
+          "pct": 0.1
+        },
+        {
+          "column": "years_since_sale",
+          "nonNull": 197050,
+          "pct": 93.5
+        },
+        {
+          "column": "owner_mail_city",
+          "nonNull": 210005,
+          "pct": 99.6
+        },
+        {
+          "column": "owner_mail_state",
+          "nonNull": 206436,
+          "pct": 97.9
+        },
+        {
+          "column": "owner_mail_country",
+          "nonNull": 6009,
+          "pct": 2.8
+        },
+        {
+          "column": "owner_out_of_county",
+          "nonNull": 209327,
+          "pct": 99.3
+        },
+        {
+          "column": "owner_out_of_state",
+          "nonNull": 206436,
+          "pct": 97.9
+        },
+        {
+          "column": "gis_year_built",
+          "nonNull": 170234,
+          "pct": 80.7
+        },
+        {
+          "column": "source_urls",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "first_seen_run_id",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "last_changed_run_id",
+          "nonNull": 210853,
+          "pct": 100
+        },
+        {
+          "column": "row_hash",
+          "nonNull": 210853,
+          "pct": 100
+        }
+      ]
+    },
+    {
+      "table": "permits",
+      "rows": 317197,
+      "columns": [
+        {
+          "column": "property_improvement_id",
+          "nonNull": 317197,
+          "pct": 100
+        },
+        {
+          "column": "property_id",
+          "nonNull": 309739,
+          "pct": 97.6
+        },
+        {
+          "column": "parcel_identifier",
+          "nonNull": 317197,
+          "pct": 100
+        },
+        {
+          "column": "permit_number",
+          "nonNull": 317197,
+          "pct": 100
+        },
+        {
+          "column": "improvement_type",
+          "nonNull": 317197,
+          "pct": 100
+        },
+        {
+          "column": "improvement_status",
+          "nonNull": 317197,
+          "pct": 100
+        },
+        {
+          "column": "improvement_action",
+          "nonNull": 290176,
+          "pct": 91.5
+        },
+        {
+          "column": "permit_issue_date",
+          "nonNull": 299343,
+          "pct": 94.4
+        },
+        {
+          "column": "application_received_date",
+          "nonNull": 65709,
+          "pct": 20.7
+        },
+        {
+          "column": "final_inspection_date",
+          "nonNull": 38543,
+          "pct": 12.2
+        },
+        {
+          "column": "permit_close_date",
+          "nonNull": 131709,
+          "pct": 41.5
+        },
+        {
+          "column": "completion_date",
+          "nonNull": 101778,
+          "pct": 32.1
+        },
+        {
+          "column": "expiration_date",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "opened_date",
+          "nonNull": 299343,
+          "pct": 94.4
+        },
+        {
+          "column": "source_system",
+          "nonNull": 317197,
+          "pct": 100
+        },
+        {
+          "column": "county_name",
+          "nonNull": 317197,
+          "pct": 100
+        },
+        {
+          "column": "project_description",
+          "nonNull": 284189,
+          "pct": 89.6
+        },
+        {
+          "column": "description",
+          "nonNull": 284189,
+          "pct": 89.6
+        },
+        {
+          "column": "estimated_job_value",
+          "nonNull": 298612,
+          "pct": 94.1
+        },
+        {
+          "column": "fee",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "is_roofing",
+          "nonNull": 317197,
+          "pct": 100
+        },
+        {
+          "column": "is_open",
+          "nonNull": 317197,
+          "pct": 100
+        },
+        {
+          "column": "days_open",
+          "nonNull": 299343,
+          "pct": 94.4
+        },
+        {
+          "column": "issuing_agency",
+          "nonNull": 154053,
+          "pct": 48.6
+        },
+        {
+          "column": "contractor_name",
+          "nonNull": 40947,
+          "pct": 12.9
+        },
+        {
+          "column": "contractor_qualifier",
+          "nonNull": 12142,
+          "pct": 3.8
+        },
+        {
+          "column": "contractor_phone",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "contractor_license",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "contractor_id",
+          "nonNull": 40940,
+          "pct": 12.9
+        },
+        {
+          "column": "bbb_rating",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "bbb_accredited",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "bbb_profile_url",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "bbb_match_method",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "latitude",
+          "nonNull": 309388,
+          "pct": 97.5
+        },
+        {
+          "column": "longitude",
+          "nonNull": 309388,
+          "pct": 97.5
+        },
+        {
+          "column": "address_street",
+          "nonNull": 316782,
+          "pct": 99.9
+        },
+        {
+          "column": "address_city",
+          "nonNull": 309739,
+          "pct": 97.6
+        },
+        {
+          "column": "address_zip",
+          "nonNull": 309739,
+          "pct": 97.6
+        },
+        {
+          "column": "source_url",
+          "nonNull": 317197,
+          "pct": 100
+        },
+        {
+          "column": "fetched_at",
+          "nonNull": 317197,
+          "pct": 100
+        },
+        {
+          "column": "first_seen_run_id",
+          "nonNull": 317197,
+          "pct": 100
+        },
+        {
+          "column": "last_changed_run_id",
+          "nonNull": 317197,
+          "pct": 100
+        },
+        {
+          "column": "row_hash",
+          "nonNull": 317197,
+          "pct": 100
+        }
+      ]
+    },
+    {
+      "table": "contractors",
+      "rows": 4529,
+      "columns": [
+        {
+          "column": "contractor_id",
+          "nonNull": 4529,
+          "pct": 100
+        },
+        {
+          "column": "display_name",
+          "nonNull": 4529,
+          "pct": 100
+        },
+        {
+          "column": "normalized_name",
+          "nonNull": 4529,
+          "pct": 100
+        },
+        {
+          "column": "license_number",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "phone",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "identity_basis",
+          "nonNull": 4529,
+          "pct": 100
+        },
+        {
+          "column": "permit_count",
+          "nonNull": 4529,
+          "pct": 100
+        },
+        {
+          "column": "roofing_permit_count",
+          "nonNull": 4529,
+          "pct": 100
+        },
+        {
+          "column": "open_roofing_permit_count",
+          "nonNull": 4529,
+          "pct": 100
+        },
+        {
+          "column": "first_permit_date",
+          "nonNull": 3595,
+          "pct": 79.4
+        },
+        {
+          "column": "last_permit_date",
+          "nonNull": 3595,
+          "pct": 79.4
+        },
+        {
+          "column": "bbb_id",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "bbb_rating",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "bbb_accredited",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "bbb_review_count",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "bbb_complaint_count",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "bbb_profile_url",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "bbb_match_method",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "source_systems",
+          "nonNull": 4529,
+          "pct": 100
+        }
+      ]
+    },
+    {
+      "table": "places",
+      "rows": 19057,
+      "columns": [
+        {
+          "column": "place_id",
+          "nonNull": 19057,
+          "pct": 100
+        },
+        {
+          "column": "name",
+          "nonNull": 19057,
+          "pct": 100
+        },
+        {
+          "column": "taxonomy_primary",
+          "nonNull": 18141,
+          "pct": 95.2
+        },
+        {
+          "column": "taxonomy_hierarchy",
+          "nonNull": 18141,
+          "pct": 95.2
+        },
+        {
+          "column": "basic_category",
+          "nonNull": 18294,
+          "pct": 96
+        },
+        {
+          "column": "is_contractor",
+          "nonNull": 19057,
+          "pct": 100
+        },
+        {
+          "column": "operating_status",
+          "nonNull": 12578,
+          "pct": 66
+        },
+        {
+          "column": "confidence",
+          "nonNull": 19057,
+          "pct": 100
+        },
+        {
+          "column": "phone",
+          "nonNull": 16884,
+          "pct": 88.6
+        },
+        {
+          "column": "website",
+          "nonNull": 15098,
+          "pct": 79.2
+        },
+        {
+          "column": "address_street",
+          "nonNull": 18416,
+          "pct": 96.6
+        },
+        {
+          "column": "address_city",
+          "nonNull": 19023,
+          "pct": 99.8
+        },
+        {
+          "column": "address_zip",
+          "nonNull": 18392,
+          "pct": 96.5
+        },
+        {
+          "column": "latitude",
+          "nonNull": 19057,
+          "pct": 100
+        },
+        {
+          "column": "longitude",
+          "nonNull": 19057,
+          "pct": 100
+        },
+        {
+          "column": "contractor_id",
+          "nonNull": 0,
+          "pct": 0
+        },
+        {
+          "column": "source_datasets",
+          "nonNull": 19057,
+          "pct": 100
+        },
+        {
+          "column": "overture_release",
+          "nonNull": 19057,
+          "pct": 100
+        },
+        {
+          "column": "source_url",
+          "nonNull": 19057,
+          "pct": 100
+        },
+        {
+          "column": "fetched_at",
+          "nonNull": 19057,
+          "pct": 100
+        }
+      ]
+    }
+  ],
+  "sourceLoads": [
+    {
+      "run_id": "2026-09-07T10-42-08Z-full",
+      "source": "ocpa_certified",
+      "item": "vw_mdparcel.csv",
+      "url": "https://www.dropbox.com/scl/fi/zxmxctjxkkontl6jww2qz/2025_CertifiedData_OCPA.zip?rlkey=2bxf6ef5my1k4jkx8jjynwxtx&st=m40wer6o&dl=1",
+      "digest": "47614542175a8b2b85d830b10203555bebf55a9fc4c1ed83f9743cb3b298bda2",
+      "bytes": 139703616,
+      "rows": 210853,
+      "fetched_at": "2026-09-07 10:42:12.24",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T10-42-08Z-full",
+      "source": "ocpa_certified",
+      "item": "vw_mdsite.csv",
+      "url": "https://www.dropbox.com/scl/fi/zxmxctjxkkontl6jww2qz/2025_CertifiedData_OCPA.zip?rlkey=2bxf6ef5my1k4jkx8jjynwxtx&st=m40wer6o&dl=1",
+      "digest": "47614542175a8b2b85d830b10203555bebf55a9fc4c1ed83f9743cb3b298bda2",
+      "bytes": 20366729,
+      "rows": 221594,
+      "fetched_at": "2026-09-07 10:42:12.24",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T10-42-08Z-full",
+      "source": "ocpa_certified",
+      "item": "vw_mdowner.csv",
+      "url": "https://www.dropbox.com/scl/fi/zxmxctjxkkontl6jww2qz/2025_CertifiedData_OCPA.zip?rlkey=2bxf6ef5my1k4jkx8jjynwxtx&st=m40wer6o&dl=1",
+      "digest": "47614542175a8b2b85d830b10203555bebf55a9fc4c1ed83f9743cb3b298bda2",
+      "bytes": 20081293,
+      "rows": 316728,
+      "fetched_at": "2026-09-07 10:42:12.24",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T10-42-08Z-full",
+      "source": "ocpa_certified",
+      "item": "vw_mdmail.csv",
+      "url": "https://www.dropbox.com/scl/fi/zxmxctjxkkontl6jww2qz/2025_CertifiedData_OCPA.zip?rlkey=2bxf6ef5my1k4jkx8jjynwxtx&st=m40wer6o&dl=1",
+      "digest": "47614542175a8b2b85d830b10203555bebf55a9fc4c1ed83f9743cb3b298bda2",
+      "bytes": 34184792,
+      "rows": 210853,
+      "fetched_at": "2026-09-07 10:42:12.24",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T10-42-08Z-full",
+      "source": "ocpa_certified",
+      "item": "vw_mdBld.csv",
+      "url": "https://www.dropbox.com/scl/fi/zxmxctjxkkontl6jww2qz/2025_CertifiedData_OCPA.zip?rlkey=2bxf6ef5my1k4jkx8jjynwxtx&st=m40wer6o&dl=1",
+      "digest": "47614542175a8b2b85d830b10203555bebf55a9fc4c1ed83f9743cb3b298bda2",
+      "bytes": 27222560,
+      "rows": 171115,
+      "fetched_at": "2026-09-07 10:42:12.24",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T10-42-08Z-full",
+      "source": "ocpa_certified",
+      "item": "vw_mdpermit.csv",
+      "url": "https://www.dropbox.com/scl/fi/zxmxctjxkkontl6jww2qz/2025_CertifiedData_OCPA.zip?rlkey=2bxf6ef5my1k4jkx8jjynwxtx&st=m40wer6o&dl=1",
+      "digest": "47614542175a8b2b85d830b10203555bebf55a9fc4c1ed83f9743cb3b298bda2",
+      "bytes": 75103490,
+      "rows": 321075,
+      "fetched_at": "2026-09-07 10:42:12.24",
+      "notes": "5 malformed rows quarantined in reject_errors"
+    },
+    {
+      "run_id": "2026-09-07T10-42-08Z-full",
+      "source": "ocpa_certified",
+      "item": "vw_mdsales1930.csv",
+      "url": "https://www.dropbox.com/scl/fi/zxmxctjxkkontl6jww2qz/2025_CertifiedData_OCPA.zip?rlkey=2bxf6ef5my1k4jkx8jjynwxtx&st=m40wer6o&dl=1",
+      "digest": "47614542175a8b2b85d830b10203555bebf55a9fc4c1ed83f9743cb3b298bda2",
+      "bytes": 410912205,
+      "rows": 887628,
+      "fetched_at": "2026-09-07 10:42:12.24",
+      "notes": "15 malformed rows quarantined in reject_errors"
+    },
+    {
+      "run_id": "2026-09-07T10-42-08Z-full",
+      "source": "ocpa_certified",
+      "item": "vw_mdDetail.csv",
+      "url": "https://www.dropbox.com/scl/fi/zxmxctjxkkontl6jww2qz/2025_CertifiedData_OCPA.zip?rlkey=2bxf6ef5my1k4jkx8jjynwxtx&st=m40wer6o&dl=1",
+      "digest": "47614542175a8b2b85d830b10203555bebf55a9fc4c1ed83f9743cb3b298bda2",
+      "bytes": 93710739,
+      "rows": 210853,
+      "fetched_at": "2026-09-07 10:42:12.24",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T10-42-08Z-full",
+      "source": "ocpa_certified",
+      "item": "vw_mdLegal_ln.csv",
+      "url": "https://www.dropbox.com/scl/fi/zxmxctjxkkontl6jww2qz/2025_CertifiedData_OCPA.zip?rlkey=2bxf6ef5my1k4jkx8jjynwxtx&st=m40wer6o&dl=1",
+      "digest": "47614542175a8b2b85d830b10203555bebf55a9fc4c1ed83f9743cb3b298bda2",
+      "bytes": 27414422,
+      "rows": 411680,
+      "fetched_at": "2026-09-07 10:42:12.24",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T10-42-08Z-full",
+      "source": "ocpa_certified",
+      "item": "lu_dor.csv",
+      "url": "https://www.dropbox.com/scl/fi/zxmxctjxkkontl6jww2qz/2025_CertifiedData_OCPA.zip?rlkey=2bxf6ef5my1k4jkx8jjynwxtx&st=m40wer6o&dl=1",
+      "digest": "47614542175a8b2b85d830b10203555bebf55a9fc4c1ed83f9743cb3b298bda2",
+      "bytes": 22556,
+      "rows": 351,
+      "fetched_at": "2026-09-07 10:42:12.24",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T10-42-08Z-full",
+      "source": "ocpa_certified",
+      "item": "lu_sub.csv",
+      "url": "https://www.dropbox.com/scl/fi/zxmxctjxkkontl6jww2qz/2025_CertifiedData_OCPA.zip?rlkey=2bxf6ef5my1k4jkx8jjynwxtx&st=m40wer6o&dl=1",
+      "digest": "47614542175a8b2b85d830b10203555bebf55a9fc4c1ed83f9743cb3b298bda2",
+      "bytes": 658498,
+      "rows": 4032,
+      "fetched_at": "2026-09-07 10:42:12.24",
+      "notes": null
+    },
+    {
+      "run_id": "2026-09-07T10-42-08Z-full",
+      "source": "osceola_gis_parcels",
+      "item": "parcels.jsonl",
+      "url": "https://services6.arcgis.com/9zKHLCgIwu2HFA5O/arcgis/rest/services/Parcels/FeatureServer/0/query",
+      "digest": "03bbf3032ee5fa44668b97326dec02204a69a4d6e134ecdf631f70e76784d47d",
+      "bytes": 66426586,
+      "rows": 215866,
+      "fetched_at": "2026-09-07 10:42:49.587",
+      "notes": "where=1=1; expected=215866"
+    },
+    {
+      "run_id": "2026-09-07T10-42-08Z-full",
+      "source": "overture_places",
+      "item": "places-osceola.parquet",
+      "url": "https://stac.overturemaps.org/2026-08-19.0/catalog.json",
+      "digest": "e85f0320407bdd72634b5b349c123e02560947db903b946a05bd4f8d9e39b942",
+      "bytes": 1540673,
+      "rows": 19057,
+      "fetched_at": "2026-09-07 10:44:01.921",
+      "notes": "release=2026-08-19.0; clipped=19057; excluded_osm=0"
+    }
+  ]
+}
