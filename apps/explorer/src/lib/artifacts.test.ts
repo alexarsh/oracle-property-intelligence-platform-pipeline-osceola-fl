@@ -2,7 +2,8 @@ import { mkdtemp, mkdir, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { deriveRecord, findArtifactsDir, loadArtifacts, runIdToIso, toIso } from "./artifacts";
+import { chainStatus, findArtifactsDir, loadArtifacts, runIdToIso, toIso } from "./artifacts";
+import type { RunBundle } from "./artifacts";
 
 const CID_A = "bafybeiai4v6n7xxryf7rkmemqs3cnjew3hlkm5ov4zs2prbrbcodxwoiiu";
 const CID_B = "bafybeih2chewz4rqs7ohhmyhruavvpji23xgda27q5efyfc5xlt6ogzj7a";
@@ -156,31 +157,75 @@ describe("findArtifactsDir", () => {
 });
 
 describe("loadArtifacts", () => {
-  it("uses run-history.json when present", async () => {
+  it("uses run-history.json as the only source of run records", async () => {
     const snap = await loadArtifacts(await scaffold(true));
     expect(snap.history?.runs).toHaveLength(1);
-    expect(snap.latest?.derived).toBe(false);
+    expect(snap.runs).toHaveLength(1);
     expect(snap.latest?.record.rootCid).toBe(CID_A);
+    expect(snap.latestPublished?.runId).toBe("2026-09-07T00-00-00Z-full");
     expect(snap.latest?.manifest?.artifacts).toHaveLength(2);
     expect(snap.latest?.coverage?.tables[0]?.table).toBe("permits");
     expect(snap.warnings).toEqual([]);
   });
-  it("derives a record from the manifest when history is missing", async () => {
+  it("shows no runs (and a warning) when history is missing, even if run directories exist", async () => {
     const snap = await loadArtifacts(await scaffold(false));
     expect(snap.history).toBeNull();
+    expect(snap.runs).toEqual([]);
+    expect(snap.latest).toBeNull();
     expect(snap.warnings.some((w) => w.includes("run-history.json is missing"))).toBe(true);
-    const rec = snap.latest!.record;
-    expect(snap.latest!.derived).toBe(true);
-    expect(rec.status).toBe("succeeded");
-    expect(rec.mode).toBe("full");
-    expect(rec.startedAt).toBe("2026-09-07T00:00:00Z");
-    expect(rec.rootCid).toBe(CID_A);
-    expect(rec.tableCounts).toEqual({ properties: 210853, permits: 317197 });
-    const ocpa = rec.sources.find((s) => s.source === "ocpa_certified")!;
-    expect(ocpa.status).toBe("ok");
-    expect(ocpa.recordsSeen).toBe(210853 + 317197);
-    expect(ocpa.fetchedAt).toBe("2026-09-07T08:52:00.000Z");
-    expect(rec.sources.find((s) => s.source === "bbb_roofing")?.status).toBe("skipped");
+  });
+});
+
+describe("chainStatus", () => {
+  const rec = (
+    runId: string,
+    rootCid: string | null,
+    previousRootCid: string | null,
+    status: "succeeded" | "running" = "succeeded",
+  ): RunBundle => ({
+    runId,
+    record: {
+      runId,
+      county: "osceola",
+      mode: "incremental",
+      startedAt: runId,
+      finishedAt: null,
+      status,
+      pipelineCommit: null,
+      sources: [],
+      tableCounts: {},
+      tableDeltas: {},
+      manifestCid: null,
+      rootCid,
+      previousRootCid,
+      ipnsName: null,
+      verification: null,
+      notes: [],
+    },
+    manifest: null,
+    coverage: null,
+    verification: null,
+  });
+  it("links each run to the most recent published root before it (newest first)", () => {
+    const runs = [rec("3", null, CID_B, "running"), rec("2", CID_B, CID_A), rec("1", CID_A, null)];
+    expect(chainStatus(runs, 2)).toBe("first");
+    expect(chainStatus(runs, 1)).toBe("linked");
+    expect(chainStatus(runs, 0)).toBe("linked");
+  });
+  it("flags a broken chain and pending runs", () => {
+    expect(
+      chainStatus(
+        [
+          rec("2", CID_B, "bafybeigi53fqrhhlk6eqeuirw3k23s5ebqbejmhl6zggbqut7e4u25wwdy"),
+          rec("1", CID_A, null),
+        ],
+        0,
+      ),
+    ).toBe("broken");
+    expect(chainStatus([rec("2", null, null, "running"), rec("1", CID_A, null)], 0)).toBe(
+      "pending",
+    );
+    expect(chainStatus([rec("1", CID_A, CID_B)], 0)).toBe("broken");
   });
 });
 
@@ -190,11 +235,5 @@ describe("helpers", () => {
     expect(runIdToIso("nope")).toBeNull();
     expect(toIso("2026-09-07 08:51:42.781")).toBe("2026-09-07T08:51:42.781Z");
     expect(toIso("2026-09-07T08:51:42.781Z")).toBe("2026-09-07T08:51:42.781Z");
-  });
-  it("deriveRecord tolerates missing manifest and coverage", () => {
-    const rec = deriveRecord("2026-09-08T00-00-00Z-incremental", null, null, null);
-    expect(rec.status).toBe("running");
-    expect(rec.mode).toBe("incremental");
-    expect(rec.rootCid).toBeNull();
   });
 });

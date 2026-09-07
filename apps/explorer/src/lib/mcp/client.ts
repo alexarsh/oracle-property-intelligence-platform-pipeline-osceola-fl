@@ -49,10 +49,18 @@ function firstText(result: unknown): string {
   return text;
 }
 
-function isToolError(v: unknown): v is { error: string; details?: string } {
+function isToolError(v: unknown): v is { error: string; details?: unknown } {
   return (
     typeof v === "object" && v !== null && typeof (v as { error?: unknown }).error === "string"
   );
+}
+
+/** The MCP's `details` is usually the DuckDB/validator message; keep it verbatim, stringify anything else. */
+function detailText(details: unknown): string | null {
+  if (details == null) return null;
+  if (typeof details === "string") return details;
+  if (Array.isArray(details) && details.length === 0) return null;
+  return JSON.stringify(details);
 }
 
 /**
@@ -83,7 +91,8 @@ export function createMcpClient(
       return withClient(async (client) => {
         const result = await client.callTool({ name, arguments: args });
         const parsed: unknown = JSON.parse(firstText(result));
-        if (isToolError(parsed)) throw new McpToolError(name, parsed.error, parsed.details ?? null);
+        if (isToolError(parsed))
+          throw new McpToolError(name, parsed.error, detailText(parsed.details));
         return parsed;
       });
     },

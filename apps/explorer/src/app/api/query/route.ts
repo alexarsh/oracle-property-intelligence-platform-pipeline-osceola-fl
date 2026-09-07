@@ -10,6 +10,8 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { errorResponse, jsonError } from "../_lib";
+import type { ApiError } from "../_lib";
+import { McpToolError } from "@/lib/mcp/client";
 import { createMcpClient } from "@/lib/mcp/client";
 import { assertReadOnlySelect } from "@/lib/mcp/sql";
 import { queryPermits, queryProperties } from "@/lib/mcp/tools";
@@ -25,6 +27,12 @@ const Body = z.object({
   limit: z.number().int().min(1).max(1000).optional(),
 });
 
+/** Error body: the MCP's own error text + details, the SQL that was sent, and a usage hint. */
+export interface QueryErrorResponse extends ApiError {
+  sql: string | null;
+  hint: string;
+}
+
 export interface QueryResponse {
   table: "properties" | "permits";
   tool: "queryProperties" | "queryPermits";
@@ -37,7 +45,11 @@ export interface QueryResponse {
   ms: number;
 }
 
+const HINT =
+  "Only a single read-only SELECT (or WITH … SELECT) over the `properties` or `permits` view is accepted; mutating statements, multiple statements and file/extension keywords are rejected by the MCP.";
+
 export async function POST(req: Request): Promise<NextResponse> {
+  let sent: string | null = null;
   try {
     const parsed = Body.safeParse(await req.json());
     if (!parsed.success)
@@ -45,7 +57,9 @@ export async function POST(req: Request): Promise<NextResponse> {
         parsed.error.issues.map((i) => `${i.path.join(".")}: ${i.message}`).join("; "),
       );
     const { table, sql, limit = 100 } = parsed.data;
+    sent = sql;
     const statement = assertReadOnlySelect(sql);
+    sent = statement;
     const mcp = createMcpClient();
     const t0 = Date.now();
     const res =
@@ -66,6 +80,12 @@ export async function POST(req: Request): Promise<NextResponse> {
     };
     return NextResponse.json(body);
   } catch (err) {
-    return errorResponse(err);
+    const res = errorResponse(err);
+    const body = (await res.json()) as ApiError;
+    const details = err instanceof McpToolError ? err.details : body.details;
+    return NextResponse.json(
+      { ...body, details: details ?? null, sql: sent, hint: HINT } satisfies QueryErrorResponse,
+      { status: res.status },
+    );
   }
 }

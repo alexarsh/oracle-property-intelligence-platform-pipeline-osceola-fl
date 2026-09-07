@@ -1,6 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
-import type { QueryResponse } from "@/app/api/query/route";
+import type { QueryErrorResponse, QueryResponse } from "@/app/api/query/route";
 import type { ApiError } from "@/app/api/_lib";
 import { toCsv } from "@/lib/csv";
 import { cellText as cell, fmtBytes, fmtInt } from "@/lib/format";
@@ -27,7 +27,7 @@ export function QueryConsole({ schemas, coverage, examples, endpoint, parquet }:
   );
   const [limit, setLimit] = useState<number>(100);
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<ApiError | null>(null);
+  const [error, setError] = useState<(ApiError & Partial<QueryErrorResponse>) | null>(null);
   const [result, setResult] = useState<QueryResponse | null>(null);
   const [schemaTab, setSchemaTab] = useState<Table>("properties");
   const [filter, setFilter] = useState("");
@@ -49,9 +49,9 @@ export function QueryConsole({ schemas, coverage, examples, endpoint, parquet }:
         headers: { "content-type": "application/json" },
         body: JSON.stringify({ table, sql, limit }),
       });
-      const body = (await res.json()) as QueryResponse | ApiError;
+      const body = (await res.json()) as QueryResponse | QueryErrorResponse;
       if (!res.ok || "error" in body) {
-        setError("error" in body ? body : { error: `HTTP ${res.status}` });
+        setError("error" in body ? body : { error: `HTTP ${res.status}`, sql, hint: undefined });
         setResult(null);
       } else setResult(body);
     } catch (err) {
@@ -238,7 +238,21 @@ export function QueryConsole({ schemas, coverage, examples, endpoint, parquet }:
             <div className="font-medium">{error.error}</div>
             {error.details ? (
               <pre className="mt-1 whitespace-pre-wrap text-xs">{error.details}</pre>
+            ) : (
+              <div className="mt-1 text-xs">The MCP returned no further detail.</div>
+            )}
+            {error.sql ? (
+              <details className="mt-2 text-xs" open>
+                <summary className="cursor-pointer">SQL sent</summary>
+                <pre className="mt-1 overflow-x-auto rounded bg-white/60 p-2 font-mono whitespace-pre-wrap dark:bg-black/30">
+                  {error.sql}
+                </pre>
+              </details>
             ) : null}
+            <div className="mt-2 text-xs">
+              {error.hint ??
+                "Only a single read-only SELECT (or WITH … SELECT) over the `properties` or `permits` view is accepted."}
+            </div>
           </div>
         ) : null}
 

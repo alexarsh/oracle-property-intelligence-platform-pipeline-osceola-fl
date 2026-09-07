@@ -5,7 +5,8 @@
  * `manifest.json`, `coverage.json` and `verification.json` with `fs` at request
  * time. The directory is discovered by walking up from `process.cwd()` (works
  * from `apps/explorer` in dev and from the traced serverless bundle on Vercel)
- * or taken from `OSCEOLA_ARTIFACTS_DIR`.
+ * or taken from `OSCEOLA_ARTIFACTS_DIR`. `run-history.json` is the only source of run
+ * records; run directories only add their manifest / coverage / verification.
  *
  * Nothing here talks to the MCP or to Parquet: these files are the pipeline's
  * own committed statement of what was ingested and published.
@@ -14,8 +15,8 @@
  */
 import { promises as fs } from "node:fs";
 import path from "node:path";
-import { OSCEOLA, RunHistory, RunManifest } from "@osceola/shared";
-import type { RunRecord, SourceRunResult, TableCounts } from "@osceola/shared";
+import { RunHistory, RunManifest } from "@osceola/shared";
+import type { RunRecord } from "@osceola/shared";
 import { z } from "zod";
 
 export const CoverageReportSchema = z
@@ -103,10 +104,8 @@ export type VerificationReport = z.infer<typeof VerificationReportSchema>;
 /** Everything the UI knows about one run. */
 export interface RunBundle {
   runId: string;
-  /** From run-history.json, or derived from the manifest when history is absent. */
+  /** From run-history.json (the only source of run records). */
   record: RunRecord;
-  /** True when `record` was synthesized because run-history.json has no entry yet. */
-  derived: boolean;
   manifest: RunManifest | null;
   coverage: CoverageReport | null;
   verification: VerificationReport | null;
@@ -117,7 +116,10 @@ export interface ArtifactsSnapshot {
   history: RunHistory | null;
   /** Newest first. */
   runs: RunBundle[];
+  /** Newest run record (may still be running). */
   latest: RunBundle | null;
+  /** Newest run that succeeded and published a root CID. */
+  latestPublished: RunBundle | null;
   /** Human-readable problems (missing files, parse errors) surfaced in the UI. */
   warnings: string[];
 }
@@ -171,79 +173,6 @@ async function readJsonIf<T>(
   }
 }
 
-/** Build a RunRecord from a manifest + coverage when run-history.json has no entry yet. */
-export function deriveRecord(
-  runId: string,
-  manifest: RunManifest | null,
-  coverage: CoverageReport | null,
-  verification: VerificationReport | null,
-): RunRecord {
-  const tableCounts: TableCounts = {};
-  for (const a of manifest?.artifacts ?? []) {
-    if (a.rowCount != null && a.name.startsWith("query-tables/"))
-      tableCounts[a.name.replace("query-tables/", "").replace(/\.parquet$/, "")] = a.rowCount;
-  }
-  for (const t of coverage?.tables ?? []) tableCounts[t.table] ??= t.rows;
-  const loadsBySource = new Map<
-    string,
-    { rows: number; fetchedAt: string | null; urls: Set<string> }
-  >();
-  for (const l of coverage?.sourceLoads ?? []) {
-    const e = loadsBySource.get(l.source) ?? { rows: 0, fetchedAt: null, urls: new Set<string>() };
-    e.rows += l.rows ?? 0;
-    if (l.fetched_at && (!e.fetchedAt || l.fetched_at > e.fetchedAt)) e.fetchedAt = l.fetched_at;
-    if (l.url) e.urls.add(l.url);
-    loadsBySource.set(l.source, e);
-  }
-  const sources: SourceRunResult[] = Object.values(OSCEOLA.sources).map((s) => {
-    const load = loadsBySource.get(s.key);
-    return {
-      source: s.key,
-      status: load ? "ok" : "skipped",
-      fetchedAt: load?.fetchedAt ? toIso(load.fetchedAt) : null,
-      window: null,
-      recordsSeen: load?.rows ?? 0,
-      recordsNew: load?.rows ?? 0,
-      recordsChanged: 0,
-      recordsQuarantined: 0,
-      durationMs: 0,
-      requestCount: null,
-      urls: load ? [...load.urls] : [s.url],
-      limitations: [...s.limitations],
-      error: null,
-    };
-  });
-  const startedAt =
-    runIdToIso(runId) ?? manifest?.publishedAt ?? coverage?.exportedAt ?? new Date(0).toISOString();
-  return {
-    runId,
-    county: OSCEOLA.key,
-    mode: runId.endsWith("-full") ? "full" : "incremental",
-    startedAt,
-    finishedAt: manifest?.publishedAt ?? null,
-    status: manifest ? "succeeded" : "running",
-    pipelineCommit: null,
-    sources,
-    tableCounts,
-    tableDeltas: {},
-    manifestCid: null,
-    rootCid: manifest?.root.cid ?? null,
-    previousRootCid: manifest?.previousRootCid ?? null,
-    ipnsName: manifest?.ipns?.name ?? null,
-    verification: verification
-      ? {
-          verifiedAt: verification.verifiedAt,
-          gateways: verification.gateways,
-          artifactsChecked: verification.artifacts.length,
-          allMatched: verification.allMatched,
-        }
-      : null,
-    notes: [
-      "Run record derived from manifest.json/coverage.json: artifacts/run-history.json has no entry for this run yet.",
-    ],
-  };
-}
-
 /** `2026-09-07T00-00-00Z-full` → `2026-09-07T00:00:00Z`. */
 export function runIdToIso(runId: string): string | null {
   const m = /^(\d{4}-\d{2}-\d{2})T(\d{2})-(\d{2})-(\d{2})Z/.exec(runId);
@@ -266,6 +195,7 @@ export async function loadArtifacts(start = process.cwd()): Promise<ArtifactsSna
       history: null,
       runs: [],
       latest: null,
+      latestPublished: null,
       warnings: [
         "artifacts directory not found (set OSCEOLA_ARTIFACTS_DIR or run the pipeline first)",
       ],
@@ -276,22 +206,19 @@ export async function loadArtifacts(start = process.cwd()): Promise<ArtifactsSna
     RunHistory,
     warnings,
   );
-  if (!history)
+  if (!history) {
     warnings.push(
-      "artifacts/run-history.json is missing; run records below are derived from each run's manifest.json.",
+      "artifacts/run-history.json is missing: no run records to show (the pipeline writes it on every run).",
     );
-
-  const runsDir = path.join(artifactsDir, "runs");
-  const runIds = new Set<string>();
-  if (await exists(runsDir)) {
-    for (const entry of await fs.readdir(runsDir, { withFileTypes: true }))
-      if (entry.isDirectory()) runIds.add(entry.name);
+    return { artifactsDir, history: null, runs: [], latest: null, latestPublished: null, warnings };
   }
-  for (const r of history?.runs ?? []) runIds.add(r.runId);
 
+  // Run records come from run-history.json only; each run directory contributes its
+  // manifest / coverage / verification files when they are committed.
+  const runsDir = path.join(artifactsDir, "runs");
   const runs: RunBundle[] = [];
-  for (const runId of runIds) {
-    const dir = path.join(runsDir, runId);
+  for (const record of history.runs) {
+    const dir = path.join(runsDir, record.runId);
     const manifest = await readJsonIf(dir + "/manifest.json", RunManifest, warnings);
     const coverage = await readJsonIf(dir + "/coverage.json", CoverageReportSchema, warnings);
     const verification = await readJsonIf(
@@ -299,28 +226,41 @@ export async function loadArtifacts(start = process.cwd()): Promise<ArtifactsSna
       VerificationReportSchema,
       warnings,
     );
-    const record = history?.runs.find((r) => r.runId === runId) ?? null;
-    runs.push({
-      runId,
-      record: record ?? deriveRecord(runId, manifest, coverage, verification),
-      derived: record === null,
-      manifest,
-      coverage,
-      verification,
-    });
+    runs.push({ runId: record.runId, record, manifest, coverage, verification });
   }
+  // Newest first.
   runs.sort(
     (a, b) =>
       b.record.startedAt.localeCompare(a.record.startedAt) || b.runId.localeCompare(a.runId),
   );
-  return { artifactsDir, history, runs, latest: runs[0] ?? null, warnings };
+  const latestPublished =
+    runs.find((r) => r.record.status === "succeeded" && r.record.rootCid) ?? null;
+  return { artifactsDir, history, runs, latest: runs[0] ?? null, latestPublished, warnings };
 }
 
-/** Single run by id (or the latest when `runId` is omitted). */
+/** Single run by id (or the latest published run when `runId` is omitted). */
 export async function loadRun(
   runId?: string,
 ): Promise<{ run: RunBundle | null; snapshot: ArtifactsSnapshot }> {
   const snapshot = await loadArtifacts();
-  const run = runId ? (snapshot.runs.find((r) => r.runId === runId) ?? null) : snapshot.latest;
+  const run = runId
+    ? (snapshot.runs.find((r) => r.runId === runId) ?? null)
+    : (snapshot.latestPublished ?? snapshot.latest);
   return { run, snapshot };
+}
+
+/**
+ * Immutability-chain check for a newest-first run list: a run "links" when its
+ * `previousRootCid` equals the root CID of the most recent *published* run before it.
+ */
+export function chainStatus(
+  runs: readonly RunBundle[],
+  index: number,
+): "first" | "linked" | "broken" | "pending" {
+  const run = runs[index];
+  if (!run) return "pending";
+  const prior = runs.slice(index + 1).find((r) => r.record.rootCid);
+  if (!prior) return run.record.previousRootCid ? "broken" : "first";
+  if (!run.record.rootCid && !run.record.previousRootCid) return "pending";
+  return run.record.previousRootCid === prior.record.rootCid ? "linked" : "broken";
 }

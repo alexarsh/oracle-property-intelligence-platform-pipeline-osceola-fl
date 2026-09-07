@@ -552,6 +552,8 @@ function PermitsTable({
               <th>Issued</th>
               <th>Job site</th>
               <th>Contractor</th>
+              <th>License</th>
+              <th>Phone</th>
               <th>BBB</th>
               <th>Source</th>
             </tr>
@@ -588,19 +590,35 @@ function PermitsTable({
                       <div className="truncate font-medium" title={x.contractorName}>
                         {x.contractorName}
                       </div>
-                      <div className="text-zinc-500">
-                        {x.contractorQualifier ? `${x.contractorQualifier} · ` : ""}
-                        {x.contractorLicense ? `lic. ${x.contractorLicense} · ` : ""}
-                        {x.contractorPhone ?? ""}
-                      </div>
+                      {x.contractorQualifier ? (
+                        <div className="text-zinc-500">{x.contractorQualifier}</div>
+                      ) : null}
                     </>
                   ) : (
                     <span className="text-zinc-400">not recorded on permit</span>
                   )}
                 </td>
-                <td className="text-xs">
+                <td className="font-mono text-xs whitespace-nowrap">
+                  {x.contractorLicense ?? <span className="text-zinc-400">—</span>}
+                </td>
+                <td className="font-mono text-xs whitespace-nowrap">
+                  {x.contractorPhone ?? <span className="text-zinc-400">—</span>}
+                </td>
+                <td className="text-xs whitespace-nowrap">
                   {x.bbbRating ? (
-                    <Badge tone="ok">{x.bbbRating}</Badge>
+                    <>
+                      <Badge tone="ok">{x.bbbRating}</Badge>
+                      {x.bbbAccredited ? <span className="ml-1">accredited</span> : null}
+                      <div className="text-zinc-500">
+                        matched by {x.bbbMatchMethod ?? "—"}
+                        {x.bbbProfileUrl ? (
+                          <>
+                            {" · "}
+                            <ExtLink href={x.bbbProfileUrl}>profile</ExtLink>
+                          </>
+                        ) : null}
+                      </div>
+                    </>
                   ) : (
                     <span className="text-zinc-400">none matched</span>
                   )}
@@ -616,7 +634,7 @@ function PermitsTable({
             ))}
             {permits.length === 0 && !busy ? (
               <tr>
-                <td colSpan={7} className="py-6 text-center text-zinc-500">
+                <td colSpan={9} className="py-6 text-center text-zinc-500">
                   No open roofing permits in this radius with the current filters.
                 </td>
               </tr>

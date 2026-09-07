@@ -12,6 +12,11 @@ Next.js 15 (App Router, TypeScript strict, Tailwind v4) UI for the Osceola Count
 | `/agent`    | "Now I am asking the same questions through the agent"                                                                                     | Vercel AI SDK `ToolLoopAgent` on Anthropic (`claude-sonnet-4-5`, override with `AGENT_MODEL`) with Zod tools `getSchema`, `geocodePlace`, `queryProperties`, `queryPermits`, `findPropertiesInArea`. Tool calls and SQL are rendered inline; the two transcript prompts are one-click suggestions. Without `ANTHROPIC_API_KEY` the page shows a notice instead of failing.                                                                                                    |
 | `/mcp`      | "Finally, I will show that the system is MCP-ready"                                                                                        | Configured endpoint, live `tools/list`, copy-paste Cursor / Claude Desktop / shell / curl configs (HTTP endpoint or `npx @elephant-xyz/mcp` stdio reading the Parquet straight from an IPFS gateway URL derived from the current root CID).                                                                                                                                                                                                                                   |
 
+## Deployed
+
+- Explorer (production): <https://osceola-explorer.vercel.app>
+- Hosted Elephant MCP (streamable HTTP): `https://osceola-mcp.vercel.app/mcp` (health: `https://osceola-mcp.vercel.app/health`) — the same stock `@elephant-xyz/mcp` package, with `PROPERTY_QUERY_TABLE_MAP` / `PERMIT_QUERY_TABLE_MAP` pointing at gateway URLs derived from the current run's root CID.
+
 ## Data access: only through the Elephant MCP
 
 Every data read — server components, route handlers and agent tools — is an MCP tool call to the stock [`@elephant-xyz/mcp`](https://github.com/elephant-xyz/elephant-mcp) server (streamable HTTP), which embeds DuckDB and reads the pipeline's published Parquet. The app never opens Parquet or DuckDB itself, so what the UI shows is exactly what any external agent or the roofing CRM gets through the same tools and the same kit data model.
@@ -56,7 +61,7 @@ Checks: `npx tsc --noEmit -p apps/explorer`, `npm run lint`, `npx vitest run app
 
 ## Deploy (Vercel Hobby)
 
-- Project root directory: `apps/explorer`; "Include source files outside of the Root Directory" enabled (default). `vercel.json` sets the install/build commands to run from the monorepo root so `@osceola/shared` resolves from the workspace and is built first.
+- Vercel project: root directory `apps/explorer`, deployed from the monorepo root ("Include source files outside of the Root Directory" enabled). `vercel.json` sets the install/build commands to run from the monorepo root so `@osceola/shared` resolves from the workspace and is built first. A `.vercelignore` at the repo root keeps `data/`, `.cache/`, build outputs, Parquet query tables and CAR files out of the upload — only source plus the committed run records (`manifest.json`, `coverage.json`, `verification.json`, `run-history.json`) ship.
 - `next.config.ts` sets `outputFileTracingRoot` to the monorepo root and `outputFileTracingIncludes` for `artifacts/run-history.json` and `artifacts/runs/**/*.json`, so the committed run records ship with the serverless functions. Parquet and CAR files are **not** bundled — they live on IPFS and are read by the MCP.
 - `/api/verify` and `/api/chat` declare `maxDuration = 300` (Hobby with Fluid compute). Large Parquet verification through public gateways can still exceed a gateway's own timeout; the UI reports the HTTP status instead of pretending.
 - The MCP itself is hosted separately (same `@elephant-xyz/mcp` package; e.g. its Vercel/Nitro preset or any Node host) with `PROPERTY_QUERY_TABLE_MAP` / `PERMIT_QUERY_TABLE_MAP` pointing at gateway URLs derived from the run's root CID.

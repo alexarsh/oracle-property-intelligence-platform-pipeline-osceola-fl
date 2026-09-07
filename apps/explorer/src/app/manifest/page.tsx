@@ -101,6 +101,39 @@ export default async function ManifestPage({
                 </span>
               ),
             ],
+            [
+              "IPNS gateways",
+              m.ipns ? (
+                <span key="ig" className="flex flex-col text-xs">
+                  <span>
+                    <ExtLink href={`https://${m.ipns.name}.ipns.dweb.link/`}>
+                      https://{m.ipns.name}.ipns.dweb.link/
+                    </ExtLink>{" "}
+                    <span className="text-zinc-500">(subdomain, independent)</span>
+                  </span>
+                  <span>
+                    <ExtLink href={`https://ipfs.io/ipns/${m.ipns.name}`}>
+                      https://ipfs.io/ipns/{m.ipns.name}
+                    </ExtLink>{" "}
+                    <span className="text-zinc-500">(independent · may lag: DHT propagation)</span>
+                  </span>
+                  <span>
+                    <ExtLink href={`https://ipfs.filebase.io/ipns/${m.ipns.name}`}>
+                      https://ipfs.filebase.io/ipns/{m.ipns.name}
+                    </ExtLink>{" "}
+                    <span className="text-zinc-500">(pinning vendor, publisher of the record)</span>
+                  </span>
+                  <span className="text-zinc-500">
+                    Each resolves to the resolved CID above — compare it with the root CID to
+                    confirm the pointer moved.
+                  </span>
+                </span>
+              ) : (
+                <span key="ig" className="text-zinc-500">
+                  —
+                </span>
+              ),
+            ],
             ["Proof gateways", m.gateways.join(", ")],
           ]}
         />
@@ -224,6 +257,24 @@ export default async function ManifestPage({
                     not pinned as its own object (the root CID is inside it)
                   </span>
                 ),
+              ],
+              [
+                "Derived CAR links",
+                <span key="links" className="flex flex-col text-xs">
+                  {GATEWAYS.filter((g) => g.independent).map((g) => (
+                    <ExtLink key={g.key} href={`${gatewayUrl(g, m.root.cid)}?format=car`}>
+                      {gatewayUrl(g, m.root.cid)}?format=car
+                    </ExtLink>
+                  ))}
+                  <span className="text-zinc-500">
+                    Any trustless gateway re-encodes the same DAG as a CAR on request; the
+                    pipeline's own CAR is also stored in the pinning bucket under{" "}
+                    <code>
+                      runs/{m.runId}/{m.car.fileName}
+                    </code>
+                    .
+                  </span>
+                </span>,
               ],
               [
                 "Import",

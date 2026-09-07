@@ -2,6 +2,8 @@ import { OSCEOLA } from "@osceola/shared";
 import { CoverageBar, ExtLink, Notice, PageHeader, Section, Stat } from "@/components/ui";
 import { loadArtifacts } from "@/lib/artifacts";
 import { fmtBytes, fmtDateTime, fmtInt } from "@/lib/format";
+import { getEnrichment } from "@/lib/queries/enrichment";
+import type { EnrichmentStats } from "@/lib/queries/enrichment";
 
 export const dynamic = "force-dynamic";
 
@@ -33,6 +35,13 @@ export default async function SourcesPage() {
     .find((t) => t.table === "properties")
     ?.columns.find((c) => c.column === "owner_name");
   const totalBytes = cov.sourceLoads.reduce((s, l) => s + (l.bytes ?? 0), 0);
+  let enrichment: EnrichmentStats | null = null;
+  let enrichmentError: string | null = null;
+  try {
+    enrichment = await getEnrichment();
+  } catch (err) {
+    enrichmentError = err instanceof Error ? err.message : String(err);
+  }
 
   return (
     <>
@@ -84,6 +93,51 @@ export default async function SourcesPage() {
           available” rather than inventing a score.
         </Notice>
       ) : null}
+
+      <Section
+        title="Contractor enrichment"
+        description="Computed live through the MCP permits view (contractor entities = distinct contractor_id on permits); cached for 5 minutes. Zeros are real zeros, not placeholders."
+      >
+        {enrichment ? (
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
+            <Stat
+              label="Contractors"
+              value={fmtInt(enrichment.contractors)}
+              sub={`on ${fmtInt(enrichment.permitsWithContractor)} permits naming a contractor`}
+            />
+            <Stat
+              label="With BBB rating"
+              value={fmtInt(enrichment.contractorsRated)}
+              sub={
+                Object.keys(enrichment.ratedByMethod).length
+                  ? Object.entries(enrichment.ratedByMethod)
+                      .map(([m, n]) => `${m}: ${fmtInt(n)}`)
+                      .join(" · ")
+                  : "by match method: license 0 · phone 0 · name 0"
+              }
+            />
+            <Stat
+              label="Permits with rated contractor"
+              value={fmtInt(enrichment.permitsRated)}
+              sub={`of ${fmtInt(enrichment.permitsTotal)} permits`}
+            />
+            <Stat
+              label="Permits from Accela portal"
+              value={fmtInt(enrichment.permitsAccela)}
+              sub="source_system = 'osceola_accela'"
+            />
+            <Stat
+              label="Computed"
+              value={<span className="text-base">{fmtDateTime(enrichment.computedAt)}</span>}
+              sub="via queryPermits · 5-min cache"
+            />
+          </div>
+        ) : (
+          <Notice tone="bad">
+            Enrichment counters unavailable: the MCP could not be reached ({enrichmentError}).
+          </Notice>
+        )}
+      </Section>
 
       <Section
         title="Datasets loaded"
