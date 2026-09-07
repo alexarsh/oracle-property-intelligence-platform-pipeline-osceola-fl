@@ -116,7 +116,16 @@ export async function ensureBbbTable(db: Db): Promise<void> {
       harvest_dir VARCHAR, loaded_run_id VARCHAR)`);
 }
 
-/** Load every BBB harvest under `data/raw/bbb/`. */
+/**
+ * Load every BBB harvest under `data/raw/bbb/`.
+ *
+ * Two record shapes are merged per harvest directory: `profiles.jsonl` (full
+ * profile pages: license numbers, review/complaint counts, address) and
+ * `listings.jsonl` (category listing cards: rating, score, accreditation,
+ * phones). Listings are the fallback for businesses whose profile page has not
+ * been fetched yet, so ratings are available as soon as the listing phase is
+ * done; a later profile fetch replaces the listing-derived row.
+ */
 export async function loadBbbHarvests(
   db: Db,
   runId: string,
@@ -128,17 +137,33 @@ export async function loadBbbHarvests(
   let inserted = 0;
   for (const file of files) {
     const before = await db.count("raw_bbb_profiles");
+    const listings = path.join(path.dirname(file), "listings.jsonl");
+    const hasListings = await stat(listings)
+      .then((s) => s.isFile())
+      .catch(() => false);
     await db.run(`CREATE OR REPLACE TEMP TABLE bbb_in AS
       SELECT * FROM read_json(${lit(file)}, format='newline_delimited', union_by_name=true,
         columns={bbbId:'VARCHAR', name:'VARCHAR', rating:'VARCHAR', accredited:'BOOLEAN', ratingScore:'DOUBLE', reviewCount:'INTEGER',
                  complaintCount:'INTEGER', phone:'VARCHAR', address:'VARCHAR', city:'VARCHAR', state:'VARCHAR', zip:'VARCHAR',
-                 licenseNumbers:'VARCHAR[]', categories:'VARCHAR[]', profileUrl:'VARCHAR', fetchedAt:'VARCHAR', rawHtmlSha256:'VARCHAR'})`);
+                 licenseNumbers:'VARCHAR[]', categories:'VARCHAR[]', profileUrl:'VARCHAR', fetchedAt:'VARCHAR', rawHtmlSha256:'VARCHAR'})
+      ${
+        hasListings
+          ? `UNION ALL BY NAME
+      SELECT bbbId, name, rating, accredited, ratingScore, NULL::INTEGER AS reviewCount, NULL::INTEGER AS complaintCount,
+             phones[1] AS phone, NULL::VARCHAR AS address, city, state, postalCode AS zip, []::VARCHAR[] AS licenseNumbers,
+             categories, profileUrl, ${lit(new Date().toISOString())} AS fetchedAt, NULL::VARCHAR AS rawHtmlSha256
+      FROM read_json(${lit(listings)}, format='newline_delimited', union_by_name=true,
+        columns={bbbId:'VARCHAR', name:'VARCHAR', rating:'VARCHAR', accredited:'BOOLEAN', ratingScore:'DOUBLE', phones:'VARCHAR[]',
+                 city:'VARCHAR', state:'VARCHAR', postalCode:'VARCHAR', categories:'VARCHAR[]', profileUrl:'VARCHAR'})
+      WHERE bbbId NOT IN (SELECT bbbId FROM read_json(${lit(file)}, format='newline_delimited', union_by_name=true, columns={bbbId:'VARCHAR'}))`
+          : ""
+      }`);
     const n = await db.count("bbb_in");
     await db.run(`
       INSERT OR REPLACE INTO raw_bbb_profiles
       SELECT bbbId, name, rating, accredited, ratingScore, reviewCount, complaintCount, phone, address, city, state, zip,
              licenseNumbers, categories, profileUrl, fetchedAt, rawHtmlSha256, ${lit(path.dirname(file))}, ${lit(runId)}
-      FROM bbb_in QUALIFY row_number() OVER (PARTITION BY bbbId ORDER BY fetchedAt DESC) = 1`);
+      FROM bbb_in QUALIFY row_number() OVER (PARTITION BY bbbId ORDER BY (rawHtmlSha256 IS NOT NULL) DESC, fetchedAt DESC) = 1`);
     seen += n;
     inserted += (await db.count("raw_bbb_profiles")) - before;
     await recordLoad(db, {
