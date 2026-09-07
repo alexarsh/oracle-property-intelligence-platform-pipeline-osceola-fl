@@ -97,13 +97,13 @@
       "previousRootCid": null,
       "ipnsName": "k51qzi5uqu5dj6np6f9gfvamtn0z1a4kcnbn1jpaba5im6i1msabllgebus21p",
       "verification": {
-        "verifiedAt": "2026-09-07T11:04:40.867Z",
+        "verifiedAt": "2026-09-07T11:28:33.230Z",
         "gateways": [
           "https://ipfs.io",
           "https://dweb.link"
         ],
         "artifactsChecked": 7,
-        "allMatched": false
+        "allMatched": true
       },
       "notes": []
     }

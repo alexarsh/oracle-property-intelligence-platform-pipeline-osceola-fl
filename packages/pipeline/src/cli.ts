@@ -21,7 +21,7 @@ import path from "node:path";
 import { ARTIFACTS_DIR, VERIFY_GATEWAYS } from "./config.js";
 import { publishRun } from "./publish/manifest.js";
 import { verifyManifest } from "./publish/verify.js";
-import { lastPublishedRun, readHistory, runDir } from "./runs/history.js";
+import { lastPublishedRun, readHistory, recordVerification, runDir } from "./runs/history.js";
 import { readJson, writeJson } from "./util/fs.js";
 import { RunManifest } from "@osceola/shared";
 import { executeRun } from "./runs/orchestrator.js";
@@ -81,7 +81,9 @@ ingest
 
 ingest
   .command("permits")
-  .description("Harvest Osceola Accela roofing permits for a date window (bisects windows that hit the portal's 100-hit cap)")
+  .description(
+    "Harvest Osceola Accela roofing permits for a date window (bisects windows that hit the portal's 100-hit cap)",
+  )
   .requiredOption("--since <date>", "Window start YYYY-MM-DD (inclusive)")
   .requiredOption("--until <date>", "Window end YYYY-MM-DD (inclusive)")
   .option("--concurrency <n>", "Parallel detail fetches", "2")
@@ -90,19 +92,43 @@ ingest
     const { harvestRange } = await import("./sources/accela/index.js");
     const { DATA_DIR } = await import("./config.js");
     const outDir = o.out ?? path.join(DATA_DIR, "raw", "accela", `${o.since}_${o.until}`);
-    const summaries = await harvestRange({ since: o.since, until: o.until, outDir, concurrency: Number(o.concurrency), logger });
-    const total = (k: "searchHits" | "detailsFetched" | "detailsFailed" | "requestCount") => summaries.reduce((a, s) => a + s[k], 0);
-    logger.info({ outDir, windows: summaries.length, searchHits: total("searchHits"), detailsFetched: total("detailsFetched"), detailsFailed: total("detailsFailed"), requests: total("requestCount") }, "permit harvest finished");
+    const summaries = await harvestRange({
+      since: o.since,
+      until: o.until,
+      outDir,
+      concurrency: Number(o.concurrency),
+      logger,
+    });
+    const total = (k: "searchHits" | "detailsFetched" | "detailsFailed" | "requestCount") =>
+      summaries.reduce((a, s) => a + s[k], 0);
+    logger.info(
+      {
+        outDir,
+        windows: summaries.length,
+        searchHits: total("searchHits"),
+        detailsFetched: total("detailsFetched"),
+        detailsFailed: total("detailsFailed"),
+        requests: total("requestCount"),
+      },
+      "permit harvest finished",
+    );
   });
 
 ingest
   .command("overture")
-  .description("Extract county-clipped Overture Maps places (business locations) for the pinned release")
-  .option("--release <release>", "Overture release to pin (default from OVERTURE_RELEASE or 2026-08-19.0)")
+  .description(
+    "Extract county-clipped Overture Maps places (business locations) for the pinned release",
+  )
+  .option(
+    "--release <release>",
+    "Overture release to pin (default from OVERTURE_RELEASE or 2026-08-19.0)",
+  )
   .option("--force", "Re-extract even if the release parquet exists", false)
   .action(async (o: { release?: string; force: boolean }) => {
     const { loadOverturePlaces } = await import("./sources/overture/index.js");
-    const result = await withDb((db, runId) => loadOverturePlaces(db, { runId, release: o.release, force: o.force }));
+    const result = await withDb((db, runId) =>
+      loadOverturePlaces(db, { runId, release: o.release, force: o.force }),
+    );
     logger.info(result, "overture ingest finished");
   });
 

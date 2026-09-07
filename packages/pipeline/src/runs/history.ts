@@ -40,6 +40,23 @@ export async function upsertRun(record: RunRecord): Promise<RunHistory> {
   return history;
 }
 
+/** Attach (or replace) the verification summary on an existing run record. */
+export async function recordVerification(
+  runId: string,
+  v: { verifiedAt: string; gateways: string[]; artifacts: unknown[]; allMatched: boolean },
+): Promise<void> {
+  const history = await readHistory();
+  const run = history.runs.find((r) => r.runId === runId);
+  if (!run) return;
+  run.verification = {
+    verifiedAt: v.verifiedAt,
+    gateways: v.gateways,
+    artifactsChecked: v.artifacts.length,
+    allMatched: v.allMatched,
+  };
+  await writeJson(HISTORY_PATH, history);
+}
+
 /** Latest run that finished successfully and published a root CID. */
 export async function lastPublishedRun(): Promise<RunRecord | null> {
   const history = await readHistory();
