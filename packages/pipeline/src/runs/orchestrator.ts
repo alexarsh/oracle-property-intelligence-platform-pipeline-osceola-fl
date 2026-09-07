@@ -190,6 +190,11 @@ export async function executeRun(db: Db, opts: RunOptions): Promise<RunRecord> {
       try {
         const res = await harvestAccela(opts.runId, since, opts.runDate);
         const loaded = await loadAccelaHarvests(db, opts.runId);
+        // `recordsSeen` counts every harvested row loaded this run (all harvest
+        // directories), so it is never smaller than the new/changed counts; the
+        // window's own search hits are kept in `window.searchHits`.
+        res.window = { ...(res.window ?? {}), searchHits: String(res.recordsSeen) };
+        res.recordsSeen = loaded.seen;
         res.recordsNew = loaded.inserted;
         res.recordsChanged = loaded.changed;
         record.sources.push(res);
@@ -268,6 +273,12 @@ export async function executeRun(db: Db, opts: RunOptions): Promise<RunRecord> {
     }
 
     record.status = "succeeded";
+    const failedSources = record.sources.filter((s) => s.status === "failed").map((s) => s.source);
+    if (failedSources.length > 0) {
+      record.notes.push(
+        `Succeeded with source failures: ${failedSources.join(", ")} (published tables carry the previous data for those sources)`,
+      );
+    }
   } catch (err) {
     record.status = "failed";
     record.notes.push(`Run failed: ${err instanceof Error ? err.message : String(err)}`);
