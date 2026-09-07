@@ -16,3 +16,6 @@ artifacts/runs/*/query-tables/
 artifacts/runs/*/*.car
 .DS_Store
 *.tsbuildinfo
+.vercel
+.env*
+.cache/
