@@ -21,7 +21,17 @@ import { exists, readJson, sha256File, writeJson } from "../../util/fs.js";
 
 const LAYER_URL = COUNTY.sources.osceola_gis_parcels!.url;
 const PAGE = 2000;
-const OUT_FIELDS = ["OBJECTID_1", "PARCELNO", "Dsp_strap", "YearBuilt", "DORCode", "LocCity", "LocZip", "LastUpdate", "TotalAcres"];
+const OUT_FIELDS = [
+  "OBJECTID_1",
+  "PARCELNO",
+  "Dsp_strap",
+  "YearBuilt",
+  "DORCode",
+  "LocCity",
+  "LocZip",
+  "LastUpdate",
+  "TotalAcres",
+];
 
 interface Feature {
   attributes: Record<string, unknown>;
@@ -42,10 +52,12 @@ export interface GisSweepOptions {
 }
 
 function epochMsToIso(v: unknown): string | null {
-  return typeof v === "number" && Number.isFinite(v) ? new Date(v).toISOString().slice(0, 10) : null;
+  return typeof v === "number" && Number.isFinite(v)
+    ? new Date(v).toISOString().slice(0, 10)
+    : null;
 }
 function str(v: unknown): string | null {
-  if (v === null || v === undefined) return null;
+  if (typeof v !== "string" && typeof v !== "number") return null;
   const s = String(v).trim();
   return s.length ? s : null;
 }
@@ -76,7 +88,11 @@ export function featureToRecord(f: Feature, fetchedAt: string): GisParcelRecord 
   });
 }
 
-async function fetchPage(fetchImpl: typeof fetch, where: string, offset: number): Promise<QueryResponse> {
+async function fetchPage(
+  fetchImpl: typeof fetch,
+  where: string,
+  offset: number,
+): Promise<QueryResponse> {
   const params = new URLSearchParams({
     where,
     outFields: OUT_FIELDS.join(","),
@@ -90,7 +106,9 @@ async function fetchPage(fetchImpl: typeof fetch, where: string, offset: number)
   });
   for (let attempt = 1; ; attempt++) {
     try {
-      const res = await fetchImpl(`${LAYER_URL}/query?${params}`, { headers: { "User-Agent": "oracle-osceola-pipeline/0.1" } });
+      const res = await fetchImpl(`${LAYER_URL}/query?${params.toString()}`, {
+        headers: { "User-Agent": "oracle-osceola-pipeline/0.1" },
+      });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const body = (await res.json()) as QueryResponse;
       if (body.error) throw new Error(`ArcGIS error ${body.error.code}: ${body.error.message}`);
@@ -104,7 +122,11 @@ async function fetchPage(fetchImpl: typeof fetch, where: string, offset: number)
 
 export function gisPaths(runId: string) {
   const dir = path.join(DATA_DIR, "raw", "gis", runId);
-  return { dir, jsonl: path.join(dir, "parcels.jsonl"), checkpoint: path.join(dir, "checkpoint.json") };
+  return {
+    dir,
+    jsonl: path.join(dir, "parcels.jsonl"),
+    checkpoint: path.join(dir, "checkpoint.json"),
+  };
 }
 
 /**
@@ -121,12 +143,15 @@ export async function loadGisParcels(db: Db, opts: GisSweepOptions): Promise<Sou
   const where = opts.updatedSince ? `LastUpdate >= DATE '${opts.updatedSince}'` : "1=1";
 
   // Total for progress + expected-count reconciliation.
-  const countRes = await fetchImpl(`${LAYER_URL}/query?where=${encodeURIComponent(where)}&returnCountOnly=true&f=json`);
+  const countRes = await fetchImpl(
+    `${LAYER_URL}/query?where=${encodeURIComponent(where)}&returnCountOnly=true&f=json`,
+  );
   const total = Number(((await countRes.json()) as { count?: number }).count ?? 0);
   log.info({ total, where }, "sweep start");
 
   let offset = 0;
-  if (await exists(p.checkpoint)) offset = (await readJson<{ offset: number }>(p.checkpoint)).offset;
+  if (await exists(p.checkpoint))
+    offset = (await readJson<{ offset: number }>(p.checkpoint)).offset;
   else await writeFile(p.jsonl, "");
 
   const fetchedAt = new Date().toISOString();
@@ -134,7 +159,9 @@ export async function loadGisParcels(db: Db, opts: GisSweepOptions): Promise<Sou
   let written = 0;
   const concurrency = opts.concurrency ?? 4;
   while (offset < total) {
-    const offsets = Array.from({ length: concurrency }, (_, i) => offset + i * PAGE).filter((o) => o < total);
+    const offsets = Array.from({ length: concurrency }, (_, i) => offset + i * PAGE).filter(
+      (o) => o < total,
+    );
     const pages = await Promise.all(offsets.map((o) => fetchPage(fetchImpl, where, o)));
     requests += pages.length;
     const lines: string[] = [];

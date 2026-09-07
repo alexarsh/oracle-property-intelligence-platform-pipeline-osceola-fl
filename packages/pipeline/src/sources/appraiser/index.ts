@@ -59,7 +59,11 @@ export interface AppraiserLoadOptions {
 /** Local paths for one tax year's export. */
 export function appraiserPaths(taxYear: number) {
   const dir = path.join(DATA_DIR, "raw", "ocpa", String(taxYear));
-  return { dir, zip: path.join(dir, `${taxYear}_CertifiedData_OCPA.zip`), extracted: path.join(dir, "extracted") };
+  return {
+    dir,
+    zip: path.join(dir, `${taxYear}_CertifiedData_OCPA.zip`),
+    extracted: path.join(dir, "extracted"),
+  };
 }
 
 async function extractZip(zip: string, dest: string): Promise<void> {
@@ -69,7 +73,10 @@ async function extractZip(zip: string, dest: string): Promise<void> {
 
 /** Find the extracted CSV regardless of the top-level folder name inside the ZIP. */
 async function locate(extracted: string, taxYear: number, file: string): Promise<string> {
-  const candidates = [path.join(extracted, `${taxYear}_CertifiedData_OCPA`, file), path.join(extracted, file)];
+  const candidates = [
+    path.join(extracted, `${taxYear}_CertifiedData_OCPA`, file),
+    path.join(extracted, file),
+  ];
   for (const c of candidates) if (await exists(c)) return c;
   throw new Error(`OCPA file not found after extraction: ${file}`);
 }
@@ -88,10 +95,18 @@ export async function loadAppraiser(db: Db, opts: AppraiserLoadOptions): Promise
 
   const dl = await downloadFile(url, p.zip, { overwrite: opts.forceDownload ?? false });
   const digest = await sha256File(p.zip);
-  log.info({ bytes: dl.bytes, downloaded: dl.downloaded, sha256: digest }, "certified export ready");
+  log.info(
+    { bytes: dl.bytes, downloaded: dl.downloaded, sha256: digest },
+    "certified export ready",
+  );
 
-  await db.run(`CREATE TABLE IF NOT EXISTS ocpa_loaded (tax_year INTEGER PRIMARY KEY, zip_sha256 VARCHAR, loaded_at TIMESTAMP, run_id VARCHAR)`);
-  const already = await db.one<{ zip_sha256: string }>(`SELECT zip_sha256 FROM ocpa_loaded WHERE tax_year = ?`, [opts.taxYear]);
+  await db.run(
+    `CREATE TABLE IF NOT EXISTS ocpa_loaded (tax_year INTEGER PRIMARY KEY, zip_sha256 VARCHAR, loaded_at TIMESTAMP, run_id VARCHAR)`,
+  );
+  const already = await db.one<{ zip_sha256: string }>(
+    `SELECT zip_sha256 FROM ocpa_loaded WHERE tax_year = ?`,
+    [opts.taxYear],
+  );
   const fetchedAt = new Date().toISOString();
   if (already && already.zip_sha256 === digest && !opts.forceReload) {
     log.info("tax year already loaded with identical digest — skipping (idempotent)");
@@ -148,7 +163,12 @@ export async function loadAppraiser(db: Db, opts: AppraiserLoadOptions): Promise
     });
     log.info({ table, rows, rejected: nRej }, "loaded");
   }
-  await db.run(`INSERT OR REPLACE INTO ocpa_loaded VALUES (?, ?, ?::TIMESTAMP, ?)`, [opts.taxYear, digest, fetchedAt, opts.runId]);
+  await db.run(`INSERT OR REPLACE INTO ocpa_loaded VALUES (?, ?, ?::TIMESTAMP, ?)`, [
+    opts.taxYear,
+    digest,
+    fetchedAt,
+    opts.runId,
+  ]);
 
   return {
     source: source.key,

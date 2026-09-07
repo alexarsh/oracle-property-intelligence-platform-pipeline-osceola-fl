@@ -16,10 +16,32 @@ import { lit } from "../duckdb/client.js";
 import { num, ocpaDate, parcelKey, rowHash, txt, year } from "./sql.js";
 
 const PROPERTY_HASH_COLS = [
-  "address_street", "address_city", "address_zip", "latitude", "longitude", "lot_size_acre", "property_usage_type",
-  "built_year", "effective_year", "livable_floor_area", "total_area", "assessed_value", "market_value", "land_value",
-  "owner_name", "owners_text", "owner_count", "last_sale_date", "last_sale_price", "subdivision", "permit_count",
-  "last_roof_permit_date", "open_roof_permit_count", "owner_mail_city", "owner_mail_state", "owner_mail_country",
+  "address_street",
+  "address_city",
+  "address_zip",
+  "latitude",
+  "longitude",
+  "lot_size_acre",
+  "property_usage_type",
+  "built_year",
+  "effective_year",
+  "livable_floor_area",
+  "total_area",
+  "assessed_value",
+  "market_value",
+  "land_value",
+  "owner_name",
+  "owners_text",
+  "owner_count",
+  "last_sale_date",
+  "last_sale_price",
+  "subdivision",
+  "permit_count",
+  "last_roof_permit_date",
+  "open_roof_permit_count",
+  "owner_mail_city",
+  "owner_mail_state",
+  "owner_mail_country",
 ];
 
 /** Phase 1: appraiser roll + GIS -> `properties_base` (no permit-derived columns yet). */

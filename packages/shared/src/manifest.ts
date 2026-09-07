@@ -39,10 +39,20 @@ export const RunManifest = z.object({
   /** Directory root of the whole run (every artifact is `<root>/<name>`). */
   root: ManifestArtifact,
   /** CAR file carrying the DAG rooted at `root.cid`, so any node can import it. */
-  car: z.object({ fileName: z.string(), size: z.number().int(), digest: z.string(), cid: cidV1.nullable() }),
+  car: z.object({
+    fileName: z.string(),
+    size: z.number().int(),
+    digest: z.string(),
+    cid: cidV1.nullable(),
+  }),
   artifacts: z.array(ManifestArtifact),
   ipns: z
-    .object({ name: z.string(), label: z.string(), resolvedCid: cidV1, publishedAt: z.string().datetime() })
+    .object({
+      name: z.string(),
+      label: z.string(),
+      resolvedCid: cidV1,
+      publishedAt: z.string().datetime(),
+    })
     .nullable(),
   /** The previous run's root CID (immutable; never rewritten). */
   previousRootCid: cidV1.nullable(),
@@ -71,6 +81,7 @@ export const SourceRunResult = z.object({
 export type SourceRunResult = z.infer<typeof SourceRunResult>;
 
 export const TableCounts = z.record(z.number().int().nonnegative());
+export type TableCounts = z.infer<typeof TableCounts>;
 
 export const RunRecord = z.object({
   runId: z.string(),
@@ -92,7 +103,12 @@ export const RunRecord = z.object({
   ipnsName: z.string().nullable(),
   /** Independent gateway verification outcome. */
   verification: z
-    .object({ verifiedAt: z.string().datetime(), gateways: z.array(z.string()), artifactsChecked: z.number().int(), allMatched: z.boolean() })
+    .object({
+      verifiedAt: z.string().datetime(),
+      gateways: z.array(z.string()),
+      artifactsChecked: z.number().int(),
+      allMatched: z.boolean(),
+    })
     .nullable(),
   notes: z.array(z.string()),
 });

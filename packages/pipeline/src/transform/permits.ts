@@ -20,7 +20,18 @@
  */
 import type { Db } from "../duckdb/client.js";
 import { lit } from "../duckdb/client.js";
-import { contractorBusiness, contractorQualifier, isRoofing, normalizedName, num, ocpaDate, parcelKey, phone10, rowHash, txt } from "./sql.js";
+import {
+  contractorBusiness,
+  contractorQualifier,
+  isRoofing,
+  normalizedName,
+  num,
+  ocpaDate,
+  parcelKey,
+  phone10,
+  rowHash,
+  txt,
+} from "./sql.js";
 
 /** Business columns whose change bumps `last_changed_run_id`. */
 const PERMIT_HASH_COLS = [

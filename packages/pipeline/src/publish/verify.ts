@@ -45,18 +45,36 @@ export interface VerificationReport {
   allMatched: boolean;
 }
 
-async function fetchAndHash(url: string, expectedSize: number, expectedDigest: string, timeoutMs: number): Promise<Omit<FetchCheck, "gateway">> {
+async function fetchAndHash(
+  url: string,
+  expectedSize: number,
+  expectedDigest: string,
+  timeoutMs: number,
+): Promise<Omit<FetchCheck, "gateway">> {
   const t0 = Date.now();
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
-    const res = await fetch(url, { signal: ctrl.signal, headers: { "User-Agent": "oracle-osceola-verify/0.1" }, redirect: "follow" });
+    const res = await fetch(url, {
+      signal: ctrl.signal,
+      headers: { "User-Agent": "oracle-osceola-verify/0.1" },
+      redirect: "follow",
+    });
     if (!res.ok || !res.body) {
-      return { url, ok: false, status: res.status, bytes: null, sha256: null, matched: false, ms: Date.now() - t0, error: `HTTP ${res.status}` };
+      return {
+        url,
+        ok: false,
+        status: res.status,
+        bytes: null,
+        sha256: null,
+        matched: false,
+        ms: Date.now() - t0,
+        error: `HTTP ${res.status}`,
+      };
     }
     const hash = createHash("sha256");
     let bytes = 0;
-    const reader = res.body.getReader();
+    const reader = (res.body as ReadableStream<Uint8Array>).getReader();
     for (;;) {
       const { done, value } = await reader.read();
       if (done) break;
@@ -64,9 +82,27 @@ async function fetchAndHash(url: string, expectedSize: number, expectedDigest: s
       bytes += value.length;
     }
     const digest = `sha256:${hash.digest("hex")}`;
-    return { url, ok: true, status: res.status, bytes, sha256: digest, matched: bytes === expectedSize && digest === expectedDigest, ms: Date.now() - t0, error: null };
+    return {
+      url,
+      ok: true,
+      status: res.status,
+      bytes,
+      sha256: digest,
+      matched: bytes === expectedSize && digest === expectedDigest,
+      ms: Date.now() - t0,
+      error: null,
+    };
   } catch (err) {
-    return { url, ok: false, status: null, bytes: null, sha256: null, matched: false, ms: Date.now() - t0, error: err instanceof Error ? err.message : String(err) };
+    return {
+      url,
+      ok: false,
+      status: null,
+      bytes: null,
+      sha256: null,
+      matched: false,
+      ms: Date.now() - t0,
+      error: err instanceof Error ? err.message : String(err),
+    };
   } finally {
     clearTimeout(timer);
   }
@@ -82,11 +118,16 @@ export interface VerifyOptions {
   only?: string[];
 }
 
-export async function verifyManifest(manifest: RunManifest, opts: VerifyOptions): Promise<VerificationReport> {
+export async function verifyManifest(
+  manifest: RunManifest,
+  opts: VerifyOptions,
+): Promise<VerificationReport> {
   const timeoutMs = opts.timeoutMs ?? 180_000;
   const attempts = opts.attempts ?? 3;
   const log = logger.child({ stage: "verify", runId: manifest.runId });
-  const files = manifest.artifacts.filter((a) => a.codec === "file" && (!opts.only || opts.only.includes(a.name)));
+  const files = manifest.artifacts.filter(
+    (a) => a.codec === "file" && (!opts.only || opts.only.includes(a.name)),
+  );
   const artifacts: ArtifactVerification[] = [];
 
   for (const a of files) {
@@ -97,13 +138,25 @@ export async function verifyManifest(manifest: RunManifest, opts: VerifyOptions)
       for (let i = 1; i <= attempts; i++) {
         check = await fetchAndHash(url, a.size, a.digest, timeoutMs);
         if (check.matched) break;
-        log.warn({ url, attempt: i, error: check.error ?? `mismatch (${check.bytes} bytes)` }, "gateway fetch not matched yet");
+        log.warn(
+          { url, attempt: i, error: check.error ?? `mismatch (${check.bytes} bytes)` },
+          "gateway fetch not matched yet",
+        );
         await new Promise((r) => setTimeout(r, 5_000 * i));
       }
       checks.push({ gateway, ...check! });
-      log.info({ name: a.name, gateway, matched: check!.matched, ms: check!.ms, bytes: check!.bytes }, "verified");
+      log.info(
+        { name: a.name, gateway, matched: check!.matched, ms: check!.ms, bytes: check!.bytes },
+        "verified",
+      );
     }
-    artifacts.push({ name: a.name, cid: a.cid, expectedSize: a.size, expectedDigest: a.digest, checks });
+    artifacts.push({
+      name: a.name,
+      cid: a.cid,
+      expectedSize: a.size,
+      expectedDigest: a.digest,
+      checks,
+    });
   }
 
   // Root proof: resolve the smallest file *through* the directory root.
@@ -113,11 +166,21 @@ export async function verifyManifest(manifest: RunManifest, opts: VerifyOptions)
     for (const gateway of opts.gateways) {
       const url = `${gateway.replace(/\/$/, "")}/ipfs/${manifest.root.cid}/${probe.name}`;
       let check: Omit<FetchCheck, "gateway"> | null = null;
-      for (let i = 1; i <= attempts && !check?.matched; i++) check = await fetchAndHash(url, probe.size, probe.digest, timeoutMs);
+      for (let i = 1; i <= attempts && !check?.matched; i++)
+        check = await fetchAndHash(url, probe.size, probe.digest, timeoutMs);
       rootPathCheck.push({ gateway, ...check! });
     }
   }
 
-  const allMatched = artifacts.every((a) => a.checks.every((c) => c.matched)) && rootPathCheck.every((c) => c.matched);
-  return { runId: manifest.runId, verifiedAt: new Date().toISOString(), gateways: opts.gateways, artifacts, rootPathCheck, allMatched };
+  const allMatched =
+    artifacts.every((a) => a.checks.every((c) => c.matched)) &&
+    rootPathCheck.every((c) => c.matched);
+  return {
+    runId: manifest.runId,
+    verifiedAt: new Date().toISOString(),
+    gateways: opts.gateways,
+    artifacts,
+    rootPathCheck,
+    allMatched,
+  };
 }

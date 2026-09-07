@@ -9,7 +9,10 @@
 import { z } from "zod";
 
 /** ISO-8601 date string `YYYY-MM-DD` or null. */
-export const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/).nullable();
+export const isoDate = z
+  .string()
+  .regex(/^\d{4}-\d{2}-\d{2}$/)
+  .nullable();
 
 /**
  * One permit as harvested from the Accela Citizen Access portal.

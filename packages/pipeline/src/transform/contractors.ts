@@ -21,7 +21,9 @@ import { normalizedName, phone10 } from "./sql.js";
  * Build `contractor_link` (permit -> contractor id), `contractors`, and — when
  * `raw_bbb_profiles` exists — `contractor_bbb_match`.
  */
-export async function buildContractors(db: Db): Promise<{ contractors: number; bbbMatched: number }> {
+export async function buildContractors(
+  db: Db,
+): Promise<{ contractors: number; bbbMatched: number }> {
   // 1. Per-permit identity key. Licenses are unique per contractor; phones are
   //    stable per business; the normalized name is the fallback.
   await db.run(`

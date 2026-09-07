@@ -24,6 +24,7 @@ import { verifyManifest } from "./publish/verify.js";
 import { lastPublishedRun, readHistory, runDir } from "./runs/history.js";
 import { readJson, writeJson } from "./util/fs.js";
 import { RunManifest } from "@osceola/shared";
+import { executeRun } from "./runs/orchestrator.js";
 
 const program = new Command()
   .name("osceola-pipeline")
@@ -38,7 +39,7 @@ async function withDb<T>(fn: (db: Db, runId: string) => Promise<T>): Promise<T> 
     await ensureLedger(db);
     return await fn(db, opts.runId ?? newRunId("incremental"));
   } finally {
-    await db.close();
+    db.close();
   }
 }
 
@@ -52,7 +53,12 @@ ingest
   .option("--force-reload", "Re-load tables even if already loaded", false)
   .action(async (o: { taxYear: string; forceDownload: boolean; forceReload: boolean }) => {
     const result = await withDb((db, runId) =>
-      loadAppraiser(db, { taxYear: Number(o.taxYear), runId, forceDownload: o.forceDownload, forceReload: o.forceReload }),
+      loadAppraiser(db, {
+        taxYear: Number(o.taxYear),
+        runId,
+        forceDownload: o.forceDownload,
+        forceReload: o.forceReload,
+      }),
     );
     logger.info(result, "appraiser ingest finished");
   });
@@ -64,7 +70,11 @@ ingest
   .option("--concurrency <n>", "Parallel page requests", "4")
   .action(async (o: { updatedSince?: string; concurrency: string }) => {
     const result = await withDb((db, runId) =>
-      loadGisParcels(db, { runId, updatedSince: o.updatedSince, concurrency: Number(o.concurrency) }),
+      loadGisParcels(db, {
+        runId,
+        updatedSince: o.updatedSince,
+        concurrency: Number(o.concurrency),
+      }),
     );
     logger.info(result, "gis ingest finished");
   });
@@ -82,8 +92,14 @@ ingest
 
 program
   .command("build")
-  .description("Rebuild the reconciled query tables and export Parquet + coverage into artifacts/runs/<runId>/")
-  .option("--run-date <date>", "As-of date for age / duration calculations (YYYY-MM-DD)", new Date().toISOString().slice(0, 10))
+  .description(
+    "Rebuild the reconciled query tables and export Parquet + coverage into artifacts/runs/<runId>/",
+  )
+  .option(
+    "--run-date <date>",
+    "As-of date for age / duration calculations (YYYY-MM-DD)",
+    new Date().toISOString().slice(0, 10),
+  )
   .option("--out <dir>", "Output directory (default artifacts/runs/<runId>)")
   .action(async (o: { runDate: string; out?: string }) => {
     const result = await withDb(async (db, runId) => {
@@ -97,21 +113,42 @@ program
 
 program
   .command("publish")
-  .description("Pack a built run directory into a CAR, compute CIDs, write manifest.json; with --live upload to Filebase and re-point IPNS")
+  .description(
+    "Pack a built run directory into a CAR, compute CIDs, write manifest.json; with --live upload to Filebase and re-point IPNS",
+  )
   .requiredOption("--run <runId>", "Run id whose artifacts/runs/<runId> directory to publish")
   .option("--live", "Upload to Filebase (requires credentials in the environment)", false)
   .action(async (o: { run: string; live: boolean }) => {
     const dir = runDir(o.run);
-    const coverage = await readJson<{ tables: { table: string; rows: number }[] }>(path.join(dir, "coverage.json"));
+    const coverage = await readJson<{ tables: { table: string; rows: number }[] }>(
+      path.join(dir, "coverage.json"),
+    );
     const rowCounts = Object.fromEntries(coverage.tables.map((t) => [t.table, t.rows]));
     const prev = await lastPublishedRun();
-    const out = await publishRun({ runId: o.run, runDir: dir, previousRootCid: prev?.rootCid ?? null, rowCounts, live: o.live });
-    logger.info({ root: out.manifest.root.cid, car: out.manifest.car, ipns: out.manifest.ipns, uploaded: out.uploaded, manifest: out.manifestPath }, "publish finished");
+    const out = await publishRun({
+      runId: o.run,
+      runDir: dir,
+      previousRootCid: prev?.rootCid ?? null,
+      rowCounts,
+      live: o.live,
+    });
+    logger.info(
+      {
+        root: out.manifest.root.cid,
+        car: out.manifest.car,
+        ipns: out.manifest.ipns,
+        uploaded: out.uploaded,
+        manifest: out.manifestPath,
+      },
+      "publish finished",
+    );
   });
 
 program
   .command("verify")
-  .description("Fetch every artifact CID from independent public gateways and compare bytes with the manifest")
+  .description(
+    "Fetch every artifact CID from independent public gateways and compare bytes with the manifest",
+  )
   .requiredOption("--run <runId>", "Run id to verify")
   .option("--gateways <list>", "Comma-separated gateway base URLs", VERIFY_GATEWAYS.join(","))
   .option("--only <names>", "Comma-separated artifact names to verify (default all)")
@@ -125,9 +162,78 @@ program
       ...(o.only ? { only: o.only.split(",").map((n) => n.trim()) } : {}),
     });
     await writeJson(path.join(dir, "verification.json"), report);
-    logger.info({ allMatched: report.allMatched, artifacts: report.artifacts.length, gateways: report.gateways }, "verification finished");
+    logger.info(
+      {
+        allMatched: report.allMatched,
+        artifacts: report.artifacts.length,
+        gateways: report.gateways,
+      },
+      "verification finished",
+    );
     if (!report.allMatched) process.exitCode = 2;
   });
+
+program
+  .command("run")
+  .description(
+    "Execute a full or incremental pipeline run: ingest -> build -> export -> publish -> verify -> history",
+  )
+  .option("--mode <mode>", "full | incremental", "incremental")
+  .option("--run-date <date>", "As-of date (YYYY-MM-DD)", new Date().toISOString().slice(0, 10))
+  .option("--permits-since <date>", "Override the Accela window start (YYYY-MM-DD)")
+  .option("--overlap-days <n>", "Days of permit-window overlap with the previous run", "14")
+  .option("--skip-permits", "Skip the Accela harvest", false)
+  .option("--skip-gis", "Skip the GIS sweep", false)
+  .option("--no-publish", "Pack + manifest only, never upload")
+  .option("--no-verify", "Skip gateway verification")
+  .option("--verify-only <names>", "Comma-separated artifact names to verify")
+  .action(
+    async (o: {
+      mode: "full" | "incremental";
+      runDate: string;
+      permitsSince?: string;
+      overlapDays: string;
+      skipPermits: boolean;
+      skipGis: boolean;
+      publish: boolean;
+      verify: boolean;
+      verifyOnly?: string;
+    }) => {
+      const opts = program.opts<{ db: string; runId?: string }>();
+      const runId = opts.runId ?? newRunId(o.mode);
+      const db = await Db.open(opts.db);
+      try {
+        await ensureLedger(db);
+        const record = await executeRun(db, {
+          runId,
+          mode: o.mode,
+          runDate: o.runDate,
+          permitsSince: o.permitsSince,
+          overlapDays: Number(o.overlapDays),
+          skipPermits: o.skipPermits,
+          skipGis: o.skipGis,
+          publish: o.publish,
+          verify: o.verify,
+          ...(o.verifyOnly ? { verifyOnly: o.verifyOnly.split(",").map((n) => n.trim()) } : {}),
+        });
+        logger.info(
+          {
+            runId: record.runId,
+            status: record.status,
+            rootCid: record.rootCid,
+            ipns: record.ipnsName,
+            counts: record.tableCounts,
+            deltas: record.tableDeltas,
+            verification: record.verification,
+          },
+          "run finished",
+        );
+        if (record.status !== "succeeded") process.exitCode = 1;
+      } finally {
+        db.close();
+      }
+    },
+  );
 
 program
   .command("history")
@@ -135,7 +241,17 @@ program
   .action(async () => {
     const h = await readHistory();
     for (const r of h.runs) {
-      logger.info({ runId: r.runId, mode: r.mode, status: r.status, rootCid: r.rootCid, tableCounts: r.tableCounts, tableDeltas: r.tableDeltas }, "run");
+      logger.info(
+        {
+          runId: r.runId,
+          mode: r.mode,
+          status: r.status,
+          rootCid: r.rootCid,
+          tableCounts: r.tableCounts,
+          tableDeltas: r.tableDeltas,
+        },
+        "run",
+      );
     }
   });
 

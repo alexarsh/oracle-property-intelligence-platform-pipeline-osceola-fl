@@ -48,21 +48,39 @@ export async function publishRun(opts: PublishOptions): Promise<PublishOutcome> 
   const log = logger.child({ stage: "publish", runId: opts.runId });
   const carPath = path.join(opts.runDir, CAR_NAME);
   const pack = await packDirectory(opts.runDir, carPath, (rel) => NOT_PACKED.has(rel));
-  log.info({ root: pack.root.cid.toString(), files: pack.entries.length, blocks: pack.blockCount, carBytes: pack.carSize }, "run packed");
+  log.info(
+    {
+      root: pack.root.cid.toString(),
+      files: pack.entries.length,
+      blocks: pack.blockCount,
+      carBytes: pack.carSize,
+    },
+    "run packed",
+  );
 
   let ipns: RunManifest["ipns"] = null;
   let uploaded = false;
   let carCid: string | null = null;
   if (opts.live) {
-    if (!hasFilebaseCredentials()) throw new Error("live publish requested but Filebase credentials are missing (S3_ACCESS_KEY_ID / S3_SECRET_ACCESS_KEY / S3_BUCKET)");
+    if (!hasFilebaseCredentials())
+      throw new Error(
+        "live publish requested but Filebase credentials are missing (S3_ACCESS_KEY_ID / S3_SECRET_ACCESS_KEY / S3_BUCKET)",
+      );
     const up = await uploadCar(carPath, `runs/${opts.runId}/${CAR_NAME}`);
     if (up.cid !== pack.root.cid.toString()) {
-      throw new Error(`Filebase root CID ${up.cid} differs from locally computed ${pack.root.cid.toString()} — refusing to publish an unverifiable manifest`);
+      throw new Error(
+        `Filebase root CID ${up.cid} differs from locally computed ${pack.root.cid.toString()} — refusing to publish an unverifiable manifest`,
+      );
     }
     carCid = up.cid;
     uploaded = true;
     const name = await upsertIpns(FILEBASE.ipnsLabel, up.cid);
-    ipns = { name: name.name, label: name.label, resolvedCid: up.cid, publishedAt: new Date().toISOString() };
+    ipns = {
+      name: name.name,
+      label: name.label,
+      resolvedCid: up.cid,
+      publishedAt: new Date().toISOString(),
+    };
     log.info({ cid: up.cid, ipns: name.name }, "published to Filebase and re-pointed IPNS");
   }
 
@@ -77,7 +95,12 @@ export async function publishRun(opts: PublishOptions): Promise<PublishOutcome> 
     runId: opts.runId,
     publishedAt: new Date().toISOString(),
     root: toManifestArtifact(pack.root, pack.carSha256),
-    car: { fileName: CAR_NAME, size: pack.carSize, digest: `sha256:${pack.carSha256}`, cid: carCid },
+    car: {
+      fileName: CAR_NAME,
+      size: pack.carSize,
+      digest: `sha256:${pack.carSha256}`,
+      cid: carCid,
+    },
     artifacts,
     ipns,
     previousRootCid: opts.previousRootCid,

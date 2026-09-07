@@ -28,7 +28,11 @@ export interface BuildResult {
 }
 
 /** Rebuild every query table inside DuckDB. Idempotent; lineage columns carry forward. */
-export async function buildQueryTables(db: Db, runId: string, runDate: string): Promise<BuildResult> {
+export async function buildQueryTables(
+  db: Db,
+  runId: string,
+  runDate: string,
+): Promise<BuildResult> {
   const log = logger.child({ stage: "transform", runId });
   const t0 = Date.now();
   const base = await buildPropertiesBase(db);
@@ -55,7 +59,8 @@ export async function columnCoverage(db: Db, table: QueryTableName): Promise<Col
   const cols = QUERY_TABLES[table].map((c) => c.name);
   const total = await db.count(table);
   const exprs = cols.map((c) => `count(${c}) AS "${c}"`).join(", ");
-  const row = (await db.one<Record<string, bigint | number>>(`SELECT ${exprs} FROM ${table}`)) ?? {};
+  const row =
+    (await db.one<Record<string, bigint | number>>(`SELECT ${exprs} FROM ${table}`)) ?? {};
   return cols.map((c) => {
     const nonNull = Number(row[c] ?? 0);
     return { column: c, nonNull, pct: total ? Math.round((nonNull / total) * 1000) / 10 : 0 };
@@ -72,7 +77,11 @@ export interface ExportedTable {
  * Write Parquet query tables + coverage + samples into `outDir`.
  * Column order follows `@osceola/shared` so the schema is stable across runs.
  */
-export async function exportQueryTables(db: Db, outDir: string, runId: string): Promise<ExportedTable[]> {
+export async function exportQueryTables(
+  db: Db,
+  outDir: string,
+  runId: string,
+): Promise<ExportedTable[]> {
   const tablesDir = path.join(outDir, "query-tables");
   const samplesDir = path.join(outDir, "samples");
   await mkdir(tablesDir, { recursive: true });
@@ -84,14 +93,21 @@ export async function exportQueryTables(db: Db, outDir: string, runId: string): 
   for (const table of Object.keys(QUERY_TABLES) as QueryTableName[]) {
     const cols = QUERY_TABLES[table].map((c) => `${c.name}::${c.type} AS ${c.name}`).join(", ");
     const file = path.join(tablesDir, `${table}.parquet`);
-    await db.run(`COPY (SELECT ${cols} FROM ${table} ORDER BY 1) TO ${lit(file)} (FORMAT PARQUET, COMPRESSION ZSTD, ROW_GROUP_SIZE 65536)`);
+    await db.run(
+      `COPY (SELECT ${cols} FROM ${table} ORDER BY 1) TO ${lit(file)} (FORMAT PARQUET, COMPRESSION ZSTD, ROW_GROUP_SIZE 65536)`,
+    );
     const rows = await db.count(table);
     exported.push({ table, file: path.relative(outDir, file), rows });
     coverage.push({ table, rows, columns: await columnCoverage(db, table) });
   }
 
   // Per-source counts in the kit's dataset-coverage shape.
-  const sourceRows = await db.all<{ source_system: string; n: bigint | number; first_loaded: string; last_loaded: string }>(`
+  const sourceRows = await db.all<{
+    source_system: string;
+    n: bigint | number;
+    first_loaded: string;
+    last_loaded: string;
+  }>(`
     SELECT source_system, count(*) AS n, min(fetched_at)::VARCHAR AS first_loaded, max(fetched_at)::VARCHAR AS last_loaded FROM permits GROUP BY 1
     UNION ALL
     SELECT 'osceola_appraiser (properties)', count(*), (SELECT min(fetched_at)::VARCHAR FROM source_loads WHERE source='ocpa_certified'), (SELECT max(fetched_at)::VARCHAR FROM source_loads WHERE source='ocpa_certified') FROM properties
@@ -109,7 +125,9 @@ export async function exportQueryTables(db: Db, outDir: string, runId: string): 
       ipns_label: null,
     });
   }
-  const loads = await db.all(`SELECT run_id, source, item, url, digest, bytes, rows, fetched_at::VARCHAR AS fetched_at, notes FROM source_loads ORDER BY fetched_at`);
+  const loads = await db.all(
+    `SELECT run_id, source, item, url, digest, bytes, rows, fetched_at::VARCHAR AS fetched_at, notes FROM source_loads ORDER BY fetched_at`,
+  );
   await writeJson(path.join(outDir, "coverage.json"), {
     county: COUNTY.key,
     countyName: COUNTY.name,

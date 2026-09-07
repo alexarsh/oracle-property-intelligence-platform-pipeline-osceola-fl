@@ -23,8 +23,14 @@ import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
 import * as UnixFS from "@ipld/unixfs";
 import { CarWriter } from "@ipld/car";
-import { CID } from "multiformats/cid";
+import type { CID } from "multiformats/cid";
 import type { ManifestArtifact } from "@osceola/shared";
+
+/** Link types as returned by the UnixFS writers (not re-exported by the package root). */
+type FileLink = Awaited<ReturnType<ReturnType<typeof UnixFS.createFileWriter>["close"]>>;
+type DirectoryLink = Awaited<ReturnType<ReturnType<typeof UnixFS.createDirectoryWriter>["close"]>>;
+/** @ipld/car bundles its own multiformats copy; the CID shape is identical, so we cast at that boundary. */
+type CarCid = Parameters<CarWriter["put"]>[0]["cid"];
 
 /** One content-addressed entry (file or directory) inside the run. */
 export interface DagEntry {
@@ -83,7 +89,10 @@ export async function packDirectory(
   exclude: (relPath: string) => boolean = () => false,
 ): Promise<PackResult> {
   const blocks = new Map<string, { cid: CID; bytes: Uint8Array }>();
-  const { readable, writable } = new TransformStream<UnixFS.Block, UnixFS.Block>({}, UnixFS.withCapacity(1 << 26));
+  const { readable, writable } = new TransformStream<UnixFS.Block, UnixFS.Block>(
+    {},
+    UnixFS.withCapacity(1 << 26),
+  );
   const collector = (async () => {
     const reader = readable.getReader();
     for (;;) {
@@ -96,7 +105,7 @@ export async function packDirectory(
 
   const files = (await listFiles(runDir)).filter((f) => !exclude(f));
   const entries: DagEntry[] = [];
-  const fileLinks = new Map<string, UnixFS.FileLink>();
+  const fileLinks = new Map<string, FileLink>();
 
   for (const rel of files) {
     const abs = path.join(runDir, rel);
@@ -111,7 +120,13 @@ export async function packDirectory(
     }
     const link = await fw.close();
     fileLinks.set(rel, link);
-    entries.push({ name: rel, cid: link.cid as CID, codec: "file", size, sha256: hash.digest("hex") });
+    entries.push({
+      name: rel,
+      cid: link.cid as CID,
+      codec: "file",
+      size,
+      sha256: hash.digest("hex"),
+    });
   }
 
   // Build directories bottom-up: deepest paths first so children exist before parents.
@@ -123,22 +138,33 @@ export async function packDirectory(
       d = path.posix.dirname(d);
     }
   }
-  const dirs = [...dirSet].sort((a, b) => b.split("/").length - a.split("/").length || b.localeCompare(a));
-  const dirLinks = new Map<string, UnixFS.DirectoryLink>();
+  const dirs = [...dirSet].sort(
+    (a, b) => b.split("/").length - a.split("/").length || b.localeCompare(a),
+  );
+  const dirLinks = new Map<string, DirectoryLink>();
   const childrenOf = (dir: string) => {
-    const prefix = dir ? `${dir}/` : "";
-    const direct = new Map<string, UnixFS.FileLink | UnixFS.DirectoryLink>();
-    for (const [rel, link] of fileLinks) if (path.posix.dirname(rel) === (dir || ".")) direct.set(path.posix.basename(rel), link);
-    for (const [rel, link] of dirLinks) if (rel && path.posix.dirname(rel) === (dir || ".")) direct.set(path.posix.basename(rel), link);
-    void prefix;
+    const direct = new Map<string, FileLink | DirectoryLink>();
+    for (const [rel, link] of fileLinks)
+      if (path.posix.dirname(rel) === (dir || ".")) direct.set(path.posix.basename(rel), link);
+    for (const [rel, link] of dirLinks)
+      if (rel && path.posix.dirname(rel) === (dir || "."))
+        direct.set(path.posix.basename(rel), link);
     return direct;
   };
   for (const d of dirs) {
     const dw = UnixFS.createDirectoryWriter(writer);
-    for (const [name, link] of [...childrenOf(d).entries()].sort(([a], [b]) => a.localeCompare(b))) dw.set(name, link);
+    for (const [name, link] of [...childrenOf(d).entries()].sort(([a], [b]) => a.localeCompare(b)))
+      dw.set(name, link);
     const link = await dw.close();
     dirLinks.set(d, link);
-    if (d !== "") entries.push({ name: d, cid: link.cid as CID, codec: "directory", size: Number(link.dagByteLength), sha256: null });
+    if (d !== "")
+      entries.push({
+        name: d,
+        cid: link.cid as CID,
+        codec: "directory",
+        size: Number(link.dagByteLength),
+        sha256: null,
+      });
   }
   await writer.close();
   await collector;
@@ -147,7 +173,7 @@ export async function packDirectory(
   const rootCid = rootLink.cid as CID;
 
   // Write the CAR with the real root (known only now).
-  const { writer: car, out } = CarWriter.create([rootCid]);
+  const { writer: car, out } = CarWriter.create([rootCid as unknown as CarCid]);
   const carHash = createHash("sha256");
   let carSize = 0;
   const sink = createWriteStream(carPath);
@@ -163,12 +189,19 @@ export async function packDirectory(
     ),
     sink,
   );
-  for (const { cid, bytes } of blocks.values()) await car.put({ cid, bytes });
+  for (const { cid, bytes } of blocks.values())
+    await car.put({ cid: cid as unknown as CarCid, bytes });
   await car.close();
   await pump;
 
   return {
-    root: { name: "", cid: rootCid, codec: "directory", size: Number(rootLink.dagByteLength), sha256: null },
+    root: {
+      name: "",
+      cid: rootCid,
+      codec: "directory",
+      size: Number(rootLink.dagByteLength),
+      sha256: null,
+    },
     entries: entries.sort((a, b) => a.name.localeCompare(b.name)),
     carPath,
     carSize,
@@ -178,7 +211,11 @@ export async function packDirectory(
 }
 
 /** Manifest artifact for one DAG entry (row counts are filled in by the caller). */
-export function toManifestArtifact(e: DagEntry, carSha256: string, rowCount: number | null = null): ManifestArtifact {
+export function toManifestArtifact(
+  e: DagEntry,
+  carSha256: string,
+  rowCount: number | null = null,
+): ManifestArtifact {
   return {
     name: e.name,
     cid: e.cid.toString(),

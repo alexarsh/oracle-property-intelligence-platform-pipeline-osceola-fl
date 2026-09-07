@@ -34,12 +34,25 @@ export interface CountyConfig {
   readonly stateCode: string;
   readonly fips: string;
   /** Bounding box used to sanity-check coordinates (WGS84). */
-  readonly bbox: { readonly minLat: number; readonly maxLat: number; readonly minLng: number; readonly maxLng: number };
+  readonly bbox: {
+    readonly minLat: number;
+    readonly maxLat: number;
+    readonly minLng: number;
+    readonly maxLng: number;
+  };
   /** Named demo anchors for radius queries. */
-  readonly places: ReadonlyArray<{ readonly name: string; readonly lat: number; readonly lng: number }>;
+  readonly places: ReadonlyArray<{
+    readonly name: string;
+    readonly lat: number;
+    readonly lng: number;
+  }>;
   readonly sources: Readonly<Record<string, SourceDescriptor>>;
   /** Default lead-scoring thresholds (all overridable at query time). */
-  readonly thresholds: { readonly roofAgeYears: number; readonly longOpenPermitYears: number; readonly ownershipTenureYears: number };
+  readonly thresholds: {
+    readonly roofAgeYears: number;
+    readonly longOpenPermitYears: number;
+    readonly ownershipTenureYears: number;
+  };
 }
 
 /** Osceola County, FL — the default and primary county for this milestone. */

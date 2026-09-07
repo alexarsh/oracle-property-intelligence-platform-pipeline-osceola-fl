@@ -66,7 +66,9 @@ export class Db {
 
   /** Convenience: `SELECT count(*)` of a table or subquery alias. */
   async count(tableOrSubquery: string): Promise<number> {
-    const row = await this.one<{ n: bigint | number }>(`SELECT count(*) AS n FROM ${tableOrSubquery}`);
+    const row = await this.one<{ n: bigint | number }>(
+      `SELECT count(*) AS n FROM ${tableOrSubquery}`,
+    );
     return Number(row?.n ?? 0);
   }
 
@@ -78,7 +80,7 @@ export class Db {
     return Number(row?.n ?? 0) > 0;
   }
 
-  async close(): Promise<void> {
+  close(): void {
     this.conn.closeSync();
     this.instance.closeSync();
   }

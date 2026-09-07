@@ -42,7 +42,9 @@ export const DEFAULT_TAX_YEAR = Number(process.env.OSCEOLA_TAX_YEAR ?? 2025);
  * independent-retrieval proof. Filebase's gateway is deliberately excluded here
  * because it is the pinning vendor.
  */
-export const VERIFY_GATEWAYS = (process.env.OSCEOLA_VERIFY_GATEWAYS ?? "https://ipfs.io,https://dweb.link")
+export const VERIFY_GATEWAYS = (
+  process.env.OSCEOLA_VERIFY_GATEWAYS ?? "https://ipfs.io,https://dweb.link"
+)
   .split(",")
   .map((g) => g.trim())
   .filter(Boolean);
@@ -66,5 +68,8 @@ export function hasFilebaseCredentials(): boolean {
 
 /** Generates a sortable run id: `2026-09-07T10-41-12Z-full`. */
 export function newRunId(mode: "full" | "incremental", now = new Date()): string {
-  return `${now.toISOString().replace(/[:.]/g, "-").replace(/-\d{3}Z$/, "Z")}-${mode}`;
+  return `${now
+    .toISOString()
+    .replace(/[:.]/g, "-")
+    .replace(/-\d{3}Z$/, "Z")}-${mode}`;
 }

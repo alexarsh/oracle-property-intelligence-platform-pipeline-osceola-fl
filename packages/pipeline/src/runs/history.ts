@@ -49,7 +49,10 @@ export async function lastPublishedRun(): Promise<RunRecord | null> {
 /** Latest run of any status except the given one (for delta computation). */
 export async function previousSuccessfulRun(excludeRunId: string): Promise<RunRecord | null> {
   const history = await readHistory();
-  return [...history.runs].reverse().find((r) => r.status === "succeeded" && r.runId !== excludeRunId) ?? null;
+  return (
+    [...history.runs].reverse().find((r) => r.status === "succeeded" && r.runId !== excludeRunId) ??
+    null
+  );
 }
 
 export function tableDeltas(current: TableCounts, previous: TableCounts | null): TableCounts {

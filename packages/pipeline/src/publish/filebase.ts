@@ -31,7 +31,9 @@ function client(): S3Client {
 }
 
 function bearer(): string {
-  return Buffer.from(`${FILEBASE.accessKeyId}:${FILEBASE.secretAccessKey}`, "utf8").toString("base64");
+  return Buffer.from(`${FILEBASE.accessKeyId}:${FILEBASE.secretAccessKey}`, "utf8").toString(
+    "base64",
+  );
 }
 
 /** Poll HeadObject until Filebase has finished the (asynchronous) CAR import and exposes the CID. */
@@ -41,7 +43,8 @@ async function waitForCid(s3: S3Client, key: string, timeoutMs = 10 * 60_000): P
     const head = await s3.send(new HeadObjectCommand({ Bucket: FILEBASE.bucket, Key: key }));
     const cid = head.Metadata?.cid ?? head.Metadata?.["cid"];
     if (cid) return cid;
-    if (Date.now() - started > timeoutMs) throw new Error(`Filebase did not report a CID for ${key} within ${timeoutMs} ms`);
+    if (Date.now() - started > timeoutMs)
+      throw new Error(`Filebase did not report a CID for ${key} within ${timeoutMs} ms`);
     await new Promise((r) => setTimeout(r, 5_000));
   }
 }
@@ -72,11 +75,21 @@ export async function uploadCar(carPath: string, key: string): Promise<UploadRes
 }
 
 /** Upload a single small file (e.g. the manifest) and return its CID. */
-export async function uploadFile(filePath: string, key: string, contentType: string): Promise<UploadResult> {
+export async function uploadFile(
+  filePath: string,
+  key: string,
+  contentType: string,
+): Promise<UploadResult> {
   const s3 = client();
   const { size } = await stat(filePath);
   await s3.send(
-    new PutObjectCommand({ Bucket: FILEBASE.bucket, Key: key, Body: createReadStream(filePath), ContentLength: size, ContentType: contentType }),
+    new PutObjectCommand({
+      Bucket: FILEBASE.bucket,
+      Key: key,
+      Body: createReadStream(filePath),
+      ContentLength: size,
+      ContentType: contentType,
+    }),
   );
   const cid = await waitForCid(s3, key, 60_000);
   return { key, cid, bytes: size };
@@ -95,13 +108,27 @@ export async function upsertIpns(label: string, cid: string): Promise<IpnsResult
   const existing = await fetch(`${FILEBASE.namesApi}/${encodeURIComponent(label)}`, { headers });
   let res: Response;
   if (existing.ok) {
-    res = await fetch(`${FILEBASE.namesApi}/${encodeURIComponent(label)}`, { method: "PUT", headers, body: JSON.stringify({ cid }) });
+    res = await fetch(`${FILEBASE.namesApi}/${encodeURIComponent(label)}`, {
+      method: "PUT",
+      headers,
+      body: JSON.stringify({ cid }),
+    });
   } else {
-    res = await fetch(FILEBASE.namesApi, { method: "POST", headers, body: JSON.stringify({ label, cid, enabled: true }) });
+    res = await fetch(FILEBASE.namesApi, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ label, cid, enabled: true }),
+    });
   }
   if (!res.ok) throw new Error(`Filebase names API ${res.status}: ${await res.text()}`);
   const body = (await res.json()) as { network_key?: string; cid?: string };
-  const name = body.network_key ?? ((await (await fetch(`${FILEBASE.namesApi}/${encodeURIComponent(label)}`, { headers })).json()) as { network_key: string }).network_key;
+  const name =
+    body.network_key ??
+    (
+      (await (
+        await fetch(`${FILEBASE.namesApi}/${encodeURIComponent(label)}`, { headers })
+      ).json()) as { network_key: string }
+    ).network_key;
   return { label, name, cid };
 }
 

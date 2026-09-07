@@ -1,0 +1,70 @@
+# Scheduled incremental refresh — the "continuous ingestion" loop.
+#
+# Runs weekly (and on demand) on a free GitHub-hosted runner: harvests new /
+# changed Osceola roofing permits from the county Accela portal, re-sweeps GIS
+# parcels updated since the last run, rebuilds the query tables, publishes a
+# NEW immutable snapshot to IPFS (new CID; the previous CID is untouched),
+# re-points IPNS, verifies retrieval from two independent public gateways, and
+# commits the manifest + run history back to the branch. Vercel redeploys the
+# Explorer from that commit, so the UI always shows the latest run.
+#
+# Oracle carries no standing infrastructure: compute is GitHub Actions minutes,
+# storage is Filebase's free tier, everything else is content-addressed.
+name: incremental-refresh
+
+on:
+  schedule:
+    - cron: "17 9 * * 1" # Mondays 09:17 UTC
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "full | incremental"
+        default: "incremental"
+      permits_since:
+        description: "Override Accela window start (YYYY-MM-DD)"
+        required: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: osceola-pipeline
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Restore raw source cache (appraiser ZIP, GIS sweep, DuckDB)
+        uses: actions/cache@v4
+        with:
+          path: data
+          key: osceola-data-${{ github.run_id }}
+          restore-keys: osceola-data-
+      - run: npm ci
+      - run: npm run build --workspace @osceola/shared --workspace @osceola/pipeline
+      - name: Run pipeline
+        env:
+          S3_ACCESS_KEY_ID: ${{ secrets.FILEBASE_ACCESS_KEY }}
+          S3_SECRET_ACCESS_KEY: ${{ secrets.FILEBASE_SECRET_KEY }}
+          S3_BUCKET: ${{ secrets.FILEBASE_BUCKET }}
+          LOG_PRETTY: "0"
+        run: |
+          node packages/pipeline/dist/cli.js run \
+            --mode "${{ github.event.inputs.mode || 'incremental' }}" \
+            ${{ github.event.inputs.permits_since && format('--permits-since {0}', github.event.inputs.permits_since) || '' }}
+      - name: Commit manifest + run history
+        run: |
+          git config user.name "osceola-pipeline[bot]"
+          git config user.email "pipeline@users.noreply.github.com"
+          git add artifacts/run-history.json artifacts/runs/*/manifest.json artifacts/runs/*/coverage.json artifacts/runs/*/verification.json artifacts/runs/*/run-summary.json artifacts/runs/*/samples
+          git commit -m "chore(pipeline): scheduled $(date -u +%Y-%m-%dT%H:%MZ) run artifacts" || echo "nothing to commit"
+          git push
