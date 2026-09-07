@@ -46,7 +46,7 @@ or manually:
 git clone https://github.com/elephant-xyz/elephant-mcp && cd elephant-mcp && git checkout aad2785d700fb14e69872dd55f4b8e06acd09806
 npm install && npm run build
 # local
-MCP_HTTP_STANDALONE=1 PORT=8787 PROPERTY_QUERY_TABLE_MAP='{"osceola":"https://ipfs.filebase.io/ipfs/<runRootCid>/query-tables/properties.parquet"}' \
+MCP_HTTP_STANDALONE=1 PORT=8877 PROPERTY_QUERY_TABLE_MAP='{"osceola":"https://ipfs.filebase.io/ipfs/<runRootCid>/query-tables/properties.parquet"}' \
   PERMIT_QUERY_TABLE_MAP='{"osceola":"https://ipfs.filebase.io/ipfs/<runRootCid>/query-tables/permits.parquet"}' \
   PROPERTY_QUERY_TABLE_DEFAULT_COUNTY=osceola PERMIT_QUERY_TABLE_DEFAULT_COUNTY=osceola node dist/server-http.js
 # hosted

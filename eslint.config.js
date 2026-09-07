@@ -4,7 +4,7 @@ import tseslint from "typescript-eslint";
 import prettier from "eslint-config-prettier";
 
 export default tseslint.config(
-  { ignores: ["**/dist/**", "**/.next/**", "**/node_modules/**", "artifacts/**", "data/**"] },
+  { ignores: ["**/dist/**", "**/.next/**", "**/node_modules/**", "artifacts/**", "data/**", "**/next-env.d.ts", ".cache/**"] },
   js.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   prettier,

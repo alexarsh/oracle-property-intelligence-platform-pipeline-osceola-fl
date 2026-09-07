@@ -10,7 +10,7 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 
-const url = process.argv[2] ?? "http://localhost:8787/mcp";
+const url = process.argv[2] ?? "http://localhost:8877/mcp";
 const token = process.argv[3] ?? process.env.ORACLE_MCP_AUTH_TOKEN;
 const transport = new StreamableHTTPClientTransport(new URL(url), {
   requestInit: token ? { headers: { Authorization: `Bearer ${token}` } } : undefined,
