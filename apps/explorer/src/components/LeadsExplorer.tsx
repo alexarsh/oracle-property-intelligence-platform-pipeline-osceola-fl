@@ -564,6 +564,10 @@ function PermitsTable({
   onSelect: (parcel: string) => void;
 }) {
   const [show, setShow] = useState(false);
+  // Highlight only the clicked permit. Several permits can share a parcel (e.g. three
+  // open permits at one address), so highlighting by parcel lit up rows the user never
+  // clicked; sibling rows on the same parcel get a subtle left rule instead.
+  const [selectedPermit, setSelectedPermit] = useState<string | null>(null);
   return (
     <div className="min-w-0">
       <div className="table-wrap max-h-[32rem]">
@@ -585,8 +589,22 @@ function PermitsTable({
             {permits.map((x) => (
               <tr
                 key={x.permitId}
-                className={`cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800 ${selected === x.parcelIdentifier ? "bg-emerald-50 dark:bg-emerald-950/30" : ""}`}
-                onClick={() => x.parcelIdentifier && onSelect(x.parcelIdentifier)}
+                className={`cursor-pointer hover:bg-zinc-50 dark:hover:bg-zinc-800 ${
+                  selectedPermit === x.permitId
+                    ? "bg-emerald-50 dark:bg-emerald-950/30"
+                    : selected && selected === x.parcelIdentifier
+                      ? "border-l-2 border-emerald-400"
+                      : ""
+                }`}
+                title={
+                  selected && selected === x.parcelIdentifier && selectedPermit !== x.permitId
+                    ? "Same parcel as the selected permit"
+                    : undefined
+                }
+                onClick={() => {
+                  setSelectedPermit(x.permitId);
+                  if (x.parcelIdentifier) onSelect(x.parcelIdentifier);
+                }}
               >
                 <td>
                   <div className="font-mono text-xs font-medium">{x.permitNumber}</div>
