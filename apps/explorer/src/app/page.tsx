@@ -174,14 +174,17 @@ export default async function RunSummaryPage() {
               label={`${name}.parquet`}
               value={fmtInt(count)}
               sub={
-                <span>
-                  Δ{" "}
-                  {fmtDelta(
-                    rec.tableDeltas[name] ??
-                      (previous ? count - (previous.record.tableCounts[name] ?? 0) : null),
-                  )}{" "}
-                  vs previous run
-                </span>
+                previous ? (
+                  <span>
+                    Δ{" "}
+                    {fmtDelta(
+                      rec.tableDeltas[name] ?? count - (previous.record.tableCounts[name] ?? 0),
+                    )}{" "}
+                    vs {previous.runId}
+                  </span>
+                ) : (
+                  <span>first published run — no previous snapshot to diff</span>
+                )
               }
             />
           ))}

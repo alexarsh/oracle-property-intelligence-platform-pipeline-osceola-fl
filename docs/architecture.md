@@ -109,7 +109,14 @@ Scaling past the free tiers is a budget decision, not an architecture change.
   agent playbook for the LLM agents, the `bbb-harvest` matching cascade,
   `county-permit-adapter` guidance for the Accela module, Vercel AI SDK for every
   LLM call, TypeScript everywhere, Vitest + ESLint + Prettier.
-- **Deviated:** no Restate/Postgres/Neon ingestion stack and no AWS CDK. The
+- **Deviated:** the kit's `use-oracle` runtime (Restate + Postgres, county
+  catalog `published-counties.json`, readiness validator and the durable PII
+  approve gate) was not adopted, and there is no AWS CDK. Registering Osceola in
+  the canonical catalog is a follow-up: it needs the query table and coverage
+  behind their own IPNS labels (`oracle-query-table-osceola`,
+  `oracle-dataset-coverage-osceola`) and a `catalog:update` PR to the kit; the
+  Parquet already has the catalog's schema, so nothing in the data changes.
+  No Restate/Postgres/Neon ingestion stack and no AWS CDK. The
   assignment's cost rule and the absence of an AWS account made a DuckDB-only,
   serverless-free pipeline the honest choice; the durable-workflow concerns
   (idempotency, checkpoints, resumability, run manifests) are implemented

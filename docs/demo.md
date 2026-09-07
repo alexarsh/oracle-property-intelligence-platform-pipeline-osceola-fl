@@ -5,14 +5,14 @@ brackets are filled from `artifacts/run-history.json` and the deployment URLs.
 
 **Links used in the demo**
 
-| What                     | Where                                                                   |
-| ------------------------ | ----------------------------------------------------------------------- |
-| Explorer UI              | `<EXPLORER_URL>`                                                        |
-| Elephant MCP endpoint    | `<MCP_URL>/mcp` (health: `<MCP_URL>/health`)                            |
-| Pull request             | https://github.com/prismteam-ai/oracle-property-intelligence-platform-pipeline-osceola-fl/pull/1 |
-| Latest run manifest      | `artifacts/runs/<RUN_ID>/manifest.json`                                 |
-| Run root CID             | `<ROOT_CID>` (previous run: `<PREV_ROOT_CID>`)                          |
-| IPNS name (pointer)      | `<IPNS_NAME>` → resolves to `<ROOT_CID>`                                |
+| What                  | Where                                                                                            |
+| --------------------- | ------------------------------------------------------------------------------------------------ |
+| Explorer UI           | `<EXPLORER_URL>`                                                                                 |
+| Elephant MCP endpoint | `<MCP_URL>/mcp` (health: `<MCP_URL>/health`)                                                     |
+| Pull request          | https://github.com/prismteam-ai/oracle-property-intelligence-platform-pipeline-osceola-fl/pull/1 |
+| Latest run manifest   | `artifacts/runs/<RUN_ID>/manifest.json`                                                          |
+| Run root CID          | `<ROOT_CID>` (previous run: `<PREV_ROOT_CID>`)                                                   |
+| IPNS name (pointer)   | `<IPNS_NAME>` → resolves to `<ROOT_CID>`                                                         |
 
 ## 1. "I am opening the pipeline run summary"
 
