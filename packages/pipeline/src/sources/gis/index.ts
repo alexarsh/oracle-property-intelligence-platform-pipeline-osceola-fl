@@ -187,15 +187,21 @@ export async function loadGisParcels(db: Db, opts: GisSweepOptions): Promise<Sou
       loc_city VARCHAR, loc_zip VARCHAR, last_update DATE, acres DOUBLE,
       fetched_at TIMESTAMP, loaded_run_id VARCHAR)`);
   const before = await db.count("raw_gis_parcels");
-  await db.run(`
-    INSERT OR REPLACE INTO raw_gis_parcels
+  // Upsert without relying on a PRIMARY KEY (a table restored with CREATE TABLE AS
+  // loses its key, and DuckDB's ON CONFLICT is then a silent no-op): delete the
+  // keys present in this sweep, then insert the deduplicated sweep rows.
+  await db.run(`CREATE OR REPLACE TEMP TABLE gis_in AS
     SELECT parcelNo, objectId, displayStrap, latitude, longitude, yearBuilt, dorCode, locCity, locZip,
-           TRY_CAST(lastUpdate AS DATE), acres, fetchedAt::TIMESTAMP, ${lit(opts.runId)}
+           TRY_CAST(lastUpdate AS DATE) AS lastUpdate, acres, fetchedAt::TIMESTAMP AS fetchedAt
     FROM read_json(${lit(p.jsonl)}, format='newline_delimited',
       columns={parcelNo:'VARCHAR', objectId:'BIGINT', displayStrap:'VARCHAR', latitude:'DOUBLE', longitude:'DOUBLE',
                yearBuilt:'INTEGER', dorCode:'VARCHAR', locCity:'VARCHAR', locZip:'VARCHAR', lastUpdate:'VARCHAR',
                acres:'DOUBLE', fetchedAt:'VARCHAR'})
     QUALIFY row_number() OVER (PARTITION BY parcelNo ORDER BY objectId DESC) = 1`);
+  await db.run(`DELETE FROM raw_gis_parcels WHERE parcel_no IN (SELECT parcelNo FROM gis_in)`);
+  await db.run(`INSERT INTO raw_gis_parcels
+    SELECT parcelNo, objectId, displayStrap, latitude, longitude, yearBuilt, dorCode, locCity, locZip,
+           lastUpdate, acres, fetchedAt, ${lit(opts.runId)} FROM gis_in`);
   const after = await db.count("raw_gis_parcels");
   const digest = await sha256File(p.jsonl);
   await recordLoad(db, {

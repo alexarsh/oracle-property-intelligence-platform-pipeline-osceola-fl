@@ -40,10 +40,13 @@ export const DEFAULT_TAX_YEAR = Number(process.env.OSCEOLA_TAX_YEAR ?? 2025);
 /**
  * Public IPFS gateways this project does NOT operate, used for the
  * independent-retrieval proof. Filebase's gateway is deliberately excluded here
- * because it is the pinning vendor.
+ * because it is the pinning vendor. Four are listed because ipfs.io and
+ * dweb.link rate-limit shared IPs (VPN exits, CI runners) with HTTP 429; an
+ * artifact is proven when at least two of them return matching bytes.
  */
 export const VERIFY_GATEWAYS = (
-  process.env.OSCEOLA_VERIFY_GATEWAYS ?? "https://ipfs.io,https://dweb.link"
+  process.env.OSCEOLA_VERIFY_GATEWAYS ??
+  "https://ipfs.io,https://dweb.link,https://gateway.pinata.cloud,https://w3s.link"
 )
   .split(",")
   .map((g) => g.trim())
