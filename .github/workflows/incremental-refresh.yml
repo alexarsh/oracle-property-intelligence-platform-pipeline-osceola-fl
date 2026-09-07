@@ -54,7 +54,7 @@ jobs:
           key: osceola-data-${{ github.run_id }}
           restore-keys: osceola-data-
       - run: npm ci
-      - run: npm run build --workspace @osceola/shared --workspace @osceola/pipeline
+      - run: npx tsc -b packages/shared packages/pipeline
       - name: Run pipeline
         env:
           S3_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID }}

@@ -2,13 +2,18 @@
   "name": "oracle-osceola",
   "version": "0.1.0",
   "private": true,
-  "description": "Oracle Property Intelligence pipeline for Osceola County, FL — DuckDB + IPFS, MCP-ready, zero standing infrastructure cost.",
+  "description": "Oracle Property Intelligence pipeline for Osceola County, FL \u2014 DuckDB + IPFS, MCP-ready, zero standing infrastructure cost.",
   "license": "MIT",
   "type": "module",
-  "engines": { "node": ">=22.12.0" },
-  "workspaces": ["packages/*", "apps/*"],
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
+    "build": "tsc -b packages/shared packages/pipeline && npm run build --workspace @osceola/explorer --if-present",
     "test": "vitest run",
     "lint": "eslint .",
     "format": "prettier --write .",
