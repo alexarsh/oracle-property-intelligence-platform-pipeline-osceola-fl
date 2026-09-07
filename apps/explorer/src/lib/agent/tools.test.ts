@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { MockLanguageModelV3, simulateReadableStream } from "ai/test";
 import type { McpDataClient } from "../mcp/client";
 import { createLeadAgent } from "./agent";
-import { createAgentTools } from "./tools";
+import { createAgentTools, summarizeBbb } from "./tools";
 
 const SCHEMA = {
   county: "osceola",
@@ -125,6 +125,53 @@ describe("agent tools", () => {
       name: "findPropertiesInArea",
       args: { county: "osceola", bbox },
     });
+  });
+});
+
+describe("summarizeBbb", () => {
+  it("counts distinct contractors, matches by method and writes the availability sentence", () => {
+    const s = summarizeBbb([
+      {
+        contractor_id: "a",
+        contractor_name: "A ROOFING",
+        bbb_rating: "A+",
+        bbb_match_method: "license",
+      },
+      {
+        contractor_id: "a",
+        contractor_name: "A ROOFING",
+        bbb_rating: "A+",
+        bbb_match_method: "license",
+      },
+      { contractor_id: "b", contractor_name: "B INC", bbb_rating: null, bbb_match_method: null },
+      { contractor_id: null, contractor_name: "C LLC", bbb_rating: "B", bbb_match_method: "name" },
+      { contractor_id: null, contractor_name: null, bbb_rating: null, bbb_match_method: null },
+    ]);
+    expect(s).toMatchObject({
+      contractors: 3,
+      matched: 2,
+      unmatched: 1,
+      byMethod: { license: 1, name: 1 },
+    });
+    expect(s?.sentence).toBe("BBB: 2 of 3 contractors matched (license 1, name 1); 1 not matched");
+  });
+  it("is explicit when nothing matched and null for non-contractor result sets", () => {
+    expect(summarizeBbb([{ contractor_name: "X", bbb_rating: null }])?.sentence).toBe(
+      "BBB: 0 of 1 contractors matched in this run",
+    );
+    expect(summarizeBbb([{ permit_number: "1" }])).toBeNull();
+    expect(summarizeBbb([{ contractor_name: null, bbb_rating: null }])?.sentence).toBe(
+      "BBB: no contractor named on the returned permits",
+    );
+  });
+  it("queryPermits tool output carries the bbbSummary", async () => {
+    const tools = createAgentTools(fakeMcp());
+    const out = (await tools.queryPermits.execute!(
+      { sql: "SELECT 1" },
+      { toolCallId: "t9", messages: [] },
+    )) as { bbbSummary: unknown; note: string };
+    expect(out.bbbSummary).toBeNull();
+    expect(out.note).toContain("source_url");
   });
 });
 

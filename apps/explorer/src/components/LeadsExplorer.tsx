@@ -1,5 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { ApiError } from "@/app/api/_lib";
 import { fmtDate, fmtDaysOpen, fmtInt, fmtMoney } from "@/lib/format";
@@ -25,6 +26,8 @@ interface Props {
   places: Place[];
   defaults: { roofAgeYears: number; longOpenPermitYears: number; ownershipTenureYears: number };
   bbox: { minLat: number; maxLat: number; minLng: number; maxLng: number };
+  /** Run ids present in artifacts/run-history.json (lineage links). */
+  runIds?: readonly string[];
 }
 
 interface Filters {
@@ -48,7 +51,7 @@ interface Detail {
 }
 
 /** Map + filters + results + property drawer. All data comes from `/api/leads` and `/api/property`, which call the MCP. */
-export function LeadsExplorer({ places, defaults }: Props) {
+export function LeadsExplorer({ places, defaults, runIds = [] }: Props) {
   const kissimmee = places[0] ?? { name: "Kissimmee", lat: 28.2919, lng: -81.4076 };
   const [center, setCenter] = useState<{ lat: number; lng: number; label: string }>({
     ...kissimmee,
@@ -520,10 +523,30 @@ export function LeadsExplorer({ places, defaults }: Props) {
             </div>
           )}
 
-          <PropertyDrawer detail={detail} busy={detailBusy} onClose={() => setSelected(null)} />
+          <PropertyDrawer
+            detail={detail}
+            busy={detailBusy}
+            runIds={runIds}
+            onClose={() => setSelected(null)}
+          />
         </div>
       </div>
     </div>
+  );
+}
+
+/** Run id that links to its row in the run history when the run is on record, plain text otherwise. */
+function RunLink({ runId, runIds }: { runId: string | null; runIds: readonly string[] }) {
+  if (!runId) return <span>—</span>;
+  if (!runIds.includes(runId)) return <span className="font-mono">{runId}</span>;
+  return (
+    <Link
+      href={`/#run-${encodeURIComponent(runId)}`}
+      className="font-mono text-emerald-700 underline decoration-emerald-300 underline-offset-2 dark:text-emerald-400"
+      title="Open this run in the run history"
+    >
+      {runId}
+    </Link>
   );
 }
 
@@ -661,10 +684,12 @@ function PermitsTable({
 function PropertyDrawer({
   detail,
   busy,
+  runIds,
   onClose,
 }: {
   detail: Detail | null;
   busy: boolean;
+  runIds: readonly string[];
   onClose: () => void;
 }) {
   if (busy)
@@ -736,7 +761,10 @@ function PropertyDrawer({
               {u.replace(/^https?:\/\//, "").slice(0, 60)}
             </ExtLink>
           ))}
-          <span className="text-zinc-500">last changed in run {p.lastChangedRunId}</span>
+          <span className="text-zinc-500">
+            lineage: first seen <RunLink runId={p.firstSeenRunId} runIds={runIds} /> · last changed{" "}
+            <RunLink runId={p.lastChangedRunId} runIds={runIds} />
+          </span>
         </dd>
       </dl>
 

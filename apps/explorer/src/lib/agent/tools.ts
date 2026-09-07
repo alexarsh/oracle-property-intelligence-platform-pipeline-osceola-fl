@@ -20,6 +20,54 @@ import { geocodePlace, PLACES } from "./places";
 
 const ROW_CAP = 200;
 
+export interface BbbSummary {
+  /** Distinct contractors among the returned rows (by contractor_id, else name). */
+  contractors: number;
+  matched: number;
+  unmatched: number;
+  byMethod: Record<string, number>;
+  /** Ready-to-paste sentence for the answer. */
+  sentence: string;
+}
+
+/** Summarize BBB availability for the contractors present in a permits result set. */
+export function summarizeBbb(rows: ReadonlyArray<Record<string, unknown>>): BbbSummary | null {
+  if (!rows.some((r) => "contractor_name" in r || "contractor_id" in r || "bbb_rating" in r))
+    return null;
+  const seen = new Map<string, { rated: boolean; method: string | null }>();
+  for (const r of rows) {
+    const key = (r.contractor_id ?? r.contractor_name) as string | null | undefined;
+    if (!key) continue;
+    const rated = r.bbb_rating != null && r.bbb_rating !== "";
+    const method = typeof r.bbb_match_method === "string" ? r.bbb_match_method : null;
+    const prev = seen.get(String(key));
+    if (!prev || (rated && !prev.rated)) seen.set(String(key), { rated, method });
+  }
+  const contractors = seen.size;
+  const byMethod: Record<string, number> = {};
+  let matched = 0;
+  for (const v of seen.values()) {
+    if (!v.rated) continue;
+    matched++;
+    const m = v.method ?? "unknown";
+    byMethod[m] = (byMethod[m] ?? 0) + 1;
+  }
+  const unmatched = contractors - matched;
+  const methods = Object.entries(byMethod)
+    .map(([m, n]) => `${m} ${n}`)
+    .join(", ");
+  const sentence =
+    contractors === 0
+      ? "BBB: no contractor named on the returned permits"
+      : matched === 0
+        ? `BBB: 0 of ${contractors} contractors matched in this run`
+        : `BBB: ${matched} of ${contractors} contractors matched (${methods}); ${unmatched} not matched`;
+  return { contractors, matched, unmatched, byMethod, sentence };
+}
+
+const RESULT_NOTE =
+  "Cite request_identifier and the per-row source_urls / source_url column in your results table.";
+
 /**
  * Build the agent tool set bound to an MCP client. Returned tools are plain
  * `ai` tools so they work with `ToolLoopAgent`, `streamText`, and tests.
@@ -63,7 +111,7 @@ export function createAgentTools(mcp: McpDataClient) {
       },
     }),
     queryProperties: tool({
-      description: `Run ONE read-only SELECT (or WITH … SELECT) over the \`properties\` view (one row per Osceola parcel) via the Elephant MCP over Parquet. Rows are capped at ${ROW_CAP}. Use the haversine expression from geocodePlace for radius filters and always include parcel_identifier, address and source_urls in list results.`,
+      description: `Run ONE read-only SELECT (or WITH … SELECT) over the \`properties\` view (one row per Osceola parcel) via the Elephant MCP over Parquet. Rows are capped at ${ROW_CAP}. Use the haversine expression from geocodePlace for radius filters and ALWAYS select request_identifier, address_street, address_city and source_urls so every listed row can be cited.`,
       inputSchema: z.object({
         sql: z.string().min(6).max(8000).describe("Single SELECT statement over `properties`"),
         limit: z
@@ -77,6 +125,7 @@ export function createAgentTools(mcp: McpDataClient) {
       execute: async ({ sql, limit }) => {
         const statement = assertReadOnlySelect(sql);
         const res = await queryProperties(mcp, statement, limit ?? 100);
+        const first = res.rows[0];
         return {
           view: "properties",
           rowCount: res.rowCount,
@@ -84,11 +133,15 @@ export function createAgentTools(mcp: McpDataClient) {
           truncated: res.rowCount >= (res.limit ?? limit ?? 100),
           rows: res.rows,
           sql: statement,
+          note: RESULT_NOTE,
+          missingCitationColumns: first
+            ? ["request_identifier", "source_urls"].filter((c) => !(c in first))
+            : [],
         };
       },
     }),
     queryPermits: tool({
-      description: `Run ONE read-only SELECT over the \`permits\` view (one row per building permit; is_roofing, is_open, days_open, contractor_*, bbb_* columns) via the Elephant MCP. Rows are capped at ${ROW_CAP}. Join to properties in your head by parcel_identifier, or filter permits by the same haversine radius (permits carry the parcel centroid).`,
+      description: `Run ONE read-only SELECT over the \`permits\` view (one row per building permit; is_roofing, is_open, days_open, contractor_*, bbb_* columns) via the Elephant MCP. Rows are capped at ${ROW_CAP}. Join to properties in your head by parcel_identifier, or filter permits by the same haversine radius (permits carry the parcel centroid). ALWAYS select parcel_identifier, permit_number, contractor_name, bbb_rating, bbb_match_method and source_url; the result includes a bbbSummary sentence you must quote.`,
       inputSchema: z.object({
         sql: z.string().min(6).max(8000).describe("Single SELECT statement over `permits`"),
         limit: z.number().int().min(1).max(ROW_CAP).optional(),
@@ -96,6 +149,7 @@ export function createAgentTools(mcp: McpDataClient) {
       execute: async ({ sql, limit }) => {
         const statement = assertReadOnlySelect(sql);
         const res = await queryPermits(mcp, statement, limit ?? 100);
+        const first = res.rows[0];
         return {
           view: "permits",
           rowCount: res.rowCount,
@@ -103,6 +157,11 @@ export function createAgentTools(mcp: McpDataClient) {
           truncated: res.rowCount >= (res.limit ?? limit ?? 100),
           rows: res.rows,
           sql: statement,
+          bbbSummary: summarizeBbb(res.rows),
+          note: RESULT_NOTE,
+          missingCitationColumns: first
+            ? ["parcel_identifier", "source_url"].filter((c) => !(c in first))
+            : [],
         };
       },
     }),

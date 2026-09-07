@@ -36,6 +36,8 @@ export async function POST(req: Request): Promise<Response> {
       agent,
       uiMessages: body.messages,
       abortSignal: req.signal,
+      // Surface the real provider/MCP error text instead of the SDK's generic "An error occurred.".
+      onError: (error) => (error instanceof Error ? error.message : String(error)),
     });
   } catch (err) {
     return NextResponse.json(

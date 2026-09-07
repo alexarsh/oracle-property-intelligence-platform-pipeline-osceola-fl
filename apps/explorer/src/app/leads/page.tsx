@@ -1,10 +1,13 @@
 import { OSCEOLA } from "@osceola/shared";
 import { PageHeader } from "@/components/ui";
 import { LeadsExplorer } from "@/components/LeadsExplorer";
+import { loadArtifacts } from "@/lib/artifacts";
 
 export const dynamic = "force-dynamic";
 
-export default function LeadsPage() {
+export default async function LeadsPage() {
+  const snap = await loadArtifacts();
+  const runIds = snap.runs.map((r) => r.runId);
   return (
     <>
       <PageHeader
@@ -22,6 +25,7 @@ export default function LeadsPage() {
         places={OSCEOLA.places.map((p) => ({ ...p }))}
         defaults={{ ...OSCEOLA.thresholds }}
         bbox={{ ...OSCEOLA.bbox }}
+        runIds={runIds}
       />
     </>
   );

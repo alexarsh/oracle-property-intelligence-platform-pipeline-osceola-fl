@@ -143,6 +143,7 @@ export const LEAD_PROPERTY_COLUMNS = [
   "market_value",
   "livable_floor_area",
   "source_urls",
+  "first_seen_run_id",
   "last_changed_run_id",
 ] as const;
 

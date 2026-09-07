@@ -179,8 +179,21 @@ export default async function ManifestPage({
                     {a.rowCount == null ? "—" : fmtInt(a.rowCount)}
                   </td>
                   <td className="mono max-w-[14rem]">{a.cid}</td>
-                  <td className="mono max-w-[12rem]" title={a.digest}>
-                    {a.digest.slice(0, 23)}…
+                  <td
+                    className="mono max-w-[12rem]"
+                    title={
+                      a.codec === "directory"
+                        ? "UnixFS directories have no byte digest of their own; the manifest carries the CAR digest here and the CID is the identity."
+                        : a.digest
+                    }
+                  >
+                    {a.codec === "directory" ? (
+                      <span className="font-sans text-zinc-500">
+                        n/a (directory; see CAR digest)
+                      </span>
+                    ) : (
+                      <>{a.digest.slice(0, 23)}…</>
+                    )}
                   </td>
                   <td className="text-xs">
                     <div className="flex flex-col gap-0.5">

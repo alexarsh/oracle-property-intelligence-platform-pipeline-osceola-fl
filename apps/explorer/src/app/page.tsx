@@ -111,7 +111,7 @@ export default async function RunSummaryPage() {
         description="Every source the run touched, with what it saw, what was new or changed, what was quarantined, and the custodian's documented limitations (verbatim from the run record)."
       >
         <div className="table-wrap">
-          <table>
+          <table className="text-xs">
             <thead>
               <tr>
                 <th>Source</th>
@@ -121,52 +121,67 @@ export default async function RunSummaryPage() {
                 <th className="text-right">New</th>
                 <th className="text-right">Changed</th>
                 <th className="text-right">Quarantined</th>
-                <th>Window / requests</th>
+                <th>Window</th>
                 <th>Limitations</th>
               </tr>
             </thead>
             <tbody>
               {rec.sources.map((s) => {
                 const cfg = OSCEOLA.sources[s.source];
+                const url = s.urls[0] ?? cfg?.url ?? null;
                 return (
-                  <tr key={s.source}>
-                    <td>
+                  <tr key={s.source} className="align-middle">
+                    <td className="py-1">
                       <div className="font-medium">{cfg?.label ?? s.source}</div>
-                      <div className="text-xs text-zinc-500">
-                        {cfg?.custodian ?? ""} {cfg ? `· ${cfg.accessMode} · ${cfg.cadence}` : ""}
-                      </div>
-                      <div className="mt-0.5 flex flex-col">
-                        {s.urls.slice(0, 2).map((u) => (
-                          <span key={u} className="mono truncate text-zinc-500">
-                            <ExtLink href={u}>{u.length > 70 ? `${u.slice(0, 70)}…` : u}</ExtLink>
-                          </span>
-                        ))}
+                      <div className="text-zinc-500">
+                        {cfg ? `${cfg.accessMode} · ${cfg.cadence}` : s.source}
+                        {url ? (
+                          <>
+                            {" · "}
+                            <ExtLink href={url}>{new URL(url).hostname}</ExtLink>
+                          </>
+                        ) : null}
                       </div>
                     </td>
-                    <td>
+                    <td className="py-1">
                       <Badge tone={statusTone(s.status)}>{s.status}</Badge>
-                      {s.error ? <div className="mt-1 text-xs text-rose-700">{s.error}</div> : null}
+                      {s.error ? <div className="mt-0.5 text-rose-700">{s.error}</div> : null}
                     </td>
-                    <td className="whitespace-nowrap text-xs">{fmtDateTime(s.fetchedAt)}</td>
-                    <td className="text-right tabular-nums">{fmtInt(s.recordsSeen)}</td>
-                    <td className="text-right tabular-nums">{fmtInt(s.recordsNew)}</td>
-                    <td className="text-right tabular-nums">{fmtInt(s.recordsChanged)}</td>
-                    <td className="text-right tabular-nums">{fmtInt(s.recordsQuarantined)}</td>
-                    <td className="text-xs">
+                    <td className="py-1 whitespace-nowrap">{fmtDateTime(s.fetchedAt)}</td>
+                    <td className="py-1 text-right tabular-nums">{fmtInt(s.recordsSeen)}</td>
+                    <td className="py-1 text-right tabular-nums">{fmtInt(s.recordsNew)}</td>
+                    <td className="py-1 text-right tabular-nums">{fmtInt(s.recordsChanged)}</td>
+                    <td className="py-1 text-right tabular-nums">{fmtInt(s.recordsQuarantined)}</td>
+                    <td className="py-1 whitespace-nowrap">
                       {s.window
                         ? Object.entries(s.window)
                             .map(([k, v]) => `${k}=${v}`)
                             .join(" ")
                         : "—"}
-                      {s.requestCount != null ? <div>{fmtInt(s.requestCount)} requests</div> : null}
-                      {s.durationMs ? <div>{(s.durationMs / 1000).toFixed(0)} s</div> : null}
+                      {(s.requestCount ?? 0) > 0 || s.durationMs > 0 ? (
+                        <div className="text-zinc-500">
+                          {(s.requestCount ?? 0) > 0 ? `${fmtInt(s.requestCount)} req` : ""}
+                          {(s.requestCount ?? 0) > 0 && s.durationMs > 0 ? " · " : ""}
+                          {s.durationMs ? `${(s.durationMs / 1000).toFixed(0)} s` : ""}
+                        </div>
+                      ) : null}
                     </td>
-                    <td className="max-w-md text-xs">
-                      <ul className="list-disc space-y-0.5 pl-4">
-                        {s.limitations.map((l) => (
-                          <li key={l}>{l}</li>
-                        ))}
-                      </ul>
+                    <td className="max-w-md py-1">
+                      {s.limitations.length ? (
+                        <details>
+                          <summary className="cursor-pointer text-zinc-600 dark:text-zinc-300">
+                            {s.limitations.length} documented limitation
+                            {s.limitations.length === 1 ? "" : "s"}
+                          </summary>
+                          <ul className="mt-1 list-disc space-y-0.5 pl-4">
+                            {s.limitations.map((l) => (
+                              <li key={l}>{l}</li>
+                            ))}
+                          </ul>
+                        </details>
+                      ) : (
+                        <span className="text-zinc-500">none recorded</span>
+                      )}
                     </td>
                   </tr>
                 );
@@ -323,6 +338,7 @@ export default async function RunSummaryPage() {
                 return (
                   <tr
                     key={r.runId}
+                    id={`run-${r.runId}`}
                     className={chain === "linked" ? "bg-emerald-50/50 dark:bg-emerald-950/20" : ""}
                   >
                     <td className="font-mono text-xs">{r.runId}</td>

@@ -44,6 +44,12 @@ export function AgentChat({ enabled, suggestions }: Props) {
     setInput("");
   };
 
+  /** Prepared prompt: put it in the input so it is visible, then submit it when the agent is enabled. */
+  const useSuggestion = (prompt: string) => {
+    setInput(prompt);
+    if (enabled && !busy) submit(prompt);
+  };
+
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-[1fr_18rem]">
       <div className="flex min-w-0 flex-col gap-3">
@@ -189,8 +195,9 @@ export function AgentChat({ enabled, suggestions }: Props) {
                 key={s.title}
                 type="button"
                 className="btn h-auto justify-start text-left text-xs whitespace-normal"
-                disabled={!enabled || busy}
-                onClick={() => submit(s.prompt)}
+                disabled={busy}
+                aria-label={`Use prepared prompt: ${s.title}`}
+                onClick={() => useSuggestion(s.prompt)}
               >
                 <span>
                   <span className="block font-medium">{s.title}</span>

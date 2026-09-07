@@ -1,6 +1,6 @@
 import { OSCEOLA } from "@osceola/shared";
 import { CoverageBar, ExtLink, Notice, PageHeader, Section, Stat } from "@/components/ui";
-import { loadArtifacts } from "@/lib/artifacts";
+import { loadArtifacts, toIso } from "@/lib/artifacts";
 import { fmtBytes, fmtDateTime, fmtInt } from "@/lib/format";
 import { getEnrichment } from "@/lib/queries/enrichment";
 import type { EnrichmentStats } from "@/lib/queries/enrichment";
@@ -168,14 +168,10 @@ export default async function SourcesPage() {
                     )}
                   </td>
                   <td className="text-xs whitespace-nowrap">
-                    {fmtDateTime(
-                      d.first_loaded_at ? d.first_loaded_at.replace(" ", "T") + "Z" : null,
-                    )}
+                    {fmtDateTime(d.first_loaded_at ? toIso(d.first_loaded_at) : null)}
                   </td>
                   <td className="text-xs whitespace-nowrap">
-                    {fmtDateTime(
-                      d.last_loaded_at ? d.last_loaded_at.replace(" ", "T") + "Z" : null,
-                    )}
+                    {fmtDateTime(d.last_loaded_at ? toIso(d.last_loaded_at) : null)}
                   </td>
                   <td className="mono">
                     {d.cid ?? d.ipns_label ?? (
@@ -270,7 +266,7 @@ export default async function SourcesPage() {
                   <td className="text-right tabular-nums whitespace-nowrap">{fmtBytes(l.bytes)}</td>
                   <td className="text-right tabular-nums">{fmtInt(l.rows)}</td>
                   <td className="text-xs whitespace-nowrap">
-                    {fmtDateTime(l.fetched_at ? l.fetched_at.replace(" ", "T") + "Z" : null)}
+                    {fmtDateTime(l.fetched_at ? toIso(l.fetched_at) : null)}
                   </td>
                   <td className="text-xs">{l.notes ?? ""}</td>
                 </tr>

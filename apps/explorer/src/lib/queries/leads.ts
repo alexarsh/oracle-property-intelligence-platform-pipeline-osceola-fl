@@ -49,6 +49,7 @@ export interface LeadProperty {
   marketValue: number | null;
   livableFloorArea: number | null;
   sourceUrls: string[];
+  firstSeenRunId: string | null;
   lastChangedRunId: string | null;
   distanceMiles: number | null;
 }
@@ -132,6 +133,7 @@ export function toLeadProperty(r: Row): LeadProperty | null {
     marketValue: toNumber(r.market_value),
     livableFloorArea: toNumber(r.livable_floor_area),
     sourceUrls: splitUrls(toStr(r.source_urls)),
+    firstSeenRunId: toStr(r.first_seen_run_id),
     lastChangedRunId: toStr(r.last_changed_run_id),
     distanceMiles: toNumber(r.distance_miles),
   };

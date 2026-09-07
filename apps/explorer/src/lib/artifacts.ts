@@ -182,6 +182,8 @@ export function runIdToIso(runId: string): string | null {
 /** DuckDB timestamps (`2026-09-07 08:51:42.781`) → ISO with Z. */
 export function toIso(ts: string): string {
   if (/^\d{4}-\d{2}-\d{2} /.test(ts)) return `${ts.replace(" ", "T")}Z`;
+  // ISO without a zone designator → UTC; ISO with Z or an offset is returned unchanged.
+  if (/^\d{4}-\d{2}-\d{2}T[\d:.]+$/.test(ts)) return `${ts}Z`;
   return ts;
 }
 
