@@ -19,18 +19,32 @@ import type { Db } from "./client.js";
 import { lit } from "./client.js";
 import { recordLoad } from "./ledger.js";
 
-/** Find every `fileName` one directory level below `root` (one sub-directory per harvest window). */
+/**
+ * Find every `fileName` under `root`: one level down (`<root>/<harvest>/<file>`)
+ * and, for range harvests that bisect into windows, two levels down
+ * (`<root>/<harvest>/windows/<window>/<file>`). A merged top-level file wins
+ * over its per-window parts so rows are not loaded twice.
+ */
 async function findHarvestFiles(root: string, fileName: string): Promise<string[]> {
+  const isFile = async (f: string) =>
+    stat(f)
+      .then((s) => s.isFile())
+      .catch(() => false);
   try {
-    const entries = await readdir(root, { withFileTypes: true });
+    const harvests = (await readdir(root, { withFileTypes: true })).filter((e) => e.isDirectory());
     const files: string[] = [];
-    for (const e of entries) {
-      if (!e.isDirectory()) continue;
-      const f = path.join(root, e.name, fileName);
-      try {
-        if ((await stat(f)).isFile()) files.push(f);
-      } catch {
-        /* window without output */
+    for (const h of harvests) {
+      const merged = path.join(root, h.name, fileName);
+      if (await isFile(merged)) {
+        files.push(merged);
+        continue;
+      }
+      const windowsDir = path.join(root, h.name, "windows");
+      const windows = await readdir(windowsDir, { withFileTypes: true }).catch(() => []);
+      for (const w of windows) {
+        if (!w.isDirectory()) continue;
+        const part = path.join(windowsDir, w.name, fileName);
+        if (await isFile(part)) files.push(part);
       }
     }
     return files.sort();
