@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
   "installCommand": "cd ../.. && npm ci --no-audit --no-fund",
-  "buildCommand": "cd ../.. && npx tsc -b packages/shared && npm run build --workspace @osceola/explorer",
+  "buildCommand": "cd ../.. && npx tsc -b --force packages/shared && npm run build --workspace @osceola/explorer",
   "functions": {
     "src/app/api/verify/route.ts": { "maxDuration": 300 },
     "src/app/api/chat/route.ts": { "maxDuration": 300 }

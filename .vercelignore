@@ -10,3 +10,5 @@ artifacts/runs/*/query-tables
 artifacts/runs/*/*.car
 packages/pipeline/src/sources/**/__fixtures__
 *.log
+**/*.tsbuildinfo
+**/.env*.local
