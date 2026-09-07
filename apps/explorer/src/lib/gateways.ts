@@ -18,6 +18,13 @@ export const GATEWAYS: readonly Gateway[] = [
   { key: "ipfs.io", label: "ipfs.io", origin: "https://ipfs.io", independent: true },
   { key: "dweb.link", label: "dweb.link", origin: "https://dweb.link", independent: true },
   {
+    key: "pinata",
+    label: "gateway.pinata.cloud",
+    origin: "https://gateway.pinata.cloud",
+    independent: true,
+  },
+  { key: "w3s.link", label: "w3s.link", origin: "https://w3s.link", independent: true },
+  {
     key: "filebase",
     label: "Filebase (pinning vendor)",
     origin: "https://ipfs.filebase.io",

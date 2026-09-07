@@ -11,8 +11,18 @@ const pretty = process.stdout.isTTY && process.env.LOG_PRETTY !== "0";
 export const logger = pino({
   level: process.env.LOG_LEVEL ?? "info",
   base: { service: "osceola-pipeline" },
-  redact: { paths: ["*.secretAccessKey", "*.accessKeyId", "*.authorization"], censor: "[redacted]" },
-  ...(pretty ? { transport: { target: "pino-pretty", options: { colorize: true, translateTime: "HH:MM:ss" } } } : {}),
+  redact: {
+    paths: ["*.secretAccessKey", "*.accessKeyId", "*.authorization"],
+    censor: "[redacted]",
+  },
+  ...(pretty
+    ? {
+        transport: {
+          target: "pino-pretty",
+          options: { colorize: true, translateTime: "HH:MM:ss" },
+        },
+      }
+    : {}),
 });
 
 export type Logger = typeof logger;

@@ -38,6 +38,8 @@ export interface ArtifactVerification {
 
 export interface VerificationReport {
   runId: string;
+  /** Gateways that had to agree per artifact for `allMatched`. */
+  minGateways: number;
   verifiedAt: string;
   gateways: string[];
   artifacts: ArtifactVerification[];
@@ -108,6 +110,16 @@ async function fetchAndHash(
   }
 }
 
+/**
+ * Public gateways answer 429 (rate limit) and 504 (content not yet discovered)
+ * for freshly pinned CIDs; both clear with time, so waits grow geometrically
+ * and are longer for those two statuses.
+ */
+function backoffMs(status: number | null, attempt: number): number {
+  const base = status === 429 || status === 504 ? 20_000 : 5_000;
+  return Math.min(base * 2 ** (attempt - 1), 180_000);
+}
+
 export interface VerifyOptions {
   gateways: string[];
   /** Per-request timeout; large Parquet files through public gateways can be slow. */
@@ -116,6 +128,8 @@ export interface VerifyOptions {
   attempts?: number;
   /** Restrict to these artifact names (default: all files). */
   only?: string[];
+  /** An artifact passes when at least this many independent gateways return matching bytes (default 2). */
+  minGateways?: number;
 }
 
 export async function verifyManifest(
@@ -123,7 +137,7 @@ export async function verifyManifest(
   opts: VerifyOptions,
 ): Promise<VerificationReport> {
   const timeoutMs = opts.timeoutMs ?? 180_000;
-  const attempts = opts.attempts ?? 3;
+  const attempts = opts.attempts ?? 5;
   const log = logger.child({ stage: "verify", runId: manifest.runId });
   const files = manifest.artifacts.filter(
     (a) => a.codec === "file" && (!opts.only || opts.only.includes(a.name)),
@@ -142,7 +156,8 @@ export async function verifyManifest(
           { url, attempt: i, error: check.error ?? `mismatch (${check.bytes} bytes)` },
           "gateway fetch not matched yet",
         );
-        await new Promise((r) => setTimeout(r, 5_000 * i));
+        if (i < attempts)
+          await new Promise((r) => setTimeout(r, backoffMs(check?.status ?? null, i)));
       }
       checks.push({ gateway, ...check! });
       log.info(
@@ -166,17 +181,25 @@ export async function verifyManifest(
     for (const gateway of opts.gateways) {
       const url = `${gateway.replace(/\/$/, "")}/ipfs/${manifest.root.cid}/${probe.name}`;
       let check: Omit<FetchCheck, "gateway"> | null = null;
-      for (let i = 1; i <= attempts && !check?.matched; i++)
+      for (let i = 1; i <= attempts && !check?.matched; i++) {
         check = await fetchAndHash(url, probe.size, probe.digest, timeoutMs);
+        if (!check?.matched && i < attempts)
+          await new Promise((r) => setTimeout(r, backoffMs(check?.status ?? null, i)));
+      }
       rootPathCheck.push({ gateway, ...check! });
     }
   }
 
+  // Public gateways rate-limit per IP and discover fresh content at different
+  // speeds, so the proof is "at least `minGateways` independent gateways served
+  // matching bytes", not "every gateway answered on the first try".
+  const min = Math.min(opts.minGateways ?? 2, opts.gateways.length);
+  const matchedCount = (checks: FetchCheck[]) => checks.filter((c) => c.matched).length;
   const allMatched =
-    artifacts.every((a) => a.checks.every((c) => c.matched)) &&
-    rootPathCheck.every((c) => c.matched);
+    artifacts.every((a) => matchedCount(a.checks) >= min) && matchedCount(rootPathCheck) >= min;
   return {
     runId: manifest.runId,
+    minGateways: min,
     verifiedAt: new Date().toISOString(),
     gateways: opts.gateways,
     artifacts,

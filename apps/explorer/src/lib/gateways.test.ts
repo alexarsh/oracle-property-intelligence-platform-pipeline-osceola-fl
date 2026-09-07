@@ -13,10 +13,12 @@ describe("gateways", () => {
       `https://dweb.link/ipfs/${CID}/a%20b/c`,
     );
   });
-  it("lists two independent public gateways plus the vendor gateway", () => {
+  it("lists four independent public gateways plus the vendor gateway", () => {
     expect(GATEWAYS.filter((g) => g.independent).map((g) => g.key)).toEqual([
       "ipfs.io",
       "dweb.link",
+      "pinata",
+      "w3s.link",
     ]);
     expect(GATEWAYS.find((g) => g.key === "filebase")?.independent).toBe(false);
   });
