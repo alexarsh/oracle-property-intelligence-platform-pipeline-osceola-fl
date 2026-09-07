@@ -18,6 +18,8 @@
 import { createReadStream } from "node:fs";
 import { stat } from "node:fs/promises";
 import { HeadObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { Upload } from "@aws-sdk/lib-storage";
+import { CID } from "multiformats/cid";
 import { FILEBASE } from "../config.js";
 import { logger } from "../logger.js";
 
@@ -55,23 +57,45 @@ export interface UploadResult {
   bytes: number;
 }
 
-/** Upload a CAR and import it; returns the root CID Filebase pinned. */
+/**
+ * Upload a CAR (multipart, 4 parts in flight, 8 MiB each — VPN / residential
+ * uplinks throttle per connection) and import it; returns the root CID Filebase
+ * pinned. Progress is logged every ~10%.
+ */
 export async function uploadCar(carPath: string, key: string): Promise<UploadResult> {
   const s3 = client();
   const { size } = await stat(carPath);
-  logger.info({ key, bytes: size }, "uploading CAR to Filebase");
-  await s3.send(
-    new PutObjectCommand({
+  const log = logger.child({ key, bytes: size });
+  log.info("uploading CAR to Filebase");
+  const upload = new Upload({
+    client: s3,
+    params: {
       Bucket: FILEBASE.bucket,
       Key: key,
       Body: createReadStream(carPath),
-      ContentLength: size,
       ContentType: "application/vnd.ipld.car",
       Metadata: { import: "car" },
-    }),
-  );
+    },
+    partSize: 8 * 1024 * 1024,
+    queueSize: 4,
+    leavePartsOnError: false,
+  });
+  let lastPct = -10;
+  upload.on("httpUploadProgress", (p) => {
+    const pct = Math.floor(((p.loaded ?? 0) / size) * 100);
+    if (pct >= lastPct + 10) {
+      lastPct = pct;
+      log.info({ pct, loaded: p.loaded }, "upload progress");
+    }
+  });
+  await upload.done();
   const cid = await waitForCid(s3, key);
   return { key, cid, bytes: size };
+}
+
+/** Filebase reports CIDv0 (`Qm…`) for plain objects; normalize to CIDv1 base32 (same multihash). */
+export function toCidV1(cid: string): string {
+  return CID.parse(cid).toV1().toString();
 }
 
 /** Upload a single small file (e.g. the manifest) and return its CID. */
@@ -91,7 +115,7 @@ export async function uploadFile(
       ContentType: contentType,
     }),
   );
-  const cid = await waitForCid(s3, key, 60_000);
+  const cid = toCidV1(await waitForCid(s3, key, 60_000));
   return { key, cid, bytes: size };
 }
 

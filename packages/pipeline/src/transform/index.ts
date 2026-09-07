@@ -21,6 +21,7 @@ import { writeJson } from "../util/fs.js";
 import { buildContractors } from "./contractors.js";
 import { buildPermits, buildPermitsStage } from "./permits.js";
 import { buildProperties, buildPropertiesBase } from "./properties.js";
+import { buildPlaces } from "./places.js";
 
 export interface BuildResult {
   counts: Record<QueryTableName, number>;
@@ -45,7 +46,9 @@ export async function buildQueryTables(
   log.info({ rows: permits, ms: Date.now() - t0 }, "permits built");
   const properties = await buildProperties(db, runId, runDate);
   log.info({ rows: properties, ms: Date.now() - t0 }, "properties built");
-  return { counts: { properties, permits, contractors: c.contractors }, bbbMatched: c.bbbMatched };
+  const places = await buildPlaces(db);
+  log.info({ rows: places, ms: Date.now() - t0 }, "places built");
+  return { counts: { properties, permits, contractors: c.contractors, places }, bbbMatched: c.bbbMatched };
 }
 
 export interface ColumnCoverage {
@@ -112,7 +115,9 @@ export async function exportQueryTables(
     UNION ALL
     SELECT 'osceola_appraiser (properties)', count(*), (SELECT min(fetched_at)::VARCHAR FROM source_loads WHERE source='ocpa_certified'), (SELECT max(fetched_at)::VARCHAR FROM source_loads WHERE source='ocpa_certified') FROM properties
     UNION ALL
-    SELECT 'osceola_gis_parcels', count(*), min(fetched_at)::VARCHAR, max(fetched_at)::VARCHAR FROM raw_gis_parcels`);
+    SELECT 'osceola_gis_parcels', count(*), min(fetched_at)::VARCHAR, max(fetched_at)::VARCHAR FROM raw_gis_parcels
+    UNION ALL
+    SELECT 'overture_places', count(*), min(fetched_at), max(fetched_at) FROM places`);
   for (const r of sourceRows) {
     perSource.push({
       county: COUNTY.key,

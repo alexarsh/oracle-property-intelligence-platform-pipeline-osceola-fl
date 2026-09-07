@@ -33,6 +33,7 @@ import { publishRun } from "../publish/manifest.js";
 import { verifyManifest } from "../publish/verify.js";
 import { loadAppraiser } from "../sources/appraiser/index.js";
 import { loadGisParcels } from "../sources/gis/index.js";
+import { loadOverturePlaces } from "../sources/overture/index.js";
 import { buildQueryTables, exportQueryTables } from "../transform/index.js";
 import { writeJson } from "../util/fs.js";
 import {
@@ -198,6 +199,17 @@ export async function executeRun(db: Db, opts: RunOptions): Promise<RunRecord> {
           ...failedSource("osceola_accela", err, t0),
           window: { since, until: opts.runDate },
         });
+      }
+    }
+
+    // 3b. Overture places (business locations); extraction is cached per pinned release.
+    {
+      const t0 = Date.now();
+      try {
+        record.sources.push(await loadOverturePlaces(db, { runId: opts.runId }));
+      } catch (err) {
+        log.error({ err }, "overture load failed");
+        record.sources.push(failedSource("overture_places", err, t0));
       }
     }
 
