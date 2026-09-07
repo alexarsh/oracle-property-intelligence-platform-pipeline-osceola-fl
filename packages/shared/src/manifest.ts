@@ -82,6 +82,9 @@ export type SourceRunResult = z.infer<typeof SourceRunResult>;
 
 export const TableCounts = z.record(z.number().int().nonnegative());
 export type TableCounts = z.infer<typeof TableCounts>;
+/** Row-count differences versus the previous run; negative when rows were removed or merged. */
+export const TableDeltas = z.record(z.number().int());
+export type TableDeltas = z.infer<typeof TableDeltas>;
 
 export const RunRecord = z.object({
   runId: z.string(),
@@ -95,8 +98,8 @@ export const RunRecord = z.object({
   sources: z.array(SourceRunResult),
   /** Row counts of every published query table after this run. */
   tableCounts: TableCounts,
-  /** Row-count deltas versus the previous successful run. */
-  tableDeltas: TableCounts,
+  /** Row-count deltas versus the previous successful run (may be negative). */
+  tableDeltas: TableDeltas,
   manifestCid: cidV1.nullable(),
   rootCid: cidV1.nullable(),
   previousRootCid: cidV1.nullable(),

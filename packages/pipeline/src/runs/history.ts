@@ -12,7 +12,7 @@
 import { execFile } from "node:child_process";
 import path from "node:path";
 import { promisify } from "node:util";
-import { RunHistory, type RunRecord, type TableCounts } from "@osceola/shared";
+import { RunHistory, type RunRecord, type TableCounts, type TableDeltas } from "@osceola/shared";
 import { ARTIFACTS_DIR, COUNTY, REPO_ROOT } from "../config.js";
 import { exists, readJson, writeJson } from "../util/fs.js";
 
@@ -72,8 +72,8 @@ export async function previousSuccessfulRun(excludeRunId: string): Promise<RunRe
   );
 }
 
-export function tableDeltas(current: TableCounts, previous: TableCounts | null): TableCounts {
-  const out: TableCounts = {};
+export function tableDeltas(current: TableCounts, previous: TableCounts | null): TableDeltas {
+  const out: TableDeltas = {};
   for (const [k, v] of Object.entries(current)) out[k] = v - (previous?.[k] ?? 0);
   return out;
 }
