@@ -359,16 +359,19 @@ export default async function RunSummaryPage() {
                     <td className="text-right tabular-nums">
                       {fmtInt(r.record.tableCounts.contractors)}
                     </td>
-                    <td className="mono" title={r.record.rootCid ?? ""}>
+                    <td className="mono whitespace-nowrap" title={r.record.rootCid ?? ""}>
                       {r.record.rootCid ? (
-                        <ExtLink href={gatewayUrl(publicGateways[0]!, r.record.rootCid)}>
+                        <Link
+                          className="underline decoration-dotted"
+                          href={`/manifest?run=${encodeURIComponent(r.record.runId)}`}
+                        >
                           {shortCid(r.record.rootCid, 12)}
-                        </ExtLink>
+                        </Link>
                       ) : (
                         <span className="text-zinc-500">not published yet</span>
                       )}
                     </td>
-                    <td className="mono" title={r.record.previousRootCid ?? ""}>
+                    <td className="mono whitespace-nowrap" title={r.record.previousRootCid ?? ""}>
                       {r.record.previousRootCid ? (
                         shortCid(r.record.previousRootCid, 12)
                       ) : (
