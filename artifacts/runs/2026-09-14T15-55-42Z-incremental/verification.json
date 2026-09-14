@@ -1,0 +1,424 @@
+{
+  "runId": "2026-09-14T15-55-42Z-incremental",
+  "minGateways": 2,
+  "verifiedAt": "2026-09-14T16:40:55.210Z",
+  "gateways": [
+    "https://ipfs.io",
+    "https://dweb.link",
+    "https://gateway.pinata.cloud",
+    "https://w3s.link"
+  ],
+  "artifacts": [
+    {
+      "name": "coverage.json",
+      "cid": "bafybeif7abzvyxu4vpub4zxl6rnycoaakq4fnrhmhpkfvtishdrrpr47du",
+      "expectedSize": 23345,
+      "expectedDigest": "sha256:ec35efb270bacc96d5039d6fe7955548c33396307dfde82a7c2e48efe1393619",
+      "checks": [
+        {
+          "gateway": "https://ipfs.io",
+          "url": "https://ipfs.io/ipfs/bafybeif7abzvyxu4vpub4zxl6rnycoaakq4fnrhmhpkfvtishdrrpr47du",
+          "ok": false,
+          "status": 429,
+          "bytes": null,
+          "sha256": null,
+          "matched": false,
+          "ms": 44,
+          "error": "HTTP 429"
+        },
+        {
+          "gateway": "https://dweb.link",
+          "url": "https://dweb.link/ipfs/bafybeif7abzvyxu4vpub4zxl6rnycoaakq4fnrhmhpkfvtishdrrpr47du",
+          "ok": false,
+          "status": 429,
+          "bytes": null,
+          "sha256": null,
+          "matched": false,
+          "ms": 223,
+          "error": "HTTP 429"
+        },
+        {
+          "gateway": "https://gateway.pinata.cloud",
+          "url": "https://gateway.pinata.cloud/ipfs/bafybeif7abzvyxu4vpub4zxl6rnycoaakq4fnrhmhpkfvtishdrrpr47du",
+          "ok": true,
+          "status": 200,
+          "bytes": 23345,
+          "sha256": "sha256:ec35efb270bacc96d5039d6fe7955548c33396307dfde82a7c2e48efe1393619",
+          "matched": true,
+          "ms": 5957,
+          "error": null
+        },
+        {
+          "gateway": "https://w3s.link",
+          "url": "https://w3s.link/ipfs/bafybeif7abzvyxu4vpub4zxl6rnycoaakq4fnrhmhpkfvtishdrrpr47du",
+          "ok": false,
+          "status": 429,
+          "bytes": null,
+          "sha256": null,
+          "matched": false,
+          "ms": 160,
+          "error": "HTTP 429"
+        }
+      ]
+    },
+    {
+      "name": "query-tables/contractors.parquet",
+      "cid": "bafybeifml3r4shp6fucg4racphy2t4xnalmsno4hc2cq3bjqsatgwpg6ie",
+      "expectedSize": 216064,
+      "expectedDigest": "sha256:f51bd8ccbbb85b2599f635dd3b27c5d385273889ff6dd810b02965c065ff2a61",
+      "checks": [
+        {
+          "gateway": "https://ipfs.io",
+          "url": "https://ipfs.io/ipfs/bafybeifml3r4shp6fucg4racphy2t4xnalmsno4hc2cq3bjqsatgwpg6ie",
+          "ok": false,
+          "status": 429,
+          "bytes": null,
+          "sha256": null,
+          "matched": false,
+          "ms": 54,
+          "error": "HTTP 429"
+        },
+        {
+          "gateway": "https://dweb.link",
+          "url": "https://dweb.link/ipfs/bafybeifml3r4shp6fucg4racphy2t4xnalmsno4hc2cq3bjqsatgwpg6ie",
+          "ok": false,
+          "status": 429,
+          "bytes": null,
+          "sha256": null,
+          "matched": false,
+          "ms": 49,
+          "error": "HTTP 429"
+        },
+        {
+          "gateway": "https://gateway.pinata.cloud",
+          "url": "https://gateway.pinata.cloud/ipfs/bafybeifml3r4shp6fucg4racphy2t4xnalmsno4hc2cq3bjqsatgwpg6ie",
+          "ok": true,
+          "status": 200,
+          "bytes": 216064,
+          "sha256": "sha256:f51bd8ccbbb85b2599f635dd3b27c5d385273889ff6dd810b02965c065ff2a61",
+          "matched": true,
+          "ms": 6346,
+          "error": null
+        },
+        {
+          "gateway": "https://w3s.link",
+          "url": "https://w3s.link/ipfs/bafybeifml3r4shp6fucg4racphy2t4xnalmsno4hc2cq3bjqsatgwpg6ie",
+          "ok": true,
+          "status": 200,
+          "bytes": 216064,
+          "sha256": "sha256:f51bd8ccbbb85b2599f635dd3b27c5d385273889ff6dd810b02965c065ff2a61",
+          "matched": true,
+          "ms": 782,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "query-tables/permits.parquet",
+      "cid": "bafybeiddkxkmb7fuarqsnajz4enqm5gdczmcy7cbalju77jwxigirola3y",
+      "expectedSize": 37651668,
+      "expectedDigest": "sha256:4691e046756c31fc9b4efce566d8fca44900e3d3b0c85d18880ce9e8b9ec54f3",
+      "checks": [
+        {
+          "gateway": "https://ipfs.io",
+          "url": "https://ipfs.io/ipfs/bafybeiddkxkmb7fuarqsnajz4enqm5gdczmcy7cbalju77jwxigirola3y",
+          "ok": true,
+          "status": 200,
+          "bytes": 37651668,
+          "sha256": "sha256:4691e046756c31fc9b4efce566d8fca44900e3d3b0c85d18880ce9e8b9ec54f3",
+          "matched": true,
+          "ms": 3581,
+          "error": null
+        },
+        {
+          "gateway": "https://dweb.link",
+          "url": "https://dweb.link/ipfs/bafybeiddkxkmb7fuarqsnajz4enqm5gdczmcy7cbalju77jwxigirola3y",
+          "ok": true,
+          "status": 200,
+          "bytes": 37651668,
+          "sha256": "sha256:4691e046756c31fc9b4efce566d8fca44900e3d3b0c85d18880ce9e8b9ec54f3",
+          "matched": true,
+          "ms": 2895,
+          "error": null
+        },
+        {
+          "gateway": "https://gateway.pinata.cloud",
+          "url": "https://gateway.pinata.cloud/ipfs/bafybeiddkxkmb7fuarqsnajz4enqm5gdczmcy7cbalju77jwxigirola3y",
+          "ok": true,
+          "status": 200,
+          "bytes": 37651668,
+          "sha256": "sha256:4691e046756c31fc9b4efce566d8fca44900e3d3b0c85d18880ce9e8b9ec54f3",
+          "matched": true,
+          "ms": 7091,
+          "error": null
+        },
+        {
+          "gateway": "https://w3s.link",
+          "url": "https://w3s.link/ipfs/bafybeiddkxkmb7fuarqsnajz4enqm5gdczmcy7cbalju77jwxigirola3y",
+          "ok": true,
+          "status": 200,
+          "bytes": 37651668,
+          "sha256": "sha256:4691e046756c31fc9b4efce566d8fca44900e3d3b0c85d18880ce9e8b9ec54f3",
+          "matched": true,
+          "ms": 507,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "query-tables/places.parquet",
+      "cid": "bafybeih5pydiuhz3zrspnnpmu2f4dvkd2edsowkv4acmdsxzl4cwv7woim",
+      "expectedSize": 1441711,
+      "expectedDigest": "sha256:97f2d6f4ee426733f6f78515dd539b9973ee8ca40ae52307192a8bd77ceba72a",
+      "checks": [
+        {
+          "gateway": "https://ipfs.io",
+          "url": "https://ipfs.io/ipfs/bafybeih5pydiuhz3zrspnnpmu2f4dvkd2edsowkv4acmdsxzl4cwv7woim",
+          "ok": true,
+          "status": 200,
+          "bytes": 1441711,
+          "sha256": "sha256:97f2d6f4ee426733f6f78515dd539b9973ee8ca40ae52307192a8bd77ceba72a",
+          "matched": true,
+          "ms": 819,
+          "error": null
+        },
+        {
+          "gateway": "https://dweb.link",
+          "url": "https://dweb.link/ipfs/bafybeih5pydiuhz3zrspnnpmu2f4dvkd2edsowkv4acmdsxzl4cwv7woim",
+          "ok": true,
+          "status": 200,
+          "bytes": 1441711,
+          "sha256": "sha256:97f2d6f4ee426733f6f78515dd539b9973ee8ca40ae52307192a8bd77ceba72a",
+          "matched": true,
+          "ms": 637,
+          "error": null
+        },
+        {
+          "gateway": "https://gateway.pinata.cloud",
+          "url": "https://gateway.pinata.cloud/ipfs/bafybeih5pydiuhz3zrspnnpmu2f4dvkd2edsowkv4acmdsxzl4cwv7woim",
+          "ok": true,
+          "status": 200,
+          "bytes": 1441711,
+          "sha256": "sha256:97f2d6f4ee426733f6f78515dd539b9973ee8ca40ae52307192a8bd77ceba72a",
+          "matched": true,
+          "ms": 6605,
+          "error": null
+        },
+        {
+          "gateway": "https://w3s.link",
+          "url": "https://w3s.link/ipfs/bafybeih5pydiuhz3zrspnnpmu2f4dvkd2edsowkv4acmdsxzl4cwv7woim",
+          "ok": true,
+          "status": 200,
+          "bytes": 1441711,
+          "sha256": "sha256:97f2d6f4ee426733f6f78515dd539b9973ee8ca40ae52307192a8bd77ceba72a",
+          "matched": true,
+          "ms": 261,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "query-tables/properties.parquet",
+      "cid": "bafybeiaehox6qfc3qa4xo6xqifzjm4f7qildwcucdtpu3xllqgllvhiqle",
+      "expectedSize": 26263202,
+      "expectedDigest": "sha256:a6ddea9fb0fe06c571201754c00e2f97526b3f0df7bc5a8cb4e411861d63b5fc",
+      "checks": [
+        {
+          "gateway": "https://ipfs.io",
+          "url": "https://ipfs.io/ipfs/bafybeiaehox6qfc3qa4xo6xqifzjm4f7qildwcucdtpu3xllqgllvhiqle",
+          "ok": true,
+          "status": 200,
+          "bytes": 26263202,
+          "sha256": "sha256:a6ddea9fb0fe06c571201754c00e2f97526b3f0df7bc5a8cb4e411861d63b5fc",
+          "matched": true,
+          "ms": 3810,
+          "error": null
+        },
+        {
+          "gateway": "https://dweb.link",
+          "url": "https://dweb.link/ipfs/bafybeiaehox6qfc3qa4xo6xqifzjm4f7qildwcucdtpu3xllqgllvhiqle",
+          "ok": true,
+          "status": 200,
+          "bytes": 26263202,
+          "sha256": "sha256:a6ddea9fb0fe06c571201754c00e2f97526b3f0df7bc5a8cb4e411861d63b5fc",
+          "matched": true,
+          "ms": 2961,
+          "error": null
+        },
+        {
+          "gateway": "https://gateway.pinata.cloud",
+          "url": "https://gateway.pinata.cloud/ipfs/bafybeiaehox6qfc3qa4xo6xqifzjm4f7qildwcucdtpu3xllqgllvhiqle",
+          "ok": true,
+          "status": 200,
+          "bytes": 26263202,
+          "sha256": "sha256:a6ddea9fb0fe06c571201754c00e2f97526b3f0df7bc5a8cb4e411861d63b5fc",
+          "matched": true,
+          "ms": 7944,
+          "error": null
+        },
+        {
+          "gateway": "https://w3s.link",
+          "url": "https://w3s.link/ipfs/bafybeiaehox6qfc3qa4xo6xqifzjm4f7qildwcucdtpu3xllqgllvhiqle",
+          "ok": true,
+          "status": 200,
+          "bytes": 26263202,
+          "sha256": "sha256:a6ddea9fb0fe06c571201754c00e2f97526b3f0df7bc5a8cb4e411861d63b5fc",
+          "matched": true,
+          "ms": 378,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "samples/aged-roofs-sample.csv",
+      "cid": "bafybeifusqcmkvvymd2l3zxvozffi27ru3lfxgyq43fhfc2tts6m7a6klu",
+      "expectedSize": 226,
+      "expectedDigest": "sha256:be3d02d1abebfd977a6f0cc9bcc8d4692049a27dc79a286d72111bb75896b120",
+      "checks": [
+        {
+          "gateway": "https://ipfs.io",
+          "url": "https://ipfs.io/ipfs/bafybeifusqcmkvvymd2l3zxvozffi27ru3lfxgyq43fhfc2tts6m7a6klu",
+          "ok": true,
+          "status": 200,
+          "bytes": 226,
+          "sha256": "sha256:be3d02d1abebfd977a6f0cc9bcc8d4692049a27dc79a286d72111bb75896b120",
+          "matched": true,
+          "ms": 349,
+          "error": null
+        },
+        {
+          "gateway": "https://dweb.link",
+          "url": "https://dweb.link/ipfs/bafybeifusqcmkvvymd2l3zxvozffi27ru3lfxgyq43fhfc2tts6m7a6klu",
+          "ok": true,
+          "status": 200,
+          "bytes": 226,
+          "sha256": "sha256:be3d02d1abebfd977a6f0cc9bcc8d4692049a27dc79a286d72111bb75896b120",
+          "matched": true,
+          "ms": 343,
+          "error": null
+        },
+        {
+          "gateway": "https://gateway.pinata.cloud",
+          "url": "https://gateway.pinata.cloud/ipfs/bafybeifusqcmkvvymd2l3zxvozffi27ru3lfxgyq43fhfc2tts6m7a6klu",
+          "ok": true,
+          "status": 200,
+          "bytes": 226,
+          "sha256": "sha256:be3d02d1abebfd977a6f0cc9bcc8d4692049a27dc79a286d72111bb75896b120",
+          "matched": true,
+          "ms": 7149,
+          "error": null
+        },
+        {
+          "gateway": "https://w3s.link",
+          "url": "https://w3s.link/ipfs/bafybeifusqcmkvvymd2l3zxvozffi27ru3lfxgyq43fhfc2tts6m7a6klu",
+          "ok": true,
+          "status": 200,
+          "bytes": 226,
+          "sha256": "sha256:be3d02d1abebfd977a6f0cc9bcc8d4692049a27dc79a286d72111bb75896b120",
+          "matched": true,
+          "ms": 187,
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "samples/long-open-roofing-permits-sample.csv",
+      "cid": "bafybeifn22dw5cuw3o3bx62muryryslfs42uxqqzkkq2nhaxeovcrtnez4",
+      "expectedSize": 88237,
+      "expectedDigest": "sha256:bf40c496b3344481eb9749f2943b04af432981382f12ac70378fb52c81d4eb41",
+      "checks": [
+        {
+          "gateway": "https://ipfs.io",
+          "url": "https://ipfs.io/ipfs/bafybeifn22dw5cuw3o3bx62muryryslfs42uxqqzkkq2nhaxeovcrtnez4",
+          "ok": true,
+          "status": 200,
+          "bytes": 88237,
+          "sha256": "sha256:bf40c496b3344481eb9749f2943b04af432981382f12ac70378fb52c81d4eb41",
+          "matched": true,
+          "ms": 251,
+          "error": null
+        },
+        {
+          "gateway": "https://dweb.link",
+          "url": "https://dweb.link/ipfs/bafybeifn22dw5cuw3o3bx62muryryslfs42uxqqzkkq2nhaxeovcrtnez4",
+          "ok": true,
+          "status": 200,
+          "bytes": 88237,
+          "sha256": "sha256:bf40c496b3344481eb9749f2943b04af432981382f12ac70378fb52c81d4eb41",
+          "matched": true,
+          "ms": 398,
+          "error": null
+        },
+        {
+          "gateway": "https://gateway.pinata.cloud",
+          "url": "https://gateway.pinata.cloud/ipfs/bafybeifn22dw5cuw3o3bx62muryryslfs42uxqqzkkq2nhaxeovcrtnez4",
+          "ok": true,
+          "status": 200,
+          "bytes": 88237,
+          "sha256": "sha256:bf40c496b3344481eb9749f2943b04af432981382f12ac70378fb52c81d4eb41",
+          "matched": true,
+          "ms": 4964,
+          "error": null
+        },
+        {
+          "gateway": "https://w3s.link",
+          "url": "https://w3s.link/ipfs/bafybeifn22dw5cuw3o3bx62muryryslfs42uxqqzkkq2nhaxeovcrtnez4",
+          "ok": true,
+          "status": 200,
+          "bytes": 88237,
+          "sha256": "sha256:bf40c496b3344481eb9749f2943b04af432981382f12ac70378fb52c81d4eb41",
+          "matched": true,
+          "ms": 141,
+          "error": null
+        }
+      ]
+    }
+  ],
+  "rootPathCheck": [
+    {
+      "gateway": "https://ipfs.io",
+      "url": "https://ipfs.io/ipfs/bafybeiepew3pns2e2o2sdb2awlhcwbge7ttgixw3cc5ae3fflhz3dtvupu/samples/aged-roofs-sample.csv",
+      "ok": true,
+      "status": 200,
+      "bytes": 226,
+      "sha256": "sha256:be3d02d1abebfd977a6f0cc9bcc8d4692049a27dc79a286d72111bb75896b120",
+      "matched": true,
+      "ms": 458,
+      "error": null
+    },
+    {
+      "gateway": "https://dweb.link",
+      "url": "https://dweb.link/ipfs/bafybeiepew3pns2e2o2sdb2awlhcwbge7ttgixw3cc5ae3fflhz3dtvupu/samples/aged-roofs-sample.csv",
+      "ok": true,
+      "status": 200,
+      "bytes": 226,
+      "sha256": "sha256:be3d02d1abebfd977a6f0cc9bcc8d4692049a27dc79a286d72111bb75896b120",
+      "matched": true,
+      "ms": 454,
+      "error": null
+    },
+    {
+      "gateway": "https://gateway.pinata.cloud",
+      "url": "https://gateway.pinata.cloud/ipfs/bafybeiepew3pns2e2o2sdb2awlhcwbge7ttgixw3cc5ae3fflhz3dtvupu/samples/aged-roofs-sample.csv",
+      "ok": true,
+      "status": 200,
+      "bytes": 226,
+      "sha256": "sha256:be3d02d1abebfd977a6f0cc9bcc8d4692049a27dc79a286d72111bb75896b120",
+      "matched": true,
+      "ms": 5027,
+      "error": null
+    },
+    {
+      "gateway": "https://w3s.link",
+      "url": "https://w3s.link/ipfs/bafybeiepew3pns2e2o2sdb2awlhcwbge7ttgixw3cc5ae3fflhz3dtvupu/samples/aged-roofs-sample.csv",
+      "ok": true,
+      "status": 200,
+      "bytes": 226,
+      "sha256": "sha256:be3d02d1abebfd977a6f0cc9bcc8d4692049a27dc79a286d72111bb75896b120",
+      "matched": true,
+      "ms": 195,
+      "error": null
+    }
+  ],
+  "allMatched": false
+}
