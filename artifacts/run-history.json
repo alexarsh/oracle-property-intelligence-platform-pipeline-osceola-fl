@@ -507,6 +507,24 @@
         "allMatched": false
       },
       "notes": []
+    },
+    {
+      "runId": "2026-09-21T15-56-02Z-incremental",
+      "county": "osceola",
+      "mode": "incremental",
+      "startedAt": "2026-09-21T15:56:02.266Z",
+      "finishedAt": null,
+      "status": "running",
+      "pipelineCommit": "2cb761919e41e489f2e95d44ec84e778f4f7995f",
+      "sources": [],
+      "tableCounts": {},
+      "tableDeltas": {},
+      "manifestCid": null,
+      "rootCid": null,
+      "previousRootCid": "bafybeiepew3pns2e2o2sdb2awlhcwbge7ttgixw3cc5ae3fflhz3dtvupu",
+      "ipnsName": null,
+      "verification": null,
+      "notes": []
     }
   ]
 }
