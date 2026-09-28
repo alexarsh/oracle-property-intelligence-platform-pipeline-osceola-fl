@@ -525,6 +525,24 @@
       "ipnsName": null,
       "verification": null,
       "notes": []
+    },
+    {
+      "runId": "2026-09-28T17-42-27Z-incremental",
+      "county": "osceola",
+      "mode": "incremental",
+      "startedAt": "2026-09-28T17:42:27.645Z",
+      "finishedAt": null,
+      "status": "running",
+      "pipelineCommit": "c89518e237dd85322d1ae12e1174a12fac0c8bb6",
+      "sources": [],
+      "tableCounts": {},
+      "tableDeltas": {},
+      "manifestCid": null,
+      "rootCid": null,
+      "previousRootCid": "bafybeiepew3pns2e2o2sdb2awlhcwbge7ttgixw3cc5ae3fflhz3dtvupu",
+      "ipnsName": null,
+      "verification": null,
+      "notes": []
     }
   ]
 }
