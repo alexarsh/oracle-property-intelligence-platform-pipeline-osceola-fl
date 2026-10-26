@@ -1,0 +1,128 @@
+{
+  "schemaVersion": "1.0",
+  "county": "osceola",
+  "countyFips": "12097",
+  "runId": "2026-10-26T16-11-18Z-incremental",
+  "publishedAt": "2026-10-26T16:11:44.452Z",
+  "root": {
+    "name": "",
+    "cid": "bafybeihenf52svin6gyw2guaoxcby3ubmtcbpbh456stonzstypydufy54",
+    "size": 65703631,
+    "codec": "directory",
+    "digest": "sha256:2bb6520f6a396ed469756c3bd0fdc007417cd5fcfce7239b9315c008861a6aee",
+    "mediaType": null,
+    "rowCount": null,
+    "origins": []
+  },
+  "car": {
+    "fileName": "run.car",
+    "size": 65713862,
+    "digest": "sha256:2bb6520f6a396ed469756c3bd0fdc007417cd5fcfce7239b9315c008861a6aee",
+    "cid": "bafybeihenf52svin6gyw2guaoxcby3ubmtcbpbh456stonzstypydufy54"
+  },
+  "artifacts": [
+    {
+      "name": "coverage.json",
+      "cid": "bafybeibdtsnir6pohltets2nuyw7cafwhageqtldpevzpoqfww7lko3cim",
+      "size": 24285,
+      "codec": "file",
+      "digest": "sha256:2497f3bf36532aaba7e69c0f1bc0d1347402ecca0b361d8c296d2d319731c2bf",
+      "mediaType": "application/json",
+      "rowCount": null,
+      "origins": []
+    },
+    {
+      "name": "query-tables",
+      "cid": "bafybeidsso6u4vgiv33pmzzk3rkb4yjm36vfzjd6u4sze77tvtrqxfnfja",
+      "size": 65590470,
+      "codec": "directory",
+      "digest": "sha256:2bb6520f6a396ed469756c3bd0fdc007417cd5fcfce7239b9315c008861a6aee",
+      "mediaType": null,
+      "rowCount": null,
+      "origins": []
+    },
+    {
+      "name": "query-tables/contractors.parquet",
+      "cid": "bafybeicszmgulbgneka2rb4zmiy56dh2qdkbu3u3hasvu7oyvwewnilwpe",
+      "size": 216047,
+      "codec": "file",
+      "digest": "sha256:818ab91499fd9a32fefe4a9fc4207e3a6e9f432f73027795d32f145641c30376",
+      "mediaType": "application/vnd.apache.parquet",
+      "rowCount": 4595,
+      "origins": []
+    },
+    {
+      "name": "query-tables/permits.parquet",
+      "cid": "bafybeibc2jg6xn5bjtodkqw4x6puffjiurhfi7naoehby5skxurpunu7w4",
+      "size": 37653060,
+      "codec": "file",
+      "digest": "sha256:e325794d62fa22851a81ad5d37740bf81ad40c416b5239f76af8c464129d9cb6",
+      "mediaType": "application/vnd.apache.parquet",
+      "rowCount": 317331,
+      "origins": []
+    },
+    {
+      "name": "query-tables/places.parquet",
+      "cid": "bafybeihc5y3tpwt6bwtejm2ou5fneoxdwa4rvroghvsy3pac5zyhdxonfa",
+      "size": 1441716,
+      "codec": "file",
+      "digest": "sha256:e25b420958adbfd620609c25d8b7124818652c0faf186170b891b2747a2486ca",
+      "mediaType": "application/vnd.apache.parquet",
+      "rowCount": 19057,
+      "origins": []
+    },
+    {
+      "name": "query-tables/properties.parquet",
+      "cid": "bafybeif3ndhiivaxyexl23tgmjgjcje2vuiejo5enpkdvhy6t574opuygm",
+      "size": 26263285,
+      "codec": "file",
+      "digest": "sha256:7f4b4d908562cb9b925c9bcea34b751d0b4ffb9c1080aac205c547659a7c8f62",
+      "mediaType": "application/vnd.apache.parquet",
+      "rowCount": 210853,
+      "origins": []
+    },
+    {
+      "name": "samples",
+      "cid": "bafybeiggjhat5ovqyo4iavazxnv2kklkj5psybzieyp3sq3cvagu4dmppu",
+      "size": 88687,
+      "codec": "directory",
+      "digest": "sha256:2bb6520f6a396ed469756c3bd0fdc007417cd5fcfce7239b9315c008861a6aee",
+      "mediaType": null,
+      "rowCount": null,
+      "origins": []
+    },
+    {
+      "name": "samples/aged-roofs-sample.csv",
+      "cid": "bafybeifusqcmkvvymd2l3zxvozffi27ru3lfxgyq43fhfc2tts6m7a6klu",
+      "size": 226,
+      "codec": "file",
+      "digest": "sha256:be3d02d1abebfd977a6f0cc9bcc8d4692049a27dc79a286d72111bb75896b120",
+      "mediaType": "text/csv",
+      "rowCount": null,
+      "origins": []
+    },
+    {
+      "name": "samples/long-open-roofing-permits-sample.csv",
+      "cid": "bafybeibghjo7pmumfp3u4e4rz5oi33q7ump2nkji6alcb6tcon52hkxsru",
+      "size": 88284,
+      "codec": "file",
+      "digest": "sha256:23413d1d25c51239d4631361be23ee3d3c097cf5778b19c5f81a4a9fef4eed0f",
+      "mediaType": "text/csv",
+      "rowCount": null,
+      "origins": []
+    }
+  ],
+  "ipns": {
+    "name": "k51qzi5uqu5dj6np6f9gfvamtn0z1a4kcnbn1jpaba5im6i1msabllgebus21p",
+    "label": "oracle-osceola-runs",
+    "resolvedCid": "bafybeihenf52svin6gyw2guaoxcby3ubmtcbpbh456stonzstypydufy54",
+    "publishedAt": "2026-10-26T16:11:44.452Z"
+  },
+  "previousRootCid": "bafybeiepew3pns2e2o2sdb2awlhcwbge7ttgixw3cc5ae3fflhz3dtvupu",
+  "gateways": [
+    "https://ipfs.io",
+    "https://dweb.link",
+    "https://gateway.pinata.cloud",
+    "https://w3s.link"
+  ]
+}
